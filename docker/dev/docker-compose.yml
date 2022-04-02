@@ -1,0 +1,18 @@
+version: "3"
+services:
+  ecart_seller_frontend:
+    tty: true
+    ports:
+      - 3000:3000
+    build:
+      context: ../../
+      dockerfile: ./docker/dev/Dockerfile.dev
+    volumes:
+      - ../../:/home/node/ecart-seller-frontend
+    networks:
+      - dev_frontend_network
+    container_name: ecart_seller_dev_frontend_next
+
+networks:
+  dev_frontend_network:
+    name: ecart_seller_dev_frontend_network

@@ -1,0 +1,7 @@
+{
+  "name": "Ecart Seller Frontend NextJS Dev",
+  "dockerComposeFile": "../docker/dev/docker-compose.yml",
+  "service": "ecart_seller_frontend",
+  "workspaceFolder": "/home/node/ecart-seller-frontend",
+  "remoteUser": "node",
+}
