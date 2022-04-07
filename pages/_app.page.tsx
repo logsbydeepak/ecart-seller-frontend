@@ -8,13 +8,13 @@ import Navbar from "../components/Navbar";
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
-      {/* <ThemeProvider attribute="class" defaultTheme="system"> */}
-      <Head>
-        <title>Ecart Seller</title>
-      </Head>
-      <Navbar auth={false} />
-      <Component {...pageProps} />
-      {/* </ThemeProvider> */}
+      <ThemeProvider attribute="class" defaultTheme="system">
+        <Head>
+          <title>Ecart Seller</title>
+        </Head>
+        <Navbar auth={false} />
+        <Component {...pageProps} />
+      </ThemeProvider>
     </>
   );
 }
