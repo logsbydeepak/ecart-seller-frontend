@@ -32,8 +32,8 @@ const ChangeThemeItem = () => {
     <>
       <Menu as="div" className="relative inline-block text-left">
         <div>
-          <Menu.Button className="border border-gray-300 bg-white p-2 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100 dark:bg-slate-900">
-            <div className="h-5 w-5">
+          <Menu.Button className="rounded-full border border-gray-300 bg-white p-2 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100">
+            <div className="h-5 w-5 ">
               {theme === "dark" && themeOption[0].icon}
               {theme === "light" && themeOption[1].icon}
               {theme === "system" && themeOption[2].icon}
