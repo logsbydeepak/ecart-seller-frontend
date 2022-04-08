@@ -16,9 +16,6 @@ const Layout: FC = ({ children }) => {
     <>
       {isAppReady && (
         <ThemeProvider attribute="class" defaultTheme="system">
-          <Head>
-            <title>Ecart Seller</title>
-          </Head>
           <Navbar auth={isAuth} />
           {children}
         </ThemeProvider>

@@ -36,7 +36,6 @@ export const AuthProvider: FC = ({ children }) => {
       <AuthContext.Provider value={{ isAuth, setIsAuth }}>
         {children}
       </AuthContext.Provider>
-      ;
     </>
   );
 };
