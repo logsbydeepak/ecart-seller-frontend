@@ -12,7 +12,7 @@ interface props {
 const Navbar: FC<props> = ({ auth }) => {
   return (
     <>
-      <nav className="fixed top-0 z-50 flex h-16 w-full items-center border-b-2 border-gray-100 bg-white	">
+      <nav className="fixed top-0 z-50 flex h-16 w-full items-center border-b-2 border-gray-100 bg-white	font-poppins font-medium">
         <div className="mx-auto my-0 flex w-full max-w-screen-2xl items-center justify-between px-20">
           <Link href="/">
             <a className="flex items-center text-xl">
