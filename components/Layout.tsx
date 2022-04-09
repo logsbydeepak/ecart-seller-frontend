@@ -1,5 +1,4 @@
 import { ThemeProvider } from "next-themes";
-import Head from "next/head";
 import { FC, useEffect, useState } from "react";
 import { useAuthContext } from "../utils/Context/AuthContext";
 import Navbar from "./Navbar";
@@ -17,7 +16,7 @@ const Layout: FC = ({ children }) => {
       {isAppReady && (
         <ThemeProvider attribute="class" defaultTheme="system">
           <Navbar auth={isAuth} />
-          {children}
+          <div className="mx-auto my-0 max-w-screen-2xl px-10">{children}</div>
         </ThemeProvider>
       )}
     </>
