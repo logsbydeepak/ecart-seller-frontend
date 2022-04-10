@@ -16,9 +16,11 @@ const Layout: FC<PropsWithChildrenOnlyType> = ({ children }) => {
     <>
       {isAppReady && (
         <ThemeProvider attribute="class" defaultTheme="system">
-          <Navbar auth={isAuth} />
-          <div className="mx-auto my-0 mt-8 max-w-screen-2xl px-20 pt-14 font-poppins font-medium">
-            {children}
+          <div className="font-inter text-base font-medium text-slate-900">
+            <Navbar auth={isAuth} />
+            <div className="mx-auto my-0 mt-8 max-w-screen-2xl px-20 pt-14">
+              {children}
+            </div>
           </div>
         </ThemeProvider>
       )}
