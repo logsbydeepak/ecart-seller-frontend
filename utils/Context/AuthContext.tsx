@@ -7,6 +7,7 @@ import {
   useEffect,
   useState,
 } from "react";
+import { PropsWithChildrenOnlyType } from "../types";
 
 type AuthContextType = null | {
   isAuth: boolean;
@@ -23,7 +24,7 @@ export const useAuthContext = () => {
   return context;
 };
 
-export const AuthProvider: FC = ({ children }) => {
+export const AuthProvider: FC<PropsWithChildrenOnlyType> = ({ children }) => {
   const [isAuth, setIsAuth] = useState(false);
 
   useEffect(() => {

@@ -1,9 +1,10 @@
 import { ThemeProvider } from "next-themes";
 import { FC, useEffect, useState } from "react";
 import { useAuthContext } from "../utils/Context/AuthContext";
+import { PropsWithChildrenOnlyType } from "../utils/types";
 import Navbar from "./Navbar";
 
-const Layout: FC = ({ children }) => {
+const Layout: FC<PropsWithChildrenOnlyType> = ({ children }) => {
   const [isAppReady, setIsAppReady] = useState(false);
   const { isAuth } = useAuthContext();
 
