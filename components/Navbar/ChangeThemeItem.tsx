@@ -31,7 +31,7 @@ const ChangeThemeItem = () => {
   return (
     <>
       <Menu as="div" className="relative text-left">
-        <Menu.Button className="block h-6 w-6 text-violet-600">
+        <Menu.Button className="block h-6 w-6 text-green-600">
           {theme === "dark" && themeOption[0].icon}
           {theme === "light" && themeOption[1].icon}
           {theme === "system" && themeOption[2].icon}
@@ -44,7 +44,7 @@ const ChangeThemeItem = () => {
                 <button
                   className={`${active && "bg-gray-100 text-gray-900"} ${
                     theme === element.name.toLocaleLowerCase() &&
-                    "text-violet-600"
+                    "text-green-600"
                   } flex w-full cursor-pointer items-center p-3	`}
                   onClick={(e) => {
                     e.preventDefault();

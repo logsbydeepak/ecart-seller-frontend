@@ -16,14 +16,14 @@ const Navbar: FC<props> = ({ auth }) => {
         <div className="mx-auto my-0 flex w-full max-w-screen-2xl items-center justify-between px-20">
           <Link href="/">
             <a className="flex items-center text-lg">
-              <ShoppingCartIcon className="h-6 text-purple-600" />
+              <ShoppingCartIcon className="h-6 text-green-600" />
               <span className="w-full pl-2 pt-px font-bold text-black">
                 Ecart Seller
               </span>
             </a>
           </Link>
           <div className="flex items-center">
-            <div className="pr-4 text-sm">
+            <div className="pr-8 text-sm">
               {auth ? <AuthNavbarItem /> : <NoAuthNavbarItem />}
             </div>
             <ChangeThemeItem />
