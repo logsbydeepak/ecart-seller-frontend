@@ -14,7 +14,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       </Head>
 
       <ThemeProvider attribute="class" defaultTheme="system">
-        <div className="font-inter text-base font-medium text-slate-900">
+        <div className="font-inter text-base font-medium">
           <AuthProvider>
             <Layout>
               <Component {...pageProps} />

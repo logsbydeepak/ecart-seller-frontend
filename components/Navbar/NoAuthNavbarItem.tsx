@@ -4,7 +4,7 @@ import { ArrowSmRightIcon } from "@heroicons/react/outline";
 const NoAuthNavbarItem = () => {
   return (
     <div className="flex">
-      <Link href="/Login">
+      <Link href="/SignUp">
         <a className="mx-4 rounded-md border-2 border-white px-4 py-1.5 hover:text-green-600">
           SignUp
         </a>

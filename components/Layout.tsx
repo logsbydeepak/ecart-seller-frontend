@@ -21,7 +21,7 @@ const Layout: FC<PropsWithChildrenOnlyType> = ({ children }) => {
   return (
     <>
       <Navbar auth={isAuth} />
-      <div className="mx-auto my-0 mt-8 max-w-screen-2xl px-20 pt-14">
+      <div className="mx-auto my-0 max-w-screen-2xl px-20 pt-20">
         {children}
       </div>
     </>
