@@ -1,4 +1,5 @@
 import type { AppProps } from "next/app";
+import { ThemeProvider } from "next-themes";
 
 import "../styles/globals.css";
 import { AuthProvider } from "../utils/Context/AuthContext";
@@ -11,11 +12,16 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Head>
         <title>Ecart Seller</title>
       </Head>
-      <AuthProvider>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      </AuthProvider>
+
+      <ThemeProvider attribute="class" defaultTheme="system">
+        <div className="font-inter text-base font-medium text-slate-900">
+          <AuthProvider>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </AuthProvider>
+        </div>
+      </ThemeProvider>
     </>
   );
 }

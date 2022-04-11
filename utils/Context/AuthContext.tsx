@@ -9,6 +9,7 @@ import {
   useState,
 } from "react";
 import { isatty } from "tty";
+import { customUseLayoutEffect } from "../hooks";
 import { PropsWithChildrenOnlyType } from "../types";
 
 type AuthContextType = null | {
@@ -26,9 +27,6 @@ export const useAuthContext = () => {
   return context;
 };
 
-const myUseLayoutEffect =
-  typeof window !== "undefined" ? useLayoutEffect : useEffect;
-
 export const AuthProvider: FC<PropsWithChildrenOnlyType> = ({ children }) => {
   const [isAuth, changeIsAuth] = useState(false);
 
@@ -41,7 +39,7 @@ export const AuthProvider: FC<PropsWithChildrenOnlyType> = ({ children }) => {
     return authValue;
   };
 
-  myUseLayoutEffect(() => {
+  customUseLayoutEffect(() => {
     changeIsAuth(() => {
       return localStorage.getItem("auth") === "true";
     });
