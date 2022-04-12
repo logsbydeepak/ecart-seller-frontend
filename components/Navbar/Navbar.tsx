@@ -16,7 +16,7 @@ const Navbar: FC<props> = ({ auth }) => {
         <div className="mx-auto my-0 flex w-full max-w-screen-2xl items-center justify-between px-20">
           <Link href="/">
             <a className="flex items-center text-lg">
-              <ShoppingCartIcon className="h-6 text-indigo-600 dark:text-indigo-500" />
+              <ShoppingCartIcon className="h-6 text-indigo-600 dark:text-indigo-400" />
               <span className="w-full pl-2 pt-px font-bold">Ecart Seller</span>
             </a>
           </Link>

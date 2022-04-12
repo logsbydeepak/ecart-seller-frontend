@@ -7,10 +7,7 @@ const Login = () => {
   const { isAuth } = useAuthContext();
   const router = useRouter();
 
-  if (isAuth) {
-    router.push("/");
-    return <></>;
-  }
+  if (isAuth) router.push("/");
 
   const [userInfo, setUserInfo] = useState({
     email: "",
@@ -36,7 +33,7 @@ const Login = () => {
           <p className="mb-8 text-center">
             Don't have an account?
             <Link href="/SignUp">
-              <a className="ml-2 text-indigo-600 hover:text-indigo-500 hover:underline dark:text-indigo-400 dark:hover:text-indigo-500">
+              <a className="ml-2 text-indigo-600 hover:text-indigo-500 hover:underline dark:text-indigo-300 dark:hover:text-indigo-400">
                 SignUp
               </a>
             </Link>
@@ -51,7 +48,7 @@ const Login = () => {
               onChange={handleInputChange}
               className="mb-4 w-full rounded-md border-2 border-slate-200 bg-slate-50 text-base ring-0 focus:border-indigo-600 focus:bg-white focus:ring-indigo-400
               dark:border-neutral-700 dark:bg-neutral-800 dark:placeholder:text-neutral-400
-              dark:focus:border-indigo-600 dark:focus:ring-indigo-700"
+              dark:focus:border-indigo-400 dark:focus:ring-indigo-300"
             />
 
             <input
@@ -63,12 +60,12 @@ const Login = () => {
               name="password"
               className="w-full rounded-md border-2 border-slate-200 bg-slate-50 text-base ring-0 focus:border-indigo-600 focus:bg-white focus:ring-indigo-400
               dark:border-neutral-700 dark:bg-neutral-800 dark:placeholder:text-neutral-400
-              dark:focus:border-indigo-600 dark:focus:ring-indigo-700"
+              dark:focus:border-indigo-400 dark:focus:ring-indigo-300"
             />
 
             <button
               type="submit"
-              className="mt-8 w-full rounded-md bg-indigo-600 py-3 text-white hover:bg-indigo-500 dark:bg-indigo-300 dark:font-semibold dark:text-black dark:hover:bg-indigo-400"
+              className="mt-8 w-full rounded-md bg-indigo-600 py-3 text-white hover:bg-indigo-500 dark:bg-indigo-400 dark:font-semibold dark:text-black dark:hover:bg-indigo-500"
             >
               Login
             </button>
