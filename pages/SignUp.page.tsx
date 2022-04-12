@@ -1,7 +1,7 @@
-import { ArrowSmRightIcon } from "@heroicons/react/outline";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { ChangeEvent, useState } from "react";
+
 import { useAuthContext } from "../utils/Context/AuthContext";
 
 const SignUp = () => {
@@ -23,7 +23,7 @@ const SignUp = () => {
     const name = event.target.name;
     const value = event.target.value;
 
-    if (["name", "email", "password"].includes(name)) return;
+    if (!["name", "email", "password"].includes(name)) return;
 
     setUserInfo({ ...userInfo, [name]: value });
   };
@@ -33,7 +33,7 @@ const SignUp = () => {
       <div className="my-20 flex flex-col	items-center justify-center">
         <div className="rounded-lg border-2 px-10 py-16">
           <h1 className="pb-4 text-center text-4xl font-bold text-slate-900">
-            Crate Account
+            Create Account
           </h1>
           <p className="mb-8 text-center">
             Already have an account?
@@ -75,10 +75,9 @@ const SignUp = () => {
             />
             <button
               type="submit"
-              className="mt-8 flex w-full items-center justify-center rounded-md bg-slate-800 py-3 text-white hover:bg-slate-700"
+              className="mt-8 w-full rounded-md bg-slate-800 py-3 text-white hover:bg-slate-700"
             >
               SignUp
-              <ArrowSmRightIcon className="h-5 pl-1" />
             </button>
           </form>
         </div>
