@@ -13,7 +13,7 @@ const Home: NextPage = () => {
       </h1>
       <div className="flex justify-center pt-10">
         <Link href="/SignUp">
-          <a className="inline-flex items-center rounded-md border-2 border-slate-100  px-10 py-4 text-xl font-semibold hover:text-green-600 dark:border-neutral-800 dark:text-slate-100 dark:hover:text-green-400">
+          <a className="inline-flex items-center rounded-md border-2 border-slate-100  px-10 py-4 text-xl font-semibold hover:text-indigo-600 dark:border-neutral-800 dark:text-slate-100 dark:hover:text-indigo-400">
             Get Started
             <ArrowSmRightIcon className="h-6 pl-2" />
           </a>
