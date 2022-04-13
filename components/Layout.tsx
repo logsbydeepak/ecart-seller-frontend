@@ -14,9 +14,7 @@ const Layout: FC<PropsWithChildrenOnlyType> = ({ children }) => {
     setIsAppReady(true);
   }, [isAuth]);
 
-  if (!isAppReady) {
-    return null;
-  }
+  if (!isAppReady) return null;
 
   return (
     <>

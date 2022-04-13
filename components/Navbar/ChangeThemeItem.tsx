@@ -37,12 +37,12 @@ const ChangeThemeItem = () => {
 
   return (
     <>
-      <Menu as="div" className="relative text-left">
+      <Menu as="div">
         <Menu.Button className="block h-5 w-5 text-indigo-600 dark:text-indigo-300">
           {currentThemeIconMemo}
         </Menu.Button>
 
-        <Menu.Items className="absolute right-0 mt-6 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-neutral-800">
+        <Menu.Items className="absolute right-0 top-0 mt-16 mr-20 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-neutral-800">
           {themeOption.map((element) => (
             <Menu.Item key={element.key}>
               {({ active }) => (
