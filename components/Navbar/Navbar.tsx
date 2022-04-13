@@ -4,6 +4,7 @@ import AuthNavbarItem from "./AuthNavbarItem";
 import NoAuthNavbarItem from "./NoAuthNavbarItem";
 import ChangeThemeItem from "./ChangeThemeItem";
 import { ShoppingCartIcon } from "@heroicons/react/solid";
+import NextNProgress from "nextjs-progressbar";
 
 interface props {
   auth: boolean;
@@ -12,7 +13,7 @@ interface props {
 const Navbar: FC<props> = ({ auth }) => {
   return (
     <>
-      <nav className="fixed top-0 z-50 flex h-16 w-full items-center border-b-2 border-gray-100 bg-white dark:border-neutral-800 dark:bg-neutral-900">
+      <nav className=" navbar fixed top-0 z-50 flex h-16 w-full items-center border-b-2 border-gray-100 bg-white dark:border-neutral-800 dark:bg-neutral-900">
         <div className="mx-auto my-0 flex w-full max-w-screen-2xl items-center justify-between px-20">
           <Link href={auth ? "/App" : "/"}>
             <a className="flex items-center text-lg">
@@ -27,6 +28,12 @@ const Navbar: FC<props> = ({ auth }) => {
             <ChangeThemeItem />
           </div>
         </div>
+
+        <NextNProgress
+          options={{
+            showSpinner: false,
+          }}
+        />
       </nav>
     </>
   );
