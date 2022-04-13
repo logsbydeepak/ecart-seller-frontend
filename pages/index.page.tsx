@@ -1,8 +1,6 @@
 import { ArrowSmRightIcon } from "@heroicons/react/outline";
 import type { NextPage } from "next";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { useAuthContext } from "../utils/Context/AuthContext";
 
 const Home: NextPage = () => {
   return (

@@ -7,7 +7,10 @@ const Login = () => {
   const { isAuth } = useAuthContext();
   const router = useRouter();
 
-  if (isAuth) router.push("/");
+  if (isAuth) {
+    router.push("/App");
+    return null;
+  }
 
   const [userInfo, setUserInfo] = useState({
     email: "",

@@ -1,23 +1,31 @@
 import { v4 } from "uuid";
 import { Menu } from "@headlessui/react";
 import { CogIcon, LogoutIcon } from "@heroicons/react/outline";
+import { NextRouter, useRouter } from "next/router";
 
 const profileOptions = [
   {
     key: v4(),
     name: "Profile",
     icon: <CogIcon />,
+    onSelect: (router: NextRouter) => {
+      router.push("/Profile");
+    },
   },
   {
     key: v4(),
     name: "Logout",
     icon: <LogoutIcon />,
+    onSelect: (router: NextRouter) => {
+      router.push("/");
+    },
   },
 ];
 
 const AuthNavbarItem = () => {
   const image =
     "https://images.unsplash.com/photo-1637633198300-08beaec68c70?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1887&q=80";
+  const router = useRouter();
   return (
     <>
       <Menu>
@@ -39,6 +47,7 @@ const AuthNavbarItem = () => {
                   } flex w-full cursor-pointer items-center rounded-md p-3	`}
                   onClick={(e) => {
                     e.preventDefault();
+                    element.onSelect(router);
                   }}
                 >
                   <div className="text-black-500 mr-2 ml-2 h-4 w-4">

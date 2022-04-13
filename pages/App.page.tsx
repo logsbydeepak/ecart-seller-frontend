@@ -1,20 +1,21 @@
-import Router, { useRouter } from "next/router";
+import { NextPage } from "next";
+import { useRouter } from "next/router";
 import { useAuthContext } from "../utils/Context/AuthContext";
 
-const Profile = () => {
+const App: NextPage = () => {
   const { isAuth } = useAuthContext();
   const router = useRouter();
 
   if (!isAuth) {
-    router.push("/Login");
+    router.push("/");
     return null;
   }
 
   return (
     <>
-      <h1>Profile</h1>
+      <h1>App</h1>
     </>
   );
 };
 
-export default Profile;
+export default App;
