@@ -1,14 +1,12 @@
+import Head from "next/head";
 import type { AppProps } from "next/app";
-import { ThemeProvider, useTheme } from "next-themes";
+import { ThemeProvider } from "next-themes";
 
 import "../styles/globals.css";
-import "../styles/nprogress.css";
-import { AuthProvider } from "../utils/Context/AuthContext";
 import Layout from "../components/Layout";
-import Head from "next/head";
+import { AuthProvider } from "../utils/Context/AuthContext";
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const { themes } = useTheme();
   return (
     <>
       <Head>
