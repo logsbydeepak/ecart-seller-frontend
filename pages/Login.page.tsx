@@ -1,23 +1,20 @@
+import { object } from "yup";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 
-import { useForm } from "react-hook-form";
-
+import { name, email } from "../utils/validation";
 import { useAuthContext } from "../utils/Context/AuthContext";
 
-const schema = yup.object({
-  email: yup.string().trim().lowercase().email().required(),
-  password: yup
-    .string()
-    .trim()
-    .required()
-    .min(8)
-    .matches(
-      /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^ws]).{8,}$/,
-      "password must container min 1 uppercase, lowercase, number, and symbol"
-    ),
+interface LoginInputType {
+  email: string;
+  password: string;
+}
+
+const schema = object({
+  name,
+  email,
 });
 
 const Login = () => {
@@ -33,9 +30,9 @@ const Login = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({ resolver: yupResolver(schema) });
+  } = useForm<LoginInputType>({ resolver: yupResolver(schema) });
 
-  const onSubmit = (data: any) => {
+  const onSubmit: SubmitHandler<LoginInputType> = (data) => {
     console.log(data);
   };
 

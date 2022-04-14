@@ -1,22 +1,16 @@
-import { yupResolver } from "@hookform/resolvers/yup";
+import { object } from "yup";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
-import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+import { name, email, password } from "../utils/validation";
 import { useAuthContext } from "../utils/Context/AuthContext";
 
-const schema = yup.object({
-  name: yup.string().trim().required().min(3),
-  email: yup.string().trim().lowercase().email().required(),
-  password: yup
-    .string()
-    .trim()
-    .required()
-    .min(8)
-    .matches(
-      /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^ws]).{8,}$/,
-      "password must container min 1 uppercase, lowercase, number, and symbol"
-    ),
+const schema = object({
+  name,
+  email,
+  password,
 });
 
 const SignUp = () => {
