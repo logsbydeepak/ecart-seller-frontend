@@ -64,7 +64,7 @@ const Login = () => {
               dark:focus:border-indigo-400 dark:focus:ring-indigo-300
               `}
             />
-            <p className="mt-2 mb-4 text-sm font-normal text-red-500 dark:text-red-300">
+            <p className="mt-1 mb-4 text-sm font-normal text-red-500 dark:text-red-300">
               {errors.email?.message}
             </p>
 
@@ -78,7 +78,7 @@ const Login = () => {
               dark:focus:border-indigo-400 dark:focus:ring-indigo-300
               `}
             />
-            <p className="mt-2 text-sm font-normal text-red-500 dark:text-red-300">
+            <p className="mt-1 text-sm font-normal text-red-500 dark:text-red-300">
               {errors.password?.message}
             </p>
 
