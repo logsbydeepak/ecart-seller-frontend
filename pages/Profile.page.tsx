@@ -34,8 +34,10 @@ const Profile = () => {
     <>
       <div className="flex  justify-center py-10">
         <div className="">
+          {" "}
           <h1 className=" mb-10 pb-4 text-center text-4xl font-bold text-slate-900 dark:text-slate-50">
-            Profile
+            {" "}
+            Profile{" "}
           </h1>
           <div className="w-98 flex items-center justify-center">
             <img
@@ -54,7 +56,6 @@ const Profile = () => {
               </button>
             </div>
           </div>
-
           <form className="my-12 w-96">
             <input
               placeholder="Name"

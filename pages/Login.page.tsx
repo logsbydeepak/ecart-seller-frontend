@@ -1,7 +1,24 @@
-import { useRouter } from "next/router";
-import { ChangeEvent, useState } from "react";
-import { useAuthContext } from "../utils/Context/AuthContext";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+
+import { useForm } from "react-hook-form";
+
+import { useAuthContext } from "../utils/Context/AuthContext";
+
+const schema = yup.object({
+  email: yup.string().trim().lowercase().email().required(),
+  password: yup
+    .string()
+    .trim()
+    .required()
+    .min(8)
+    .matches(
+      /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^ws]).{8,}$/,
+      "password must container min 1 uppercase, lowercase, number, and symbol"
+    ),
+});
 
 const Login = () => {
   const { isAuth } = useAuthContext();
@@ -12,18 +29,14 @@ const Login = () => {
     return null;
   }
 
-  const [userInfo, setUserInfo] = useState({
-    email: "",
-    password: "",
-  });
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ resolver: yupResolver(schema) });
 
-  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const name = event.target.name;
-    const value = event.target.value;
-
-    if (!["email", "password"].includes(name)) return;
-
-    setUserInfo({ ...userInfo, [name]: value });
+  const onSubmit = (data: any) => {
+    console.log(data);
   };
 
   return (
@@ -41,30 +54,33 @@ const Login = () => {
               </a>
             </Link>
           </p>
-          <form className="w-96">
+          <form className="w-96" onSubmit={handleSubmit(onSubmit)}>
             <input
               placeholder="Email address"
               type="text"
-              id="html"
-              value={userInfo.email}
-              name="email"
-              onChange={handleInputChange}
-              className="mb-4 w-full rounded-md border-2 border-slate-200 bg-slate-50 text-base ring-0 focus:border-indigo-600 focus:bg-white focus:ring-indigo-400
+              {...register("email")}
+              className={`w-full rounded-md border-2 border-slate-200 bg-slate-50 text-base ring-0 focus:border-indigo-600 focus:bg-white focus:ring-indigo-400
               dark:border-neutral-700 dark:bg-neutral-800 dark:placeholder:text-neutral-400
-              dark:focus:border-indigo-400 dark:focus:ring-indigo-300"
+              dark:focus:border-indigo-400 dark:focus:ring-indigo-300
+              `}
             />
+            <p className="mt-2 mb-4 text-sm font-normal text-red-500 dark:text-red-300">
+              {errors.email?.message}
+            </p>
 
             <input
               placeholder="Password"
               type="text"
-              id="html"
-              value={userInfo.password}
-              onChange={handleInputChange}
-              name="password"
-              className="w-full rounded-md border-2 border-slate-200 bg-slate-50 text-base ring-0 focus:border-indigo-600 focus:bg-white focus:ring-indigo-400
+              {...register("password")}
+              className={`
+              w-full rounded-md border-2 border-slate-200 bg-slate-50 text-base ring-0 focus:border-indigo-600 focus:bg-white focus:ring-indigo-400
               dark:border-neutral-700 dark:bg-neutral-800 dark:placeholder:text-neutral-400
-              dark:focus:border-indigo-400 dark:focus:ring-indigo-300"
+              dark:focus:border-indigo-400 dark:focus:ring-indigo-300
+              `}
             />
+            <p className="mt-2 text-sm font-normal text-red-500 dark:text-red-300">
+              {errors.password?.message}
+            </p>
 
             <button
               type="submit"
