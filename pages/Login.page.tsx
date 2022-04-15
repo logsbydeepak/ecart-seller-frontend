@@ -4,18 +4,16 @@ import { useRouter } from "next/router";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-import { name, email } from "../utils/validation";
+import { email, password } from "../utils/validation";
 import { useAuthContext } from "../utils/Context/AuthContext";
+import { SimpleInput } from "../components/Input";
 
 interface LoginInputType {
   email: string;
   password: string;
 }
 
-const schema = object({
-  name,
-  email,
-});
+const schema = object({ email, password });
 
 const Login = () => {
   const { isAuth } = useAuthContext();
@@ -52,32 +50,21 @@ const Login = () => {
             </Link>
           </p>
           <form className="w-96" onSubmit={handleSubmit(onSubmit)}>
-            <input
-              placeholder="Email address"
-              type="text"
-              {...register("email")}
-              className={`w-full rounded-md border-2 border-slate-200 bg-slate-50 text-base ring-0 focus:border-indigo-600 focus:bg-white focus:ring-indigo-400
-              dark:border-neutral-700 dark:bg-neutral-800 dark:placeholder:text-neutral-400
-              dark:focus:border-indigo-400 dark:focus:ring-indigo-300
-              `}
+            <SimpleInput
+              register={register("email")}
+              label="Email"
+              errorMessage={errors.email?.message}
+              placeholder="example@abc.com"
             />
-            <p className="mt-1 mb-4 text-sm font-normal text-red-500 dark:text-red-300">
-              {errors.email?.message}
-            </p>
 
-            <input
-              placeholder="Password"
-              type="text"
-              {...register("password")}
-              className={`
-              w-full rounded-md border-2 border-slate-200 bg-slate-50 text-base ring-0 focus:border-indigo-600 focus:bg-white focus:ring-indigo-400
-              dark:border-neutral-700 dark:bg-neutral-800 dark:placeholder:text-neutral-400
-              dark:focus:border-indigo-400 dark:focus:ring-indigo-300
-              `}
+            <SimpleInput
+              register={register("password")}
+              className="mt-4"
+              label="Password"
+              type="password"
+              errorMessage={errors.password?.message}
+              placeholder="your password"
             />
-            <p className="mt-1 text-sm font-normal text-red-500 dark:text-red-300">
-              {errors.password?.message}
-            </p>
 
             <button
               type="submit"
