@@ -6,7 +6,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 import { email, password } from "../utils/validation";
 import { useAuthContext } from "../utils/Context/AuthContext";
-import { SimpleInput } from "../components/Input";
+import { SimpleInput, IconInput } from "../components/Input";
+import { EyeIcon, MailIcon } from "@heroicons/react/outline";
 
 interface LoginInputType {
   email: string;
@@ -63,7 +64,7 @@ const Login = () => {
               label="Password"
               type="password"
               errorMessage={errors.password?.message}
-              placeholder="your password"
+              placeholder="********"
             />
 
             <button
@@ -72,6 +73,14 @@ const Login = () => {
             >
               Login
             </button>
+            <IconInput
+              register={register("email")}
+              label="Email"
+              errorMessage={errors.email?.message}
+              placeholder="example@abc.com"
+              className="mt-4"
+              Icon={<MailIcon />}
+            />
           </form>
         </div>
       </div>

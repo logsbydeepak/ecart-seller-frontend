@@ -7,6 +7,11 @@ const Profile = () => {
   const { isAuth } = useAuthContext();
   const router = useRouter();
 
+  if (!isAuth) {
+    router.push("/Login");
+    return null;
+  }
+
   const [userInfo, setUserInfo] = useState({
     name: "",
     email: "",

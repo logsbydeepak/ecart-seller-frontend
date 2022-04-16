@@ -49,7 +49,7 @@ const SignUp = () => {
               register={register("name")}
               label="Name"
               errorMessage={errors.email?.message}
-              placeholder="your name"
+              placeholder="seller name"
             />
 
             <SimpleInput
@@ -65,7 +65,7 @@ const SignUp = () => {
               label="Password"
               type="password"
               errorMessage={errors.password?.message}
-              placeholder="your password"
+              placeholder="********"
             />
 
             <button
