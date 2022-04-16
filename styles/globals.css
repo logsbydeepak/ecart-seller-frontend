@@ -2,16 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer vendor {
-  #nprogress .bar {
-    @apply !top-16 !h-[2.5px] !bg-indigo-500 dark:!bg-indigo-400;
-  }
+#nprogress .bar {
+  @apply !top-16 !h-[2.5px] !bg-indigo-500 dark:!bg-indigo-400;
+}
 
-  #nprogress .peg {
-    @apply !hidden;
-  }
+#nprogress .peg {
+  @apply !hidden;
+}
 
-  #nprogress .spinner-icon {
-    @apply !hidden;
-  }
+#nprogress .spinner-icon {
+  @apply !hidden;
+}
+
+input::-ms-reveal,
+input::-ms-clear {
+  @apply hidden;
 }

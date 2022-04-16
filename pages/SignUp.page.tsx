@@ -6,7 +6,12 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 import { name, email, password } from "../utils/validation";
 import { useAuthContext } from "../utils/Context/AuthContext";
-import { SimpleInput } from "../components/Input";
+import { IconInput, IconPasswordInput } from "../components/Input";
+import {
+  EmojiHappyIcon,
+  LockClosedIcon,
+  MailIcon,
+} from "@heroicons/react/solid";
 
 const schema = object({ name, email, password });
 
@@ -45,27 +50,30 @@ const SignUp = () => {
             </Link>
           </p>
           <form className="w-96" onSubmit={handleSubmit(onSubmit)}>
-            <SimpleInput
+            <IconInput
               register={register("name")}
               label="Name"
-              errorMessage={errors.email?.message}
+              errorMessage={errors.name?.message}
               placeholder="seller name"
+              Icon={<EmojiHappyIcon />}
             />
 
-            <SimpleInput
+            <IconInput
               register={register("email")}
-              className="my-4"
               label="Email"
+              className="my-4"
               errorMessage={errors.email?.message}
               placeholder="example@abc.com"
+              Icon={<MailIcon />}
             />
 
-            <SimpleInput
+            <IconPasswordInput
               register={register("password")}
+              className="mt-4"
               label="Password"
               type="password"
               errorMessage={errors.password?.message}
-              placeholder="********"
+              placeholder="strong password"
             />
 
             <button

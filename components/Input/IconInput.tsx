@@ -26,17 +26,21 @@ const IconInput: FC<PropTypes> = ({
   const id = v4();
   return (
     <div className={className}>
-      <label htmlFor={id}>{label}</label>
+      <label htmlFor={id} className="text-sm">
+        {label}
+      </label>
       <div className="relative">
         <div className="pointer-events-none absolute left-0 flex h-full w-11 items-center justify-center">
-          <span className="w-5">{Icon}</span>
+          <span className="w-4 text-neutral-500 dark:text-neutral-400">
+            {Icon}
+          </span>
         </div>
         <input
           placeholder={placeholder}
           id={id}
           type={type}
           {...register}
-          className="mt-1 block w-full rounded-md border-2 border-slate-200 bg-slate-50 pl-11 text-base ring-0 focus:border-indigo-600 focus:bg-white focus:ring-indigo-400
+          className="mt-1 block w-full rounded-md border-2 border-slate-200 bg-slate-50 pl-10 text-base ring-0 focus:border-indigo-600 focus:bg-white focus:ring-indigo-400
         dark:border-neutral-700 dark:bg-neutral-800 dark:placeholder:text-neutral-400
         dark:focus:border-indigo-400 dark:focus:ring-indigo-300
         "
