@@ -17,7 +17,6 @@ interface CommonInputType {
   placeholder: string;
   register: UseFormRegisterReturn;
 
-  id?: string;
   className?: string;
   errorMessage?: string;
   type?: string;
@@ -28,9 +27,15 @@ interface SimpleInputType extends CommonInputType {}
 interface LeftIconInput extends CommonInputType {
   Icon: ReactNode;
 }
+
 interface LeftIconRightButtonIconInput extends CommonInputType {
   LeftIcon: ReactNode;
   RightButtonIcons: { Icon: ReactNode; handleOnClick: () => void }[];
+}
+
+interface LeftIconRightButtonPasswordIconInput extends CommonInputType {
+  LeftIcon: ReactNode;
+  RightButtonIcons?: { Icon: ReactNode; handleOnClick: () => void }[];
 }
 
 export const SimpleInput: FC<SimpleInputType> = ({
@@ -78,13 +83,19 @@ export const LeftIconInput: FC<LeftIconInput> = ({
           placeholder={placeholder}
           register={register}
           id={id}
-          className=""
+          className="pl-10"
           type={type}
         />
       </IconContainer>
       <ErrorMessage message={errorMessage} />
     </div>
   );
+};
+
+LeftIconInput.defaultProps = {
+  type: "text",
+  className: "",
+  errorMessage: "",
 };
 
 export const LeftIconRightButtonIconInput: FC<LeftIconRightButtonIconInput> = ({
@@ -107,7 +118,7 @@ export const LeftIconRightButtonIconInput: FC<LeftIconRightButtonIconInput> = ({
         </LeftIconContainer>
 
         <RightIconContainer>
-          {RightButtonIcons.map(({ handleOnClick, Icon }) => (
+          {RightButtonIcons?.map(({ Icon, handleOnClick }) => (
             <button onClick={handleOnClick}>
               <IconBase Icon={Icon} />
             </button>
@@ -118,7 +129,7 @@ export const LeftIconRightButtonIconInput: FC<LeftIconRightButtonIconInput> = ({
           placeholder={placeholder}
           register={register}
           id={id}
-          className=""
+          className={`pl-10 ${`pr-${10 * (RightButtonIcons.length + 1)} `}`}
           type={type}
         />
       </IconContainer>
@@ -127,8 +138,8 @@ export const LeftIconRightButtonIconInput: FC<LeftIconRightButtonIconInput> = ({
   );
 };
 
-export const LeftIconRightButtonIconPasswordInput: FC<
-  LeftIconRightButtonIconInput
+export const LeftIconRightButtonPasswordIconInput: FC<
+  LeftIconRightButtonPasswordIconInput
 > = ({
   className,
   label,
@@ -163,7 +174,7 @@ export const LeftIconRightButtonIconPasswordInput: FC<
             <IconBase Icon={isPasswordHidden ? <EyeOffIcon /> : <EyeIcon />} />
           </button>
 
-          {RightButtonIcons.map(({ handleOnClick, Icon }) => (
+          {RightButtonIcons?.map(({ Icon, handleOnClick }) => (
             <button onClick={handleOnClick}>
               <IconBase Icon={Icon} />
             </button>
@@ -174,7 +185,11 @@ export const LeftIconRightButtonIconPasswordInput: FC<
           placeholder={placeholder}
           register={register}
           id={id}
-          className=""
+          className={`pl-10 ${
+            RightButtonIcons?.length
+              ? `pr-${10 * (RightButtonIcons.length + 1) + 10} `
+              : "pr-10"
+          }`}
           type={isPasswordHidden ? "text" : "password"}
         />
       </IconContainer>

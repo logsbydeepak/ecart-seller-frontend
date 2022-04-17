@@ -59,7 +59,7 @@ export const IconContainer: FC<PropsWithChildrenOnlyType> = ({ children }) => (
 export const LeftIconContainer: FC<PropsWithChildrenOnlyType> = ({
   children,
 }) => (
-  <div className="pointer-events-none absolute left-0  h-full">{children}</div>
+  <div className="pointer-events-none absolute left-0 h-full">{children}</div>
 );
 
 export const RightIconContainer: FC<PropsWithChildrenOnlyType> = ({
@@ -67,5 +67,7 @@ export const RightIconContainer: FC<PropsWithChildrenOnlyType> = ({
 }) => <div className="absolute right-0 h-full">{children}</div>;
 
 export const IconBase: FC<{ Icon: ReactNode }> = ({ Icon }) => (
-  <span className="w-4 text-neutral-500 dark:text-neutral-400">{Icon}</span>
+  <div className="flex h-full w-11 items-center justify-center text-neutral-500 dark:text-neutral-400">
+    <span className="w-4">{Icon}</span>
+  </div>
 );

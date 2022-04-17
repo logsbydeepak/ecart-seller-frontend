@@ -6,7 +6,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 import { email, password } from "../utils/validation";
 import { useAuthContext } from "../utils/Context/AuthContext";
-import { SimpleInput, IconInput } from "../components/Input";
+import {
+  LeftIconInput,
+  LeftIconRightButtonPasswordIconInput,
+} from "../components/Input";
 import { LockClosedIcon, MailIcon } from "@heroicons/react/solid";
 
 interface LoginInputType {
@@ -51,7 +54,7 @@ const Login = () => {
             </Link>
           </p>
           <form className="w-96" onSubmit={handleSubmit(onSubmit)}>
-            <IconInput
+            <LeftIconInput
               register={register("email")}
               label="Email"
               errorMessage={errors.email?.message}
@@ -59,14 +62,14 @@ const Login = () => {
               Icon={<MailIcon />}
             />
 
-            <IconInput
+            <LeftIconRightButtonPasswordIconInput
               register={register("password")}
               className="mt-4"
               label="Password"
               type="password"
               errorMessage={errors.password?.message}
               placeholder="strong password"
-              Icon={<LockClosedIcon />}
+              LeftIcon={<LockClosedIcon />}
             />
 
             <button
