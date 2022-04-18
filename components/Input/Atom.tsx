@@ -2,6 +2,16 @@ import { FC, ReactNode } from "react";
 import { UseFormRegisterReturn } from "react-hook-form";
 import { PropsWithChildrenOnlyType } from "../../utils/types";
 
+export interface CommonInputType {
+  label: string;
+  placeholder: string;
+  register: UseFormRegisterReturn;
+
+  className?: string;
+  errorMessage?: string;
+  type?: string;
+}
+
 export const TextInput: FC<{
   placeholder: string;
   register: UseFormRegisterReturn;

@@ -6,12 +6,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 import { name, email, password } from "../utils/validation";
 import { useAuthContext } from "../utils/Context/AuthContext";
-import { IconInput, IconPasswordInput } from "../components/Input";
-import {
-  EmojiHappyIcon,
-  LockClosedIcon,
-  MailIcon,
-} from "@heroicons/react/solid";
+import InputWithLeftIcon from "../components/Input/InputWithLeftIcon";
+import PasswordInputWithLeftIcon from "../components/Input/PasswordInputWithLeftIcon";
+import { EmojiHappyIcon, MailIcon } from "@heroicons/react/solid";
 
 const schema = object({ name, email, password });
 
@@ -50,7 +47,7 @@ const SignUp = () => {
             </Link>
           </p>
           <form className="w-96" onSubmit={handleSubmit(onSubmit)}>
-            <IconInput
+            <InputWithLeftIcon
               register={register("name")}
               label="Name"
               errorMessage={errors.name?.message}
@@ -58,7 +55,7 @@ const SignUp = () => {
               Icon={<EmojiHappyIcon />}
             />
 
-            <IconInput
+            <InputWithLeftIcon
               register={register("email")}
               label="Email"
               className="my-4"
@@ -67,7 +64,7 @@ const SignUp = () => {
               Icon={<MailIcon />}
             />
 
-            <IconPasswordInput
+            <PasswordInputWithLeftIcon
               register={register("password")}
               className="mt-4"
               label="Password"
