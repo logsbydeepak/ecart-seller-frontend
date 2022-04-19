@@ -1,119 +1,102 @@
-import { RefreshIcon, TrashIcon } from "@heroicons/react/outline";
+import { Tab } from "@headlessui/react";
+import { ChevronRightIcon } from "@heroicons/react/outline";
 import { useRouter } from "next/router";
-import { ChangeEvent, useState } from "react";
+import { Children, FC, ReactNode } from "react";
 import { useAuthContext } from "../utils/Context/AuthContext";
 
 const Profile = () => {
   const { isAuth } = useAuthContext();
   const router = useRouter();
 
-  if (!isAuth) {
-    router.push("/Login");
-    return null;
-  }
-
-  const [userInfo, setUserInfo] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
-
-  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const name = event.target.name;
-    const value = event.target.value;
-
-    if (!["name", "email", "password"].includes(name)) return;
-
-    setUserInfo({ ...userInfo, [name]: value });
-  };
-
-  if (isAuth) {
-    router.push("/Login");
-    return null;
-  }
-
   const image =
     "https://images.unsplash.com/photo-1637633198300-08beaec68c70?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1887&q=80";
 
   return (
-    <>
-      <div className="flex  justify-center py-10">
-        <div className="">
-          {" "}
-          <h1 className=" mb-10 pb-4 text-center text-4xl font-bold text-slate-900 dark:text-slate-50">
-            {" "}
-            Profile{" "}
-          </h1>
-          <div className="w-98 flex items-center justify-center">
-            <img
-              src={image}
-              alt=""
-              className="h-40 w-40 rounded-full border-4 border-indigo-600 object-cover p-1 dark:border-indigo-300"
-            />
-            <div className="ml-8 flex flex-col justify-between">
-              <button className="mb-6 flex items-center rounded-md border-2 border-slate-100 px-4 py-1.5 hover:text-indigo-600 dark:border-neutral-800 dark:hover:text-indigo-400">
-                <RefreshIcon className="h-4 pr-2" />
-                Change
-              </button>
-              <button className="flex items-center rounded-md border-2 border-slate-100 px-4 py-1.5 hover:text-indigo-600 dark:border-neutral-800 dark:hover:text-indigo-400">
-                <TrashIcon className="h-4 pr-2" />
-                Remove
-              </button>
-            </div>
+    <Tab.Group as="div" className="flex">
+      <Tab.List as="div" className="w-64">
+        <Tab as="button">Account</Tab>
+      </Tab.List>
+      <Tab.Panels as="div" className="w-full">
+        <Tab.Panel as="div" className="relative mb-20 max-w-4xl">
+          <div className="mt-8 mb-16 text-center font-normal">
+            <h1 className="mb-2 text-3xl">Account Info</h1>
+            <p className="dark:text-neutral-300">
+              Manage you account basic info
+            </p>
           </div>
-          <form className="my-12 w-96">
-            <input
-              placeholder="Name"
-              type="text"
-              id="html"
-              value={userInfo.name}
-              name="name"
-              onChange={handleInputChange}
-              className="mb-4 w-full rounded-md border-2 border-slate-200 bg-slate-50 text-base ring-0 focus:border-indigo-600 focus:bg-white focus:ring-indigo-400 dark:border-neutral-700 dark:bg-neutral-800 dark:placeholder:text-neutral-400 dark:focus:border-indigo-400 dark:focus:ring-indigo-300"
-            />
 
-            <input
-              placeholder="Email address"
-              type="text"
-              id="html"
-              value={userInfo.email}
-              name="email"
-              onChange={handleInputChange}
-              className="mb-4 w-full rounded-md border-2 border-slate-200 bg-slate-50 text-base ring-0 focus:border-indigo-600 focus:bg-white focus:ring-indigo-400
-              dark:border-neutral-700 dark:bg-neutral-800 dark:placeholder:text-neutral-400
-              dark:focus:border-indigo-400 dark:focus:ring-indigo-300
-              "
-            />
-
-            <input
-              placeholder="Password"
-              type="text"
-              id="html"
-              value={userInfo.password}
-              onChange={handleInputChange}
-              name="password"
-              className="w-full rounded-md border-2 border-slate-200 bg-slate-50 text-base ring-0 focus:border-indigo-600 focus:bg-white focus:ring-indigo-400
-              dark:border-neutral-700 dark:bg-neutral-800 dark:placeholder:text-neutral-400
-              dark:focus:border-indigo-400 dark:focus:ring-indigo-300
-              "
-            />
-            <button
-              type="submit"
-              className="mt-8 w-full rounded-md bg-indigo-600 py-3 text-center text-white hover:bg-indigo-500 dark:bg-indigo-400 dark:font-semibold dark:text-black dark:hover:bg-indigo-500"
-            >
-              Logout All
-            </button>
-            <button
-              type="submit"
-              className="mt-4 w-full rounded-md bg-red-600 py-3 text-white hover:bg-red-500 dark:bg-red-400 dark:font-semibold dark:text-black dark:hover:bg-red-500"
-            >
-              Delete Account
-            </button>
-          </form>
-        </div>
-      </div>
-    </>
+          <BorderBox
+            title="Basic Info"
+            subTitle="All the info required your current Password"
+          >
+            <InfoImage fieldKey="Photo" image={image} />
+            <Divider />
+            <InfoText fieldKey="NAME" value="Test Name" />
+            <Divider />
+            <InfoText fieldKey="EMAIL" value="example@abc.com" />
+            <Divider />
+            <InfoText fieldKey="PASSWORD" value="*******" />
+          </BorderBox>
+        </Tab.Panel>
+      </Tab.Panels>
+    </Tab.Group>
   );
 };
+
+const BorderBox: FC<{
+  title: string;
+  subTitle: string;
+  children: ReactNode;
+}> = ({ title, subTitle, children }) => (
+  <div className="rounded-md border-2 border-neutral-200  font-normal dark:border-neutral-700">
+    <div className="py-5 pl-6">
+      <h1 className="mb-1 text-2xl">{title}</h1>
+      <p className="text-sm dark:text-neutral-300">{subTitle}</p>
+    </div>
+    {children}
+  </div>
+);
+
+const Divider: FC = () => (
+  <div className="absolute	right-0 w-full  border-b-2 border-neutral-200 dark:border-neutral-700"></div>
+);
+
+const InfoText: FC<{ fieldKey: string; value: string }> = ({
+  fieldKey,
+  value,
+}) => (
+  <button className="flex w-full items-center py-5 px-6 text-left hover:dark:bg-neutral-800">
+    <div className="w-48 dark:text-neutral-400">
+      <h3 className="text-xs font-medium">{fieldKey}</h3>
+    </div>
+    <div>
+      <h4>{value}</h4>
+    </div>
+    <div className="ml-auto">
+      <ChevronRightIcon className="w-5 dark:text-neutral-400" />
+    </div>
+  </button>
+);
+
+const InfoImage: FC<{ fieldKey: string; image: string }> = ({
+  fieldKey,
+  image,
+}) => (
+  <button className="flex w-full items-center py-5 px-6 text-left hover:dark:bg-neutral-800">
+    <div className="w-48 dark:text-neutral-400">
+      <h3 className="text-xs font-medium">{fieldKey}</h3>
+    </div>
+    <div>
+      <img
+        src={image}
+        alt=""
+        className="cover h-24 w-24 rounded-full	border-2 object-cover p-1 dark:border-indigo-200"
+      />
+    </div>
+    <div className="ml-auto">
+      <ChevronRightIcon className="w-5 dark:text-neutral-400" />
+    </div>
+  </button>
+);
 
 export default Profile;
