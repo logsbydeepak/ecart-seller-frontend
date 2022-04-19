@@ -1,7 +1,11 @@
 import { Tab } from "@headlessui/react";
-import { ChevronRightIcon } from "@heroicons/react/outline";
+import {
+  TrashIcon,
+  LogoutIcon,
+  ChevronRightIcon,
+} from "@heroicons/react/outline";
 import { useRouter } from "next/router";
-import { Children, FC, ReactNode } from "react";
+import { FC, ReactNode } from "react";
 import { useAuthContext } from "../utils/Context/AuthContext";
 
 const Profile = () => {
@@ -17,7 +21,7 @@ const Profile = () => {
         <Tab as="button">Account</Tab>
       </Tab.List>
       <Tab.Panels as="div" className="w-full">
-        <Tab.Panel as="div" className="relative mb-20 max-w-4xl">
+        <Tab.Panel as="div" className="mb-20 max-w-4xl">
           <div className="mt-8 mb-16 text-center font-normal">
             <h1 className="mb-2 text-3xl">Account Info</h1>
             <p className="dark:text-neutral-300">
@@ -37,6 +41,16 @@ const Profile = () => {
             <Divider />
             <InfoText fieldKey="PASSWORD" value="*******" />
           </BorderBox>
+
+          <BorderBox
+            title="Danger Zone"
+            subTitle="Danger Zone double check what you select"
+            className="mt-24"
+          >
+            <InfoTextIcon fieldKey="Logout All" Icon={<LogoutIcon />} />
+            <Divider />
+            <InfoTextIcon fieldKey="Delete Account" Icon={<TrashIcon />} />
+          </BorderBox>
         </Tab.Panel>
       </Tab.Panels>
     </Tab.Group>
@@ -47,8 +61,15 @@ const BorderBox: FC<{
   title: string;
   subTitle: string;
   children: ReactNode;
-}> = ({ title, subTitle, children }) => (
-  <div className="rounded-md border-2 border-neutral-200  font-normal dark:border-neutral-700">
+  className?: string;
+}> = ({ title, subTitle, children, className }) => (
+  <div
+    className={
+      className +
+      " " +
+      "rounded-md border-2 border-neutral-200  font-normal dark:border-neutral-700"
+    }
+  >
     <div className="py-5 pl-6">
       <h1 className="mb-1 text-2xl">{title}</h1>
       <p className="text-sm dark:text-neutral-300">{subTitle}</p>
@@ -58,7 +79,7 @@ const BorderBox: FC<{
 );
 
 const Divider: FC = () => (
-  <div className="absolute	right-0 w-full  border-b-2 border-neutral-200 dark:border-neutral-700"></div>
+  <div className="w-full border-b-2  border-neutral-200 dark:border-neutral-700"></div>
 );
 
 const InfoText: FC<{ fieldKey: string; value: string }> = ({
@@ -71,6 +92,23 @@ const InfoText: FC<{ fieldKey: string; value: string }> = ({
     </div>
     <div>
       <h4>{value}</h4>
+    </div>
+    <div className="ml-auto">
+      <ChevronRightIcon className="w-5 dark:text-neutral-400" />
+    </div>
+  </button>
+);
+
+const InfoTextIcon: FC<{ fieldKey: string; Icon: ReactNode }> = ({
+  fieldKey,
+  Icon,
+}) => (
+  <button className="flex w-full items-center py-5 px-6 text-left hover:dark:bg-neutral-800">
+    <div className="w-48 dark:text-neutral-400">
+      <div className="h-5 w-5">{Icon}</div>
+    </div>
+    <div>
+      <h4>{fieldKey}</h4>
     </div>
     <div className="ml-auto">
       <ChevronRightIcon className="w-5 dark:text-neutral-400" />
