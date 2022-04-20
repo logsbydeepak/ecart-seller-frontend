@@ -9,6 +9,8 @@ import { useAuthContext } from "../utils/Context/AuthContext";
 import { LockClosedIcon, MailIcon } from "@heroicons/react/solid";
 import InputWithLeftIcon from "../components/Input/InputWithLeftIcon";
 import PasswordInputWithLeftIcon from "../components/Input/PasswordInputWithLeftIcon";
+import { ReactElement } from "react";
+import { NextPage } from "next";
 
 interface LoginInputType {
   email: string;
@@ -17,7 +19,7 @@ interface LoginInputType {
 
 const schema = object({ email, password });
 
-const Login = () => {
+const Login: NextPage = () => {
   const { isAuth } = useAuthContext();
   const router = useRouter();
 

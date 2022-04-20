@@ -1,12 +1,11 @@
 import { FC, useState } from "react";
 
-import Navbar from "./Navbar";
-
 import { customUseLayoutEffect } from "../utils/hooks";
 import { PropsWithChildrenOnlyType } from "../utils/types";
 import { useAuthContext } from "../utils/Context/AuthContext";
+import Navbar from "../components/Navbar";
 
-const Layout: FC<PropsWithChildrenOnlyType> = ({ children }) => {
+const AppLayout: FC<PropsWithChildrenOnlyType> = ({ children }) => {
   const [isAppReady, setIsAppReady] = useState(false);
   const { isAuth } = useAuthContext();
 
@@ -27,4 +26,4 @@ const Layout: FC<PropsWithChildrenOnlyType> = ({ children }) => {
   );
 };
 
-export default Layout;
+export default AppLayout;

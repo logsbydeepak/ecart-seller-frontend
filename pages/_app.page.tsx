@@ -3,10 +3,22 @@ import type { AppProps } from "next/app";
 import { ThemeProvider } from "next-themes";
 
 import "../styles/globals.css";
-import Layout from "../components/Layout";
 import { AuthProvider } from "../utils/Context/AuthContext";
+import { NextPage } from "next";
+import { ReactElement, ReactNode } from "react";
+import AppLayout from "../layout/AppLayout";
 
-function MyApp({ Component, pageProps }: AppProps) {
+type NextPageWithLayout = NextPage & {
+  getLayout?: (page: ReactElement) => ReactNode;
+};
+
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout;
+};
+
+function MyApp({ Component, pageProps }: AppPropsWithLayout) {
+  const getLayout = Component.getLayout ?? ((page) => page);
+
   return (
     <>
       <Head>
@@ -16,9 +28,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <ThemeProvider attribute="class" defaultTheme="system">
         <div className="font-inter text-base font-medium dark:text-slate-100">
           <AuthProvider>
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
+            <AppLayout>{getLayout(<Component {...pageProps} />)}</AppLayout>
           </AuthProvider>
         </div>
       </ThemeProvider>

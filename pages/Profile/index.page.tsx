@@ -1,62 +1,45 @@
-import { Tab } from "@headlessui/react";
 import {
-  TrashIcon,
-  LogoutIcon,
   ChevronRightIcon,
-  IdentificationIcon,
-  CreditCardIcon,
+  LogoutIcon,
+  TrashIcon,
 } from "@heroicons/react/outline";
-import { useRouter } from "next/router";
 import { FC, ReactNode } from "react";
-import { useAuthContext } from "../utils/Context/AuthContext";
+import ProfileNavigationLayout from "../../layout/ProfileNavigation";
 
-const Profile = () => {
-  const { isAuth } = useAuthContext();
-  const router = useRouter();
-
+const Account = () => {
   const image =
     "https://images.unsplash.com/photo-1637633198300-08beaec68c70?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1887&q=80";
 
   return (
-    <Tab.Group as="div" className="flex">
-      <Tab.List as="div" className="fixed w-60">
-        <TabButton Icon={<IdentificationIcon />} text="Account" />
-        <TabButton Icon={<CreditCardIcon />} text="Payment" />
-      </Tab.List>
-      <Tab.Panels as="div" className="w-full px-12">
-        <Tab.Panel as="div" className="mb-20 ml-60 max-w-4xl">
-          <div className="mt-8 mb-16 text-center font-normal">
-            <h1 className="mb-2 text-3xl">Account Info</h1>
-            <p className="dark:text-neutral-300">
-              Manage you account basic info
-            </p>
-          </div>
+    <>
+      <div className="mt-8 mb-16 text-center font-normal">
+        <h1 className="mb-2 text-3xl">Account Info</h1>
+        <p className="dark:text-neutral-300">Manage you account basic info</p>
+      </div>
 
-          <BorderBox
-            title="Basic Info"
-            subTitle="All the info required your current Password"
-          >
-            <InfoImage fieldKey="Photo" image={image} />
-            <Divider />
-            <InfoText fieldKey="NAME" value="Test Name" />
-            <Divider />
-            <InfoText fieldKey="EMAIL" value="example@abc.com" />
-            <Divider />
-            <InfoText fieldKey="PASSWORD" value="*******" />
-          </BorderBox>
+      <BorderBox
+        title="Basic Info"
+        subTitle="All the info required your current Password"
+      >
+        <InfoImage fieldKey="Photo" image={image} />
+        <Divider />
+        <InfoText fieldKey="NAME" value="Test Name" />
+        <Divider />
+        <InfoText fieldKey="EMAIL" value="example@abc.com" />
+        <Divider />
+        <InfoText fieldKey="PASSWORD" value="*******" />
+      </BorderBox>
 
-          <BorderBox
-            title="Danger Zone"
-            subTitle="Danger Zone double check what you select"
-            className="mt-24"
-          >
-            <InfoTextIcon fieldKey="Logout All" Icon={<LogoutIcon />} />
-            <Divider />
-            <InfoTextIcon fieldKey="Delete Account" Icon={<TrashIcon />} />
-          </BorderBox>
-        </Tab.Panel>
-      </Tab.Panels>
-    </Tab.Group>
+      <BorderBox
+        title="Danger Zone"
+        subTitle="Danger Zone double check what you select"
+        className="mt-24"
+      >
+        <InfoTextIcon fieldKey="Logout All" Icon={<LogoutIcon />} />
+        <Divider />
+        <InfoTextIcon fieldKey="Delete Account" Icon={<TrashIcon />} />
+      </BorderBox>
+    </>
   );
 };
 
@@ -140,19 +123,6 @@ const InfoImage: FC<{ fieldKey: string; image: string }> = ({
   </button>
 );
 
-const TabButton: FC<{ Icon: ReactNode; text: string }> = ({ Icon, text }) => (
-  <Tab
-    as="button"
-    className={({ selected }) =>
-      (selected
-        ? "dark:text-indigo-400"
-        : "dark:text-neutral-300 hover:dark:text-neutral-200") +
-      " flex w-full items-center rounded-md p-3 text-sm font-medium  hover:dark:bg-neutral-800"
-    }
-  >
-    <span className="mr-2 h-6 w-6">{Icon}</span>
-    {text}
-  </Tab>
-);
+Account.getLayout = ProfileNavigationLayout;
 
-export default Profile;
+export default Account;
