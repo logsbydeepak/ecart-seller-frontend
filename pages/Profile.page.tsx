@@ -3,6 +3,8 @@ import {
   TrashIcon,
   LogoutIcon,
   ChevronRightIcon,
+  IdentificationIcon,
+  CreditCardIcon,
 } from "@heroicons/react/outline";
 import { useRouter } from "next/router";
 import { FC, ReactNode } from "react";
@@ -17,11 +19,12 @@ const Profile = () => {
 
   return (
     <Tab.Group as="div" className="flex">
-      <Tab.List as="div" className="w-64">
-        <Tab as="button">Account</Tab>
+      <Tab.List as="div" className="fixed w-60">
+        <TabButton Icon={<IdentificationIcon />} text="Account" />
+        <TabButton Icon={<CreditCardIcon />} text="Payment" />
       </Tab.List>
-      <Tab.Panels as="div" className="w-full">
-        <Tab.Panel as="div" className="mb-20 max-w-4xl">
+      <Tab.Panels as="div" className="w-full px-12">
+        <Tab.Panel as="div" className="mb-20 ml-60 max-w-4xl">
           <div className="mt-8 mb-16 text-center font-normal">
             <h1 className="mb-2 text-3xl">Account Info</h1>
             <p className="dark:text-neutral-300">
@@ -135,6 +138,21 @@ const InfoImage: FC<{ fieldKey: string; image: string }> = ({
       <ChevronRightIcon className="w-5 dark:text-neutral-400" />
     </div>
   </button>
+);
+
+const TabButton: FC<{ Icon: ReactNode; text: string }> = ({ Icon, text }) => (
+  <Tab
+    as="button"
+    className={({ selected }) =>
+      (selected
+        ? "dark:text-indigo-400"
+        : "dark:text-neutral-300 hover:dark:text-neutral-200") +
+      " flex w-full items-center rounded-md p-3 text-sm font-medium  hover:dark:bg-neutral-800"
+    }
+  >
+    <span className="mr-2 h-6 w-6">{Icon}</span>
+    {text}
+  </Tab>
 );
 
 export default Profile;
