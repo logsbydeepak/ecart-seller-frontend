@@ -9,7 +9,6 @@ import { useAuthContext } from "../utils/Context/AuthContext";
 import { LockClosedIcon, MailIcon } from "@heroicons/react/solid";
 import InputWithLeftIcon from "../components/Input/InputWithLeftIcon";
 import PasswordInputWithLeftIcon from "../components/Input/PasswordInputWithLeftIcon";
-import { ReactElement } from "react";
 import { NextPage } from "next";
 
 interface LoginInputType {
@@ -40,7 +39,7 @@ const Login: NextPage = () => {
 
   return (
     <>
-      <div className="my-20 flex flex-col	items-center justify-center">
+      <div className="flex flex-col items-center	justify-center py-20">
         <div className="rounded-lg border-2 px-10 py-16 dark:border-neutral-800">
           <h1 className="pb-4 text-center text-4xl font-bold text-slate-900 dark:text-slate-50 ">
             Welcome back

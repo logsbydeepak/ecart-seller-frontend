@@ -9,7 +9,7 @@ const ProfileNavigationLayout = (page: ReactElement) => {
 
   return (
     <>
-      <div className="fixed w-60">
+      <div className="fixed block w-60">
         <TabLink
           Icon={<IdentificationIcon />}
           text="Account"
@@ -23,7 +23,7 @@ const ProfileNavigationLayout = (page: ReactElement) => {
           active={currentPath === "/profile/payment"}
         />
       </div>
-      <div className="mb-20 ml-60 w-full max-w-4xl px-12">{page}</div>
+      <div className="mb-20 w-full max-w-4xl">{page}</div>
     </>
   );
 };

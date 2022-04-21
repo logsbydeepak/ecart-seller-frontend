@@ -26,11 +26,9 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
       </Head>
 
       <ThemeProvider attribute="class" defaultTheme="system">
-        <div className="font-inter text-base font-medium dark:text-slate-100">
-          <AuthProvider>
-            <AppLayout>{getLayout(<Component {...pageProps} />)}</AppLayout>
-          </AuthProvider>
-        </div>
+        <AuthProvider>
+          <AppLayout>{getLayout(<Component {...pageProps} />)}</AppLayout>
+        </AuthProvider>
       </ThemeProvider>
     </>
   );
