@@ -3,10 +3,12 @@ import {
   LogoutIcon,
   TrashIcon,
 } from "@heroicons/react/outline";
+import { NextPage } from "next";
 import { FC, ReactElement, ReactNode } from "react";
 import ProfileNavigationLayout from "../../layout/ProfileNavigation";
+import { NestPageLayoutType } from "../../utils/types";
 
-const Account = () => {
+const Account: NestPageLayoutType = () => {
   const image =
     "https://images.unsplash.com/photo-1637633198300-08beaec68c70?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1887&q=80";
 
@@ -124,4 +126,5 @@ const InfoImage: FC<{ fieldKey: string; image: string }> = ({
 );
 
 Account.getLayout = ProfileNavigationLayout;
+
 export default Account;
