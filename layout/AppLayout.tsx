@@ -19,7 +19,7 @@ const AppLayout: FC<PropsWithChildrenOnlyType> = ({ children }) => {
   return (
     <>
       <Navbar auth={isAuth} />
-      <div className="mx-auto mt-16 max-w-screen-2xl px-20">{children}</div>
+      <div className="mx-auto max-w-screen-2xl px-20 pt-16">{children}</div>
     </>
   );
 };

@@ -3,7 +3,7 @@ import {
   LogoutIcon,
   TrashIcon,
 } from "@heroicons/react/outline";
-import { FC, ReactNode } from "react";
+import { FC, ReactElement, ReactNode } from "react";
 import ProfileNavigationLayout from "../../layout/ProfileNavigation";
 
 const Account = () => {
@@ -124,5 +124,4 @@ const InfoImage: FC<{ fieldKey: string; image: string }> = ({
 );
 
 Account.getLayout = ProfileNavigationLayout;
-
 export default Account;

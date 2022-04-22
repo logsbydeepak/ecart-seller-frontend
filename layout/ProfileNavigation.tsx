@@ -1,15 +1,20 @@
 import { CreditCardIcon, IdentificationIcon } from "@heroicons/react/outline";
 import Link from "next/link";
-import { FC, ReactElement, ReactNode } from "react";
+import { FC, ReactNode } from "react";
 import { useRouter } from "next/router";
+import { PropsWithChildrenOnlyType } from "../utils/types";
 
-const ProfileNavigationLayout = (page: ReactElement) => {
+const ProfileNavigationLayout = (page: ReactNode) => {
+  return <ProfileNavigation>{page}</ProfileNavigation>;
+};
+
+const ProfileNavigation: FC<PropsWithChildrenOnlyType> = ({ children }) => {
   const router = useRouter();
   const currentPath = router.pathname.toLowerCase();
 
   return (
     <>
-      <div className="fixed block w-60">
+      <div className="fixed mt-8 w-60">
         <TabLink
           Icon={<IdentificationIcon />}
           text="Account"
@@ -23,7 +28,7 @@ const ProfileNavigationLayout = (page: ReactElement) => {
           active={currentPath === "/profile/payment"}
         />
       </div>
-      <div className="mb-20 w-full max-w-4xl">{page}</div>
+      <div className="my-10 ml-60 w-full max-w-4xl px-10">{children}</div>
     </>
   );
 };
