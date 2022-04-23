@@ -2,6 +2,7 @@ import { v4 } from "uuid";
 import { Menu } from "@headlessui/react";
 import { CogIcon, LogoutIcon } from "@heroicons/react/outline";
 import { NextRouter, useRouter } from "next/router";
+import { classNames } from "../../utils/helper";
 
 const profileOptions = [
   {
@@ -42,9 +43,10 @@ const AuthNavbarItem = () => {
             <Menu.Item key={element.key}>
               {({ active }) => (
                 <button
-                  className={`${
-                    active && "bg-gray-100 dark:bg-neutral-700"
-                  } flex w-full cursor-pointer items-center rounded-md p-3	`}
+                  className={classNames(
+                    active && "bg-gray-100 dark:bg-neutral-700",
+                    "flex w-full cursor-pointer items-center rounded-md p-3"
+                  )}
                   onClick={(e) => {
                     e.preventDefault();
                     element.onSelect(router);

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { FC, ReactNode } from "react";
 import { useRouter } from "next/router";
 import { PropsWithChildrenOnlyType } from "../utils/types";
+import { classNames } from "../utils/helper";
 
 const ProfileNavigationLayout = (page: ReactNode) => {
   return <ProfileNavigation>{page}</ProfileNavigation>;
@@ -41,11 +42,12 @@ const TabLink: FC<{
 }> = ({ Icon, text, link, active }) => (
   <Link href={link}>
     <a
-      className={`${
+      className={classNames(
         active
           ? "dark:text-indigo-300"
-          : "dark:text-neutral-300 hover:dark:text-neutral-200"
-      } flex w-full items-center rounded-md p-3 text-sm font-medium  hover:dark:bg-neutral-800  `}
+          : "dark:text-neutral-300 hover:dark:text-neutral-200",
+        "flex w-full items-center rounded-md p-3 text-sm font-medium  hover:dark:bg-neutral-800"
+      )}
     >
       <span className="mr-2 h-6 w-6">{Icon}</span>
       {text}

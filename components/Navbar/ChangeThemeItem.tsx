@@ -7,6 +7,7 @@ import {
 import { Menu } from "@headlessui/react";
 import { v4 } from "uuid";
 import { useMemo } from "react";
+import { classNames } from "../../utils/helper";
 
 const themeOption = [
   {
@@ -47,11 +48,12 @@ const ChangeThemeItem = () => {
             <Menu.Item key={element.key}>
               {({ active }) => (
                 <button
-                  className={`${active && "bg-gray-100 dark:bg-neutral-700"} ${
+                  className={classNames(
+                    active && "bg-gray-100 dark:bg-neutral-700",
                     theme === element.name.toLocaleLowerCase() &&
-                    "text-indigo-600 dark:text-indigo-300"
-                  }
-                     flex w-full cursor-pointer items-center rounded-md p-3	`}
+                      "text-indigo-600 dark:text-indigo-300",
+                    "flex w-full cursor-pointer items-center rounded-md p-3"
+                  )}
                   onClick={(e) => {
                     e.preventDefault();
                     setTheme(element.name.toLowerCase());

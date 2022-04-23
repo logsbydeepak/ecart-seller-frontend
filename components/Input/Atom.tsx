@@ -1,5 +1,6 @@
 import { FC, ReactNode } from "react";
 import { UseFormRegisterReturn } from "react-hook-form";
+import { classNames } from "../../utils/helper";
 import { PropsWithChildrenOnlyType } from "../../utils/types";
 
 export interface CommonInputType {
@@ -24,10 +25,10 @@ export const TextInput: FC<{
     id={id}
     type={type}
     {...register}
-    className={`${className} mt-1 block w-full rounded-md border-2 border-slate-200 bg-slate-50 text-base ring-0 focus:border-indigo-600 focus:bg-white focus:ring-indigo-400
-        dark:border-neutral-700 dark:bg-neutral-800 dark:placeholder:text-neutral-400
-        dark:focus:border-indigo-400 dark:focus:ring-indigo-300
-        `}
+    className={classNames(
+      className,
+      "mt-1 block w-full rounded-md border-2 border-slate-200 bg-slate-50 text-base ring-0 focus:border-indigo-600 focus:bg-white focus:ring-indigo-400 dark:border-neutral-700 dark:bg-neutral-800 dark:placeholder:text-neutral-400 dark:focus:border-indigo-400 dark:focus:ring-indigo-300"
+    )}
   />
 );
 
