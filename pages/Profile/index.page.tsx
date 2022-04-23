@@ -3,9 +3,9 @@ import {
   LogoutIcon,
   TrashIcon,
 } from "@heroicons/react/outline";
-import { NextPage } from "next";
-import { FC, ReactElement, ReactNode } from "react";
+import { FC, ReactNode } from "react";
 import ProfileNavigationLayout from "../../layout/ProfileNavigation";
+import { classNames } from "../../utils/helper";
 import { NestPageLayoutType } from "../../utils/types";
 
 const Account: NestPageLayoutType = () => {
@@ -52,11 +52,10 @@ const BorderBox: FC<{
   className?: string;
 }> = ({ title, subTitle, children, className }) => (
   <div
-    className={
-      className +
-      " " +
+    className={classNames(
+      className,
       "rounded-md border-2 border-neutral-200  font-normal dark:border-neutral-700"
-    }
+    )}
   >
     <div className="py-5 pl-6">
       <h1 className="mb-1 text-2xl">{title}</h1>
