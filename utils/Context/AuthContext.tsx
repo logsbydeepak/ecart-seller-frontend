@@ -1,14 +1,4 @@
-import {
-  createContext,
-  Dispatch,
-  FC,
-  SetStateAction,
-  useContext,
-  useEffect,
-  useLayoutEffect,
-  useState,
-} from "react";
-import { isatty } from "tty";
+import { createContext, FC, useContext, useState } from "react";
 import { customUseLayoutEffect } from "../hooks";
 import { PropsWithChildrenOnlyType } from "../types";
 

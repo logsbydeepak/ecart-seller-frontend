@@ -1,8 +1,16 @@
 import { ArrowSmRightIcon } from "@heroicons/react/outline";
 import type { NextPage } from "next";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { useAuthContext } from "../utils/Context/AuthContext";
 
 const Home: NextPage = () => {
+  const router = useRouter();
+  const { isAuth } = useAuthContext();
+  if (isAuth) {
+    router.push("/App");
+    return null;
+  }
   return (
     <div className="py-40">
       <h1 className="text-center text-7xl font-semibold leading-snug">

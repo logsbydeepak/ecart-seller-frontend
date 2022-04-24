@@ -4,6 +4,7 @@ import { FC, ReactNode } from "react";
 import { useRouter } from "next/router";
 import { PropsWithChildrenOnlyType } from "../utils/types";
 import { classNames } from "../utils/helper";
+import { useAuthContext } from "../utils/Context/AuthContext";
 
 const ProfileNavigationLayout = (page: ReactNode) => {
   return <ProfileNavigation>{page}</ProfileNavigation>;
@@ -11,6 +12,13 @@ const ProfileNavigationLayout = (page: ReactNode) => {
 
 const ProfileNavigation: FC<PropsWithChildrenOnlyType> = ({ children }) => {
   const router = useRouter();
+  const { isAuth } = useAuthContext();
+
+  if (!isAuth) {
+    router.push("/Login");
+    return null;
+  }
+
   const currentPath = router.pathname.toLowerCase();
 
   return (

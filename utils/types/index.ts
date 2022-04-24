@@ -6,5 +6,5 @@ export interface PropsWithChildrenOnlyType {
 }
 
 export type NestPageLayoutType<P = {}> = NextPage<P> & {
-  getLayout?: (page: ReactElement) => ReactElement;
+  getLayout?: (page: ReactElement) => ReactNode;
 };
