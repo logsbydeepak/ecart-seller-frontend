@@ -5,8 +5,8 @@ import { ThemeProvider } from "next-themes";
 import { ReactElement, ReactNode } from "react";
 
 import "~/styles/globals.css";
-import { AuthProvider } from "~/utils/Context/AuthContext";
 import AppLayout from "~/layout/AppLayout";
+import { AuthProvider } from "~/utils/Context/AuthContext";
 
 type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;

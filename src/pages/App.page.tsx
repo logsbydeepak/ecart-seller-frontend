@@ -1,6 +1,7 @@
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useAuthContext } from "../utils/Context/AuthContext";
+
+import { useAuthContext } from "~/utils/Context/AuthContext";
 
 const App: NextPage = () => {
   const { isAuth } = useAuthContext();

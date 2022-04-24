@@ -1,15 +1,15 @@
 import { object } from "yup";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-
-import { email, password } from "../utils/validation";
-import { useAuthContext } from "../utils/Context/AuthContext";
-import { LockClosedIcon, MailIcon } from "@heroicons/react/solid";
-import InputWithLeftIcon from "../components/Input/InputWithLeftIcon";
-import PasswordInputWithLeftIcon from "../components/Input/PasswordInputWithLeftIcon";
 import { NextPage } from "next";
+import { useRouter } from "next/router";
+import { MailIcon } from "@heroicons/react/solid";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { SubmitHandler, useForm } from "react-hook-form";
+
+import { email, password } from "~/utils/validation";
+import { useAuthContext } from "~/utils/Context/AuthContext";
+import InputWithLeftIcon from "~/components/Input/InputWithLeftIcon";
+import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftIcon";
 
 interface LoginInputType {
   email: string;

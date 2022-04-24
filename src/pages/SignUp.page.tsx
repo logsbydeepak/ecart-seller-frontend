@@ -3,12 +3,12 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-
-import { name, email, password } from "../utils/validation";
-import { useAuthContext } from "../utils/Context/AuthContext";
-import InputWithLeftIcon from "../components/Input/InputWithLeftIcon";
-import PasswordInputWithLeftIcon from "../components/Input/PasswordInputWithLeftIcon";
 import { EmojiHappyIcon, MailIcon } from "@heroicons/react/solid";
+
+import { name, email, password } from "~/utils/validation";
+import { useAuthContext } from "~/utils/Context/AuthContext";
+import InputWithLeftIcon from "~/components/Input/InputWithLeftIcon";
+import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftIcon";
 
 const schema = object({ name, email, password });
 

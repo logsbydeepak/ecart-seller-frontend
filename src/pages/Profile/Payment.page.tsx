@@ -1,7 +1,7 @@
-import { NextPage } from "next";
-import ProfileNavigationLayout from "../../layout/ProfileNavigation";
+import { NextPageLayoutType } from "~/utils/types";
+import ProfileNavigationLayout from "~/layout/ProfileNavigation";
 
-const Account = () => {
+const Account: NextPageLayoutType = () => {
   return <>Payment</>;
 };
 

@@ -1,9 +1,9 @@
 import { FC, useState } from "react";
 
-import { customUseLayoutEffect } from "../utils/hooks";
-import { PropsWithChildrenOnlyType } from "../utils/types";
-import { useAuthContext } from "../utils/Context/AuthContext";
-import Navbar from "../components/Navbar";
+import Navbar from "~/components/Navbar";
+import { customUseLayoutEffect } from "~/utils/hooks";
+import { PropsWithChildrenOnlyType } from "~/utils/types";
+import { useAuthContext } from "~/utils/Context/AuthContext";
 
 const AppLayout: FC<PropsWithChildrenOnlyType> = ({ children }) => {
   const [isAppReady, setIsAppReady] = useState(false);

@@ -1,10 +1,11 @@
-import { CreditCardIcon, IdentificationIcon } from "@heroicons/react/outline";
 import Link from "next/link";
 import { FC, ReactNode } from "react";
 import { useRouter } from "next/router";
-import { PropsWithChildrenOnlyType } from "../utils/types";
-import { classNames } from "../utils/helper";
-import { useAuthContext } from "../utils/Context/AuthContext";
+import { CreditCardIcon, IdentificationIcon } from "@heroicons/react/outline";
+
+import { classNames } from "~/utils/helper";
+import { PropsWithChildrenOnlyType } from "~/utils/types";
+import { useAuthContext } from "~/utils/Context/AuthContext";
 
 const ProfileNavigationLayout = (page: ReactNode) => {
   return <ProfileNavigation>{page}</ProfileNavigation>;
