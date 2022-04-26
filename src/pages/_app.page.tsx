@@ -7,6 +7,7 @@ import { ReactElement, ReactNode } from "react";
 import "~/styles/globals.css";
 import AppLayout from "~/layout/AppLayout";
 import { AuthProvider } from "~/utils/Context/AuthContext";
+import { QueryClient, QueryClientProvider } from "react-query";
 
 type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -15,6 +16,8 @@ type NextPageWithLayout = NextPage & {
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
 };
+
+const queryClient = new QueryClient();
 
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page) => page);
@@ -26,9 +29,11 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
       </Head>
 
       <ThemeProvider attribute="class" defaultTheme="system">
-        <AuthProvider>
-          <AppLayout>{getLayout(<Component {...pageProps} />)}</AppLayout>
-        </AuthProvider>
+        <QueryClientProvider client={queryClient}>
+          <AuthProvider>
+            <AppLayout>{getLayout(<Component {...pageProps} />)}</AppLayout>
+          </AuthProvider>
+        </QueryClientProvider>
       </ThemeProvider>
     </>
   );

@@ -10,6 +10,7 @@ import { email, password } from "~/utils/validation";
 import { useAuthContext } from "~/utils/Context/AuthContext";
 import InputWithLeftIcon from "~/components/Input/InputWithLeftIcon";
 import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftIcon";
+import { useQuery } from "react-query";
 
 interface LoginInputType {
   email: string;
@@ -33,8 +34,13 @@ const Login: NextPage = () => {
     formState: { errors },
   } = useForm<LoginInputType>({ resolver: yupResolver(schema) });
 
+  const request = async () => {
+    console.log(process.env.NEXT_PUBLIC_API_BASE_URL);
+  };
+  const { refetch } = useQuery("login", request, { enabled: false });
+
   const onSubmit: SubmitHandler<LoginInputType> = (data) => {
-    console.log(data);
+    refetch();
   };
 
   return (

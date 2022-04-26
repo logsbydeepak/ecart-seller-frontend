@@ -1,6 +1,6 @@
 import { createContext, FC, useContext, useState } from "react";
-import { customUseLayoutEffect } from "../hooks";
-import { PropsWithChildrenOnlyType } from "../types";
+import { customUseLayoutEffect } from "~/utils/hooks";
+import { PropsWithChildrenOnlyType } from "~/utils/types";
 
 type AuthContextType = null | {
   isAuth: boolean;

@@ -9,6 +9,8 @@ import { name, email, password } from "~/utils/validation";
 import { useAuthContext } from "~/utils/Context/AuthContext";
 import InputWithLeftIcon from "~/components/Input/InputWithLeftIcon";
 import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftIcon";
+import { useQuery } from "react-query";
+import request, { gql, GraphQLClient } from "graphql-request";
 
 const schema = object({ name, email, password });
 
@@ -20,15 +22,52 @@ const SignUp = () => {
     router.push("/App");
     return null;
   }
-
   const {
     register,
     handleSubmit,
+    getValues,
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
 
+  const signUpQuery = gql`
+    mutation CreateUser($name: String!, $email: String!, $password: String!) {
+      createUser(name: $name, email: $email, password: $password) {
+        ... on User {
+          name
+          email
+        }
+        ... on ErrorResponse {
+          title
+          message
+        }
+      }
+    }
+  `;
+
+  const signUpVariable = {
+    name: getValues("name"),
+    email: getValues("email"),
+    password: getValues("password"),
+  };
+
+  const graphQLClient = new GraphQLClient(
+    process.env.NEXT_PUBLIC_API_BASE_URL as string,
+    {
+      credentials: "include",
+      mode: "cors",
+    }
+  );
+
+  const signUpRequest = async () => {
+    graphQLClient
+      .request(signUpQuery, signUpVariable)
+      .then((data) => console.log(data));
+  };
+
+  const { refetch } = useQuery("login", signUpRequest, { enabled: false });
+
   const onSubmit = (data: any) => {
-    console.log(data);
+    refetch();
   };
 
   return (
