@@ -8,7 +8,6 @@ export interface CommonInputType {
   placeholder: string;
   register: UseFormRegisterReturn;
 
-  disabled?: boolean;
   className?: string;
   errorMessage?: string;
   type?: string;
@@ -20,13 +19,11 @@ export const TextInput: FC<{
   id: string;
   className: string;
   type?: string;
-  disabled?: boolean;
-}> = ({ placeholder, id, type, register, className, disabled }) => (
+}> = ({ placeholder, id, type, register, className }) => (
   <input
     placeholder={placeholder}
     id={id}
     type={type}
-    disabled={disabled}
     {...register}
     className={classNames(
       className,

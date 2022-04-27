@@ -1,8 +1,7 @@
 import Head from "next/head";
-import { NextPage } from "next";
 import type { AppProps } from "next/app";
 import { ThemeProvider } from "next-themes";
-import { ReactElement, ReactNode } from "react";
+import { ReactQueryDevtools } from "react-query/devtools";
 
 import "~/styles/globals.css";
 import AppLayout from "~/layout/AppLayout";
@@ -27,6 +26,8 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
 
       <ThemeProvider attribute="class" defaultTheme="system">
         <QueryClientProvider client={queryClient}>
+          <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
+
           <AuthProvider>
             <AppLayout>{getLayout(<Component {...pageProps} />)}</AppLayout>
           </AuthProvider>

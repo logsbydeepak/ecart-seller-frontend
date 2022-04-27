@@ -23,7 +23,6 @@ const InputWithLeftIcon: FC<PropType> = ({
   type,
   errorMessage,
   Icon,
-  disabled,
 }) => {
   const id = v4();
   return (
@@ -36,7 +35,6 @@ const InputWithLeftIcon: FC<PropType> = ({
         <TextInput
           placeholder={placeholder}
           register={register}
-          disabled={disabled}
           id={id}
           className="pl-10"
           type={type}

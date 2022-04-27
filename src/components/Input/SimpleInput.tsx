@@ -8,7 +8,6 @@ const SimpleInput: FC<CommonInputType> = ({
   label,
   placeholder,
   register,
-  disabled,
   type,
   errorMessage,
 }) => {
@@ -19,7 +18,6 @@ const SimpleInput: FC<CommonInputType> = ({
       <TextInput
         placeholder={placeholder}
         register={register}
-        disabled={disabled}
         id={id}
         className=""
         type={type}
