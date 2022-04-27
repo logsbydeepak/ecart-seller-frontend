@@ -6,12 +6,14 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { EmojiHappyIcon, MailIcon } from "@heroicons/react/solid";
 
 import { name, email, password } from "~/utils/validation";
-import { useAuthContext } from "~/utils/Context/AuthContext";
+import { useAuthContext } from "~/context/AuthContext";
 import InputWithLeftIcon from "~/components/Input/InputWithLeftIcon";
 import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftIcon";
 import { useMutation } from "react-query";
 import SignUpQuery from "~/utils/gql/User/SignUp.gql";
-import { gqlRequest } from "~/utils/helper";
+import { gqlRequest } from "~/utils/helper/gql";
+import authPageGuard from "~/utils/helper/authPageGuard";
+import { NextPage } from "next";
 
 const schema = object({ name, email, password });
 const signUpRequest = (getValues: UseFormGetValues<SignUpFormType>) =>
@@ -23,14 +25,11 @@ interface SignUpFormType {
   password: string;
 }
 
-const SignUp = () => {
-  const { isAuth, setIsAuth } = useAuthContext();
-  const router = useRouter();
+const SignUp: NextPage = () => {
+  authPageGuard(false, "/App");
 
-  if (isAuth) {
-    router.push("/App");
-    return null;
-  }
+  const { setIsAuth } = useAuthContext();
+  const router = useRouter();
 
   const {
     register,

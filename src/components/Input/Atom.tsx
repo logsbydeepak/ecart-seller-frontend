@@ -1,7 +1,7 @@
 import { FC, ReactNode } from "react";
 import { UseFormRegisterReturn } from "react-hook-form";
-import { classNames } from "../../utils/helper";
-import { PropsWithChildrenOnlyType } from "../../utils/types";
+import { classNames } from "~/utils/helper/tailwind";
+import { PropsWithChildrenOnlyType } from "~/types/nextMod";
 
 export interface CommonInputType {
   label: string;

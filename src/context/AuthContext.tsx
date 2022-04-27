@@ -1,6 +1,6 @@
 import { createContext, FC, useContext, useState } from "react";
-import { customUseLayoutEffect } from "~/utils/hooks";
-import { PropsWithChildrenOnlyType } from "~/utils/types";
+import { customUseLayoutEffect } from "~/utils/helper/nextMod";
+import { PropsWithChildrenOnlyType } from "~/types/nextMod";
 
 type AuthContextType = null | {
   isAuth: boolean;

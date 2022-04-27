@@ -1,16 +1,15 @@
 import { object } from "yup";
 import Link from "next/link";
 import { NextPage } from "next";
-import { useRouter } from "next/router";
 import { MailIcon } from "@heroicons/react/solid";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 import { email, password } from "~/utils/validation";
-import { useAuthContext } from "~/utils/Context/AuthContext";
 import InputWithLeftIcon from "~/components/Input/InputWithLeftIcon";
 import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftIcon";
 import { useQuery } from "react-query";
+import authPageGuard from "~/utils/helper/authPageGuard";
 
 interface LoginInputType {
   email: string;
@@ -20,13 +19,7 @@ interface LoginInputType {
 const schema = object({ email, password });
 
 const Login: NextPage = () => {
-  const { isAuth } = useAuthContext();
-  const router = useRouter();
-
-  if (isAuth) {
-    router.push("/App");
-    return null;
-  }
+  authPageGuard(false, "/App");
 
   const {
     register,
@@ -51,7 +44,7 @@ const Login: NextPage = () => {
             Welcome back
           </h1>
           <p className="mb-8 text-center">
-            Don't have an account?
+            Don&apos;t have an account?
             <Link href="/SignUp">
               <a className="ml-2 text-indigo-600 hover:text-indigo-500 hover:underline dark:text-indigo-300 dark:hover:text-indigo-400">
                 SignUp

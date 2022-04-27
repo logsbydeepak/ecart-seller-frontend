@@ -5,9 +5,9 @@ import { ReactQueryDevtools } from "react-query/devtools";
 
 import "~/styles/globals.css";
 import AppLayout from "~/layout/AppLayout";
-import { AuthProvider } from "~/utils/Context/AuthContext";
+import { AuthProvider } from "~/context/AuthContext";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { NextPageLayoutType } from "~/utils/types";
+import { NextPageLayoutType } from "~/types/nextMod";
 
 type AppPropsWithLayout = AppProps & {
   Component: NextPageLayoutType;

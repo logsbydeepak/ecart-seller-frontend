@@ -1,4 +1,4 @@
-import { NextPageLayoutType } from "~/utils/types";
+import { NextPageLayoutType } from "~/types/nextMod";
 import ProfileNavigationLayout from "~/layout/ProfileNavigation";
 
 const Account: NextPageLayoutType = () => {

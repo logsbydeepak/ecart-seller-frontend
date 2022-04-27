@@ -3,22 +3,18 @@ import { FC, ReactNode } from "react";
 import { useRouter } from "next/router";
 import { CreditCardIcon, IdentificationIcon } from "@heroicons/react/outline";
 
-import { classNames } from "~/utils/helper";
-import { PropsWithChildrenOnlyType } from "~/utils/types";
-import { useAuthContext } from "~/utils/Context/AuthContext";
+import { classNames } from "~/utils/helper/tailwind";
+import { PropsWithChildrenOnlyType } from "~/types/nextMod";
+import authPageGuard from "~/utils/helper/authPageGuard";
 
 const ProfileNavigationLayout = (page: ReactNode) => {
   return <ProfileNavigation>{page}</ProfileNavigation>;
 };
 
 const ProfileNavigation: FC<PropsWithChildrenOnlyType> = ({ children }) => {
-  const router = useRouter();
-  const { isAuth } = useAuthContext();
+  authPageGuard(true, "/Login");
 
-  if (!isAuth) {
-    router.push("/Login");
-    return null;
-  }
+  const router = useRouter();
 
   const currentPath = router.pathname.toLowerCase();
 

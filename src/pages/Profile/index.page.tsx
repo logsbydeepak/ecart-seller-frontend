@@ -5,9 +5,10 @@ import {
 } from "@heroicons/react/outline";
 import { FC, ReactNode } from "react";
 
-import { classNames } from "~/utils/helper";
-import { NextPageLayoutType } from "~/utils/types";
+import { classNames } from "~/utils/helper/tailwind";
+import { NextPageLayoutType } from "~/types/nextMod";
 import ProfileNavigationLayout from "~/layout/ProfileNavigation";
+import Image from "next/image";
 
 const Account: NextPageLayoutType = () => {
   const image =
@@ -113,10 +114,12 @@ const InfoImage: FC<{ fieldKey: string; image: string }> = ({
       <h3 className="text-xs font-medium">{fieldKey}</h3>
     </div>
     <div>
-      <img
+      <Image
         src={image}
-        alt=""
-        className="cover h-24 w-24 rounded-full	border-2 object-cover p-1 dark:border-indigo-200"
+        alt="profile"
+        className="
+cover h-24 w-24 rounded-full	border-2 object-cover p-1 dark:border-indigo-200
+      "
       />
     </div>
     <div className="ml-auto">

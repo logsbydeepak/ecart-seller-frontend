@@ -7,7 +7,7 @@ import {
 import { Menu } from "@headlessui/react";
 import { v4 } from "uuid";
 import { useMemo } from "react";
-import { classNames } from "../../utils/helper";
+import { classNames } from "~/utils/helper/tailwind";
 
 const themeOption = [
   {
