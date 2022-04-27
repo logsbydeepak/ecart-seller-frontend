@@ -10,8 +10,8 @@ import { useAuthContext } from "~/utils/Context/AuthContext";
 import InputWithLeftIcon from "~/components/Input/InputWithLeftIcon";
 import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftIcon";
 import { useQuery } from "react-query";
-import { GraphQLClient } from "graphql-request";
 import SignUpQuery from "~/utils/gql/User/SignUp.gql";
+import { gqlRequest } from "~/utils/helper";
 
 const schema = object({ name, email, password });
 
@@ -23,27 +23,14 @@ const SignUp = () => {
     router.push("/App");
     return null;
   }
+
   const {
     register,
     handleSubmit,
     getValues,
+    setError,
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
-
-  // const signUpQuery = gql`
-  //   mutation CreateUser($name: String!, $email: String!, $password: String!) {
-  //     createUser(name: $name, email: $email, password: $password) {
-  //       ... on User {
-  //         name
-  //         email
-  //       }
-  //       ... on ErrorResponse {
-  //         title
-  //         message
-  //       }
-  //     }
-  //   }
-  // `;
 
   const signUpVariable = {
     name: getValues("name"),
@@ -51,24 +38,32 @@ const SignUp = () => {
     password: getValues("password"),
   };
 
-  const graphQLClient = new GraphQLClient(
-    process.env.NEXT_PUBLIC_API_BASE_URL as string,
+  const signUpRequest = async () => {
+    const requ = await gqlRequest(SignUpQuery, signUpVariable);
+    return requ;
+  };
+
+  const { refetch, isLoading, isError, data } = useQuery(
+    "login",
+    signUpRequest,
     {
-      credentials: "include",
-      mode: "cors",
+      enabled: false,
     }
   );
 
-  const signUpRequest = async () => {
-    graphQLClient
-      .request(SignUpQuery, signUpVariable)
-      .then((data) => console.log(data));
-  };
+  const onSubmit = async () => {
+    const signUpUser = await refetch();
 
-  const { refetch } = useQuery("login", signUpRequest, { enabled: false });
-
-  const onSubmit = (data: any) => {
-    refetch();
+    if (
+      signUpUser.data.createUser.title === "AUTHENTICATION" &&
+      signUpUser.data.createUser.message === "email already exist"
+    ) {
+      setError(
+        "email",
+        { message: "email already exist" },
+        { shouldFocus: true }
+      );
+    }
   };
 
   return (
