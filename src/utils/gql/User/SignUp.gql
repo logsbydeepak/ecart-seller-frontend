@@ -1,10 +1,10 @@
 mutation CreateUser($name: String!, $email: String!, $password: String!) {
   createUser(name: $name, email: $email, password: $password) {
     ... on User {
-      name
-      email
+      __typename
     }
     ... on ErrorResponse {
+      __typename
       title
       message
     }

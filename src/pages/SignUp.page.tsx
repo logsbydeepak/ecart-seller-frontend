@@ -1,7 +1,7 @@
 import { object } from "yup";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { SubmitHandler, useForm, UseFormGetValues } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { EmojiHappyIcon, MailIcon } from "@heroicons/react/solid";
 
@@ -14,6 +14,8 @@ import SignUpQuery from "~/utils/gql/User/SignUp.gql";
 import { gqlRequest } from "~/utils/helper";
 
 const schema = object({ name, email, password });
+const signUpRequest = (getValues: UseFormGetValues<SignUpFormType>) =>
+  gqlRequest(SignUpQuery, getValues());
 
 interface SignUpFormType {
   name: string;
@@ -34,54 +36,50 @@ const SignUp = () => {
     register,
     handleSubmit,
     setError,
+    getValues,
     formState: { errors },
   } = useForm<SignUpFormType>({ resolver: yupResolver(schema) });
 
-  const onError = async () => {};
-
-  const signUpRequest = (data: SignUpFormType) => gqlRequest(SignUpQuery, data);
-
   const { isLoading, mutateAsync } = useMutation(signUpRequest, {
     retry: 3,
-    onError,
   });
 
-  const onSubmit: SubmitHandler<SignUpFormType> = async (data: any) => {
-    const signUpUser = await mutateAsync(data);
+  const onSubmit: SubmitHandler<SignUpFormType> = async () => {
+    const signUpUser = await mutateAsync(getValues);
+    const createUser = signUpUser.createUser;
+    const typename = createUser.__typename;
 
     if (
-      signUpUser?.data?.createUser?.title === "AUTHENTICATION" &&
-      signUpUser?.data?.createUser?.message === "email already exist"
+      createUser.title === "AUTHENTICATION" &&
+      createUser.message === "email already exist"
     ) {
-      setError(
-        "email",
-        { message: "email already exist" },
-        { shouldFocus: true }
-      );
-    } else {
+      setError("email", { message: createUser.message }, { shouldFocus: true });
+    }
+
+    if (typename === "User") {
       setIsAuth(true);
       router.push("/App");
     }
   };
 
   return (
-    <>
-      <div className="flex flex-col items-center	justify-center py-20">
-        <div className="rounded-lg border-2 px-10 py-16 dark:border-neutral-800">
-          <h1 className="pb-4 text-center text-4xl font-bold text-slate-900 dark:text-slate-50  ">
-            Create Account
-          </h1>
-          <p className="mb-8 text-center">
-            Already have an account?
-            <Link href="/Login">
-              <a className="ml-2 text-indigo-600 hover:text-indigo-500 hover:underline dark:text-indigo-300 dark:hover:text-indigo-400">
-                Login
-              </a>
-            </Link>
-          </p>
-          <form className="w-96" onSubmit={handleSubmit(onSubmit)}>
+    <div className="flex flex-col items-center	justify-center py-20">
+      <div className="rounded-lg border-2 px-10 py-16 dark:border-neutral-800">
+        <h1 className="pb-4 text-center text-4xl font-bold text-slate-900 dark:text-slate-50  ">
+          Create Account
+        </h1>
+        <p className="mb-8 text-center">
+          Already have an account?
+          <Link href="/Login">
+            <a className="ml-2 text-indigo-600 hover:text-indigo-500 hover:underline dark:text-indigo-300 dark:hover:text-indigo-400">
+              Login
+            </a>
+          </Link>
+        </p>
+        <form className="w-96" onSubmit={handleSubmit(onSubmit)}>
+          <fieldset disabled={isLoading}>
             <InputWithLeftIcon
-              register={register("name", { disabled: isLoading })}
+              register={register("name")}
               label="Name"
               errorMessage={errors.name?.message}
               placeholder="seller name"
@@ -89,7 +87,7 @@ const SignUp = () => {
             />
 
             <InputWithLeftIcon
-              register={register("email", { disabled: isLoading })}
+              register={register("email")}
               label="Email"
               className="my-4"
               errorMessage={errors.email?.message}
@@ -98,7 +96,7 @@ const SignUp = () => {
             />
 
             <PasswordInputWithLeftIcon
-              register={register("password", { disabled: isLoading })}
+              register={register("password")}
               className="mt-4"
               label="Password"
               type="password"
@@ -113,10 +111,10 @@ const SignUp = () => {
             >
               SignUp
             </button>
-          </form>
-        </div>
+          </fieldset>
+        </form>
       </div>
-    </>
+    </div>
   );
 };
 
