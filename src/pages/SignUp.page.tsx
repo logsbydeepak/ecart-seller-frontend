@@ -10,7 +10,8 @@ import { useAuthContext } from "~/utils/Context/AuthContext";
 import InputWithLeftIcon from "~/components/Input/InputWithLeftIcon";
 import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftIcon";
 import { useQuery } from "react-query";
-import request, { gql, GraphQLClient } from "graphql-request";
+import { GraphQLClient } from "graphql-request";
+import SignUpQuery from "~/utils/gql/User/SignUp.gql";
 
 const schema = object({ name, email, password });
 
@@ -29,20 +30,20 @@ const SignUp = () => {
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
 
-  const signUpQuery = gql`
-    mutation CreateUser($name: String!, $email: String!, $password: String!) {
-      createUser(name: $name, email: $email, password: $password) {
-        ... on User {
-          name
-          email
-        }
-        ... on ErrorResponse {
-          title
-          message
-        }
-      }
-    }
-  `;
+  // const signUpQuery = gql`
+  //   mutation CreateUser($name: String!, $email: String!, $password: String!) {
+  //     createUser(name: $name, email: $email, password: $password) {
+  //       ... on User {
+  //         name
+  //         email
+  //       }
+  //       ... on ErrorResponse {
+  //         title
+  //         message
+  //       }
+  //     }
+  //   }
+  // `;
 
   const signUpVariable = {
     name: getValues("name"),
@@ -60,7 +61,7 @@ const SignUp = () => {
 
   const signUpRequest = async () => {
     graphQLClient
-      .request(signUpQuery, signUpVariable)
+      .request(SignUpQuery, signUpVariable)
       .then((data) => console.log(data));
   };
 

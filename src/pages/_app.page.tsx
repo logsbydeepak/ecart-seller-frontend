@@ -8,13 +8,10 @@ import "~/styles/globals.css";
 import AppLayout from "~/layout/AppLayout";
 import { AuthProvider } from "~/utils/Context/AuthContext";
 import { QueryClient, QueryClientProvider } from "react-query";
-
-type NextPageWithLayout = NextPage & {
-  getLayout?: (page: ReactElement) => ReactNode;
-};
+import { NextPageLayoutType } from "~/utils/types";
 
 type AppPropsWithLayout = AppProps & {
-  Component: NextPageWithLayout;
+  Component: NextPageLayoutType;
 };
 
 const queryClient = new QueryClient();

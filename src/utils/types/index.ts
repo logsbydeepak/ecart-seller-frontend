@@ -5,6 +5,6 @@ export interface PropsWithChildrenOnlyType {
   children: ReactNode;
 }
 
-export type NextPageLayoutType<P = {}> = NextPage<P> & {
+export type NextPageLayoutType = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
 };
