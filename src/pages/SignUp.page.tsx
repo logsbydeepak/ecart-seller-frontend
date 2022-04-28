@@ -1,19 +1,19 @@
 import { object } from "yup";
 import Link from "next/link";
+import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { SubmitHandler, useForm, UseFormGetValues } from "react-hook-form";
+import { useMutation } from "react-query";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { EmojiHappyIcon, MailIcon } from "@heroicons/react/solid";
+import { SubmitHandler, useForm, UseFormGetValues } from "react-hook-form";
 
-import { name, email, password } from "~/utils/validation";
+import { gqlRequest } from "~/utils/helper/gql";
+import SignUpQuery from "~/utils/gql/User/SignUp.gql";
 import { useAuthContext } from "~/context/AuthContext";
+import authPageGuard from "~/utils/helper/authPageGuard";
+import { name, email, password } from "~/utils/validation";
 import InputWithLeftIcon from "~/components/Input/InputWithLeftIcon";
 import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftIcon";
-import { useMutation } from "react-query";
-import SignUpQuery from "~/utils/gql/User/SignUp.gql";
-import { gqlRequest } from "~/utils/helper/gql";
-import authPageGuard from "~/utils/helper/authPageGuard";
-import { NextPage } from "next";
 
 const schema = object({ name, email, password });
 const signUpRequest = (getValues: UseFormGetValues<SignUpFormType>) =>

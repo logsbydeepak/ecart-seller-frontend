@@ -3,13 +3,17 @@ import Link from "next/link";
 import { NextPage } from "next";
 import { MailIcon } from "@heroicons/react/solid";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { SubmitHandler, useForm, UseFormGetValues } from "react-hook-form";
 
 import { email, password } from "~/utils/validation";
 import InputWithLeftIcon from "~/components/Input/InputWithLeftIcon";
 import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftIcon";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import authPageGuard from "~/utils/helper/authPageGuard";
+import LoginQuery from "~/utils/gql/User/Login.gql";
+import { gqlRequest } from "~/utils/helper/gql";
+import { useRouter } from "next/router";
+import { useAuthContext } from "~/context/AuthContext";
 
 interface LoginInputType {
   email: string;
@@ -18,22 +22,49 @@ interface LoginInputType {
 
 const schema = object({ email, password });
 
+const loginRequest = (getValues: UseFormGetValues<LoginInputType>) =>
+  gqlRequest(LoginQuery, getValues());
+
 const Login: NextPage = () => {
   authPageGuard(false, "/App");
+
+  const { setIsAuth } = useAuthContext();
+  const router = useRouter();
 
   const {
     register,
     handleSubmit,
+    setError,
+    getValues,
     formState: { errors },
   } = useForm<LoginInputType>({ resolver: yupResolver(schema) });
 
-  const request = async () => {
-    console.log(process.env.NEXT_PUBLIC_API_BASE_URL);
-  };
-  const { refetch } = useQuery("login", request, { enabled: false });
+  const { isLoading, mutateAsync } = useMutation(loginRequest, {
+    retry: 3,
+  });
 
-  const onSubmit: SubmitHandler<LoginInputType> = (data) => {
-    refetch();
+  const onSubmit: SubmitHandler<LoginInputType> = async () => {
+    const signUpUser = await mutateAsync(getValues);
+    const createUser = signUpUser.createUser;
+    const typename = createUser.__typename;
+
+    if (typename === "ErrorResponse") {
+      setError(
+        "email",
+        { message: "invalid email or password" },
+        { shouldFocus: true }
+      );
+      setError(
+        "password",
+        { message: "invalid email or password" },
+        { shouldFocus: true }
+      );
+    }
+
+    if (typename === "User") {
+      setIsAuth(true);
+      router.push("/App");
+    }
   };
 
   return (
@@ -52,29 +83,31 @@ const Login: NextPage = () => {
             </Link>
           </p>
           <form className="w-96" onSubmit={handleSubmit(onSubmit)}>
-            <InputWithLeftIcon
-              register={register("email")}
-              label="Email"
-              errorMessage={errors.email?.message}
-              placeholder="example@abc.com"
-              Icon={<MailIcon />}
-            />
+            <fieldset disabled={isLoading}>
+              <InputWithLeftIcon
+                register={register("email")}
+                label="Email"
+                errorMessage={errors.email?.message}
+                placeholder="example@abc.com"
+                Icon={<MailIcon />}
+              />
 
-            <PasswordInputWithLeftIcon
-              register={register("password")}
-              className="mt-4"
-              label="Password"
-              type="password"
-              errorMessage={errors.password?.message}
-              placeholder="strong password"
-            />
+              <PasswordInputWithLeftIcon
+                register={register("password")}
+                className="mt-4"
+                label="Password"
+                type="password"
+                errorMessage={errors.password?.message}
+                placeholder="strong password"
+              />
 
-            <button
-              type="submit"
-              className="mt-8 w-full rounded-md bg-indigo-600 py-3 text-white hover:bg-indigo-500 dark:bg-indigo-400 dark:font-semibold dark:text-black dark:hover:bg-indigo-500"
-            >
-              Login
-            </button>
+              <button
+                type="submit"
+                className="mt-8 w-full rounded-md bg-indigo-600 py-3 text-white hover:bg-indigo-500 dark:bg-indigo-400 dark:font-semibold dark:text-black dark:hover:bg-indigo-500"
+              >
+                Login
+              </button>
+            </fieldset>
           </form>
         </div>
       </div>
