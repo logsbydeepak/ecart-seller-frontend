@@ -14,6 +14,7 @@ import authPageGuard from "~/utils/helper/authPageGuard";
 import { name, email, password } from "~/utils/validation";
 import InputWithLeftIcon from "~/components/Input/InputWithLeftIcon";
 import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftIcon";
+import Spinner from "~/components/Spinner";
 
 const schema = object({ name, email, password });
 const signUpRequest = (getValues: UseFormGetValues<SignUpFormType>) =>
@@ -39,7 +40,8 @@ const SignUp: NextPage = () => {
     formState: { errors },
   } = useForm<SignUpFormType>({ resolver: yupResolver(schema) });
 
-  const { isLoading, mutateAsync } = useMutation(signUpRequest, {
+  // const isLoading = true;
+  const { mutateAsync, isLoading } = useMutation(signUpRequest, {
     retry: 3,
   });
 
@@ -105,9 +107,9 @@ const SignUp: NextPage = () => {
 
             <button
               type="submit"
-              className="mt-8 w-full rounded-md bg-indigo-600 py-3 text-white hover:bg-indigo-500 dark:bg-indigo-400 dark:font-semibold dark:text-black dark:hover:bg-indigo-500 dark:disabled:bg-neutral-400"
+              className="mt-8 flex h-12 w-full justify-center rounded-md bg-indigo-600 py-3 text-white hover:bg-indigo-500 dark:bg-indigo-400 dark:font-semibold dark:text-black dark:hover:bg-indigo-500 dark:disabled:bg-neutral-400"
             >
-              SignUp
+              {isLoading ? <Spinner /> : "SignUp"}
             </button>
           </fieldset>
         </form>
