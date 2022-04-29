@@ -44,9 +44,8 @@ const Login: NextPage = () => {
   });
 
   const onSubmit: SubmitHandler<LoginInputType> = async () => {
-    const signUpUser = await mutateAsync(getValues);
-    const createUser = signUpUser.createUser;
-    const typename = createUser.__typename;
+    const createSession = await mutateAsync(getValues);
+    const typename = createSession.createSession.__typename;
 
     if (typename === "ErrorResponse") {
       setError(

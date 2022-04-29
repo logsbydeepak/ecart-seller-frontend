@@ -2,7 +2,7 @@ import { useAuthContext } from "~/context/AuthContext";
 import { useRouter } from "next/router";
 
 const authPageGuard = (authShouldBe: boolean, elseSendToUrl: string) => {
-  const { isAuth, setIsAuth } = useAuthContext();
+  const { isAuth } = useAuthContext();
   const router = useRouter();
 
   if (isAuth !== authShouldBe) {

@@ -3,7 +3,6 @@ import { Menu } from "@headlessui/react";
 import { CogIcon, LogoutIcon } from "@heroicons/react/outline";
 import { NextRouter, useRouter } from "next/router";
 import { classNames } from "~/utils/helper/tailwind";
-import Image from "next/image";
 
 const profileOptions = [
   {
@@ -32,7 +31,7 @@ const AuthNavbarItem = () => {
     <>
       <Menu>
         <Menu.Button>
-          <Image
+          <img
             src={image}
             alt="Profile"
             className="inline-block h-8 w-8 rounded-full border-2 border-indigo-600 object-cover p-0.5 dark:border-indigo-300"

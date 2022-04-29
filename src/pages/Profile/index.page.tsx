@@ -8,7 +8,6 @@ import { FC, ReactNode } from "react";
 import { classNames } from "~/utils/helper/tailwind";
 import { NextPageLayoutType } from "~/types/nextMod";
 import ProfileNavigationLayout from "~/layout/ProfileNavigation";
-import Image from "next/image";
 
 const Account: NextPageLayoutType = () => {
   const image =
@@ -114,7 +113,7 @@ const InfoImage: FC<{ fieldKey: string; image: string }> = ({
       <h3 className="text-xs font-medium">{fieldKey}</h3>
     </div>
     <div>
-      <Image
+      <img
         src={image}
         alt="profile"
         className="
