@@ -38,7 +38,7 @@ const AuthNavbarItem = () => {
           />
         </Menu.Button>
 
-        <Menu.Items className="absolute right-0 top-0 mr-32 mt-16 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <Menu.Items className="absolute right-0 top-0 mr-20 mt-16 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           {profileOptions.map((element) => (
             <Menu.Item key={element.key}>
               {({ active }) => (

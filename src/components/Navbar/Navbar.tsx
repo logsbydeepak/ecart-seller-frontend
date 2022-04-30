@@ -20,7 +20,7 @@ const Navbar: FC<props> = ({ auth }) => {
           </a>
         </Link>
         <div className="flex items-center">
-          <div className="pr-8 text-sm">
+          <div className="text-sm">
             {auth ? <AuthNavbarItem /> : <NoAuthNavbarItem />}
           </div>
         </div>

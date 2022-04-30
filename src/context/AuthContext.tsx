@@ -31,7 +31,8 @@ export const AuthProvider: FC<PropsWithChildrenOnlyType> = ({ children }) => {
 
   customUseLayoutEffect(() => {
     changeIsAuth(() => {
-      return localStorage.getItem("auth") === "true";
+      // return localStorage.getItem("auth") === "true";
+      return true;
     });
   }, [isAuth]);
 

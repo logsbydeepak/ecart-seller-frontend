@@ -10,7 +10,6 @@ import { SubmitHandler, useForm, UseFormGetValues } from "react-hook-form";
 import { gqlRequest } from "~/utils/helper/gql";
 import SignUpQuery from "~/utils/gql/User/SignUp.gql";
 import { useAuthContext } from "~/context/AuthContext";
-import authPageGuard from "~/utils/helper/authPageGuard";
 import { name, email, password } from "~/utils/validation";
 import InputWithLeftIcon from "~/components/Input/InputWithLeftIcon";
 import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftIcon";
@@ -27,10 +26,13 @@ interface SignUpFormType {
 }
 
 const SignUp: NextPage = () => {
-  authPageGuard(false, "/App");
-
-  const { setIsAuth } = useAuthContext();
+  const { isAuth, setIsAuth } = useAuthContext();
   const router = useRouter();
+
+  if (isAuth) {
+    router.push("/App");
+    return null;
+  }
 
   const {
     register,

@@ -1,19 +1,18 @@
 import { object } from "yup";
 import Link from "next/link";
 import { NextPage } from "next";
+import { useRouter } from "next/router";
+import { useMutation } from "react-query";
 import { MailIcon } from "@heroicons/react/solid";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { SubmitHandler, useForm, UseFormGetValues } from "react-hook-form";
 
+import { gqlRequest } from "~/utils/helper/gql";
+import LoginQuery from "~/utils/gql/User/Login.gql";
 import { email, password } from "~/utils/validation";
+import { useAuthContext } from "~/context/AuthContext";
 import InputWithLeftIcon from "~/components/Input/InputWithLeftIcon";
 import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftIcon";
-import { useMutation, useQuery } from "react-query";
-import authPageGuard from "~/utils/helper/authPageGuard";
-import LoginQuery from "~/utils/gql/User/Login.gql";
-import { gqlRequest } from "~/utils/helper/gql";
-import { useRouter } from "next/router";
-import { useAuthContext } from "~/context/AuthContext";
 
 interface LoginInputType {
   email: string;
@@ -26,10 +25,13 @@ const loginRequest = (getValues: UseFormGetValues<LoginInputType>) =>
   gqlRequest(LoginQuery, getValues());
 
 const Login: NextPage = () => {
-  authPageGuard(false, "/App");
-
-  const { setIsAuth } = useAuthContext();
+  const { isAuth, setIsAuth } = useAuthContext();
   const router = useRouter();
+
+  if (isAuth) {
+    router.push("/App");
+    return null;
+  }
 
   const {
     register,

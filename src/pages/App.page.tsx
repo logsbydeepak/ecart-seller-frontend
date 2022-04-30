@@ -2,10 +2,15 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 
 import { useAuthContext } from "~/context/AuthContext";
-import authPageGuard from "~/utils/helper/authPageGuard";
 
 const App: NextPage = () => {
-  authPageGuard(true, "/");
+  const { isAuth } = useAuthContext();
+  const router = useRouter();
+
+  if (!isAuth) {
+    router.push("/Login");
+    return null;
+  }
 
   return (
     <>
