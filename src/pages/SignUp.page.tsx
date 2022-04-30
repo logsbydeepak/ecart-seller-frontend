@@ -65,14 +65,14 @@ const SignUp: NextPage = () => {
 
   return (
     <div className="flex flex-col items-center	justify-center py-20">
-      <div className="rounded-lg border-2 px-10 py-16 dark:border-neutral-800">
-        <h1 className="pb-4 text-center text-4xl font-bold text-slate-900 dark:text-slate-50  ">
+      <div className="rounded-lg border-2 px-10 py-16">
+        <h1 className="pb-4 text-center text-4xl font-bold text-slate-900">
           Create Account
         </h1>
         <p className="mb-8 text-center">
           Already have an account?
           <Link href="/Login">
-            <a className="ml-2 text-indigo-600 hover:text-indigo-500 hover:underline dark:text-indigo-300 dark:hover:text-indigo-400">
+            <a className="ml-2 text-indigo-600 hover:text-indigo-500 hover:underline">
               Login
             </a>
           </Link>
@@ -107,7 +107,7 @@ const SignUp: NextPage = () => {
 
             <button
               type="submit"
-              className="mt-8 flex h-12 w-full justify-center rounded-md bg-indigo-600 py-3 text-white hover:bg-indigo-500 dark:bg-indigo-400 dark:font-semibold dark:text-black dark:hover:bg-indigo-500 dark:disabled:bg-neutral-400"
+              className="mt-8 flex h-12 w-full justify-center rounded-md bg-indigo-600 py-3 text-white hover:bg-indigo-500"
             >
               {isLoading ? <Spinner /> : "SignUp"}
             </button>

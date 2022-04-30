@@ -27,14 +27,14 @@ export const TextInput: FC<{
     {...register}
     className={classNames(
       className,
-      "mt-1 block w-full rounded-md border-2 border-slate-200 bg-slate-50 text-base ring-0 focus:border-indigo-600 focus:bg-white focus:ring-indigo-400 dark:border-neutral-700 dark:bg-neutral-800 dark:placeholder:text-neutral-400 dark:focus:border-indigo-400 dark:focus:ring-indigo-300"
+      "mt-1 block w-full rounded-md border-2 border-slate-200 bg-slate-50 text-base ring-0 focus:border-indigo-600 focus:bg-white focus:ring-indigo-400"
     )}
   />
 );
 
 export const LeftIcon: FC<{ Icon: ReactNode }> = ({ Icon }) => (
   <div className="pointer-events-none absolute left-0 flex h-full w-11 items-center justify-center">
-    <span className="w-4 text-neutral-500 dark:text-neutral-400">{Icon}</span>
+    <span className="w-4 text-neutral-500">{Icon}</span>
   </div>
 );
 
@@ -47,14 +47,12 @@ export const RightButtonIcon: FC<{
     onClick={handleOnClick}
     className="absolute right-0 flex h-full w-11 items-center justify-center"
   >
-    <span className="w-4 text-neutral-500 dark:text-neutral-400">{Icon}</span>
+    <span className="w-4 text-neutral-500">{Icon}</span>
   </button>
 );
 
 export const ErrorMessage: FC<{ message?: string }> = ({ message }) => (
-  <p className="mt-1 text-sm font-normal text-red-500 dark:text-red-300">
-    {message}
-  </p>
+  <p className="mt-1 text-sm font-normal text-red-500">{message}</p>
 );
 
 export const Label: FC<{ label: string; id: string }> = ({ label, id }) => (
@@ -78,7 +76,7 @@ export const RightIconContainer: FC<PropsWithChildrenOnlyType> = ({
 }) => <div className="absolute right-0 h-full">{children}</div>;
 
 export const IconBase: FC<{ Icon: ReactNode }> = ({ Icon }) => (
-  <div className="flex h-full w-11 items-center justify-center text-neutral-500 dark:text-neutral-400">
+  <div className="flex h-full w-11 items-center justify-center text-neutral-500">
     <span className="w-4">{Icon}</span>
   </div>
 );

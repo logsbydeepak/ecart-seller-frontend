@@ -17,7 +17,7 @@ const Account: NextPageLayoutType = () => {
     <>
       <div className="mt-8 mb-16 text-center font-normal">
         <h1 className="mb-2 text-3xl">Account Info</h1>
-        <p className="dark:text-neutral-300">Manage you account basic info</p>
+        <p className="">Manage you account basic info</p>
       </div>
 
       <BorderBox
@@ -55,34 +55,34 @@ const BorderBox: FC<{
   <div
     className={classNames(
       className,
-      "rounded-md border-2 border-neutral-200  font-normal dark:border-neutral-700"
+      "rounded-md border-2 border-neutral-200  font-normal"
     )}
   >
     <div className="py-5 pl-6">
       <h1 className="mb-1 text-2xl">{title}</h1>
-      <p className="text-sm dark:text-neutral-300">{subTitle}</p>
+      <p className="text-sm">{subTitle}</p>
     </div>
     {children}
   </div>
 );
 
 const Divider: FC = () => (
-  <div className="w-full border-b-2  border-neutral-200 dark:border-neutral-700"></div>
+  <div className="w-full border-b-2  border-neutral-200"></div>
 );
 
 const InfoText: FC<{ fieldKey: string; value: string }> = ({
   fieldKey,
   value,
 }) => (
-  <button className="flex w-full items-center py-5 px-6 text-left hover:dark:bg-neutral-800">
-    <div className="w-48 dark:text-neutral-400">
+  <button className="flex w-full items-center py-5 px-6 text-left">
+    <div className="w-48">
       <h3 className="text-xs font-medium">{fieldKey}</h3>
     </div>
     <div>
       <h4>{value}</h4>
     </div>
     <div className="ml-auto">
-      <ChevronRightIcon className="w-5 dark:text-neutral-400" />
+      <ChevronRightIcon className="w-5" />
     </div>
   </button>
 );
@@ -91,15 +91,15 @@ const InfoTextIcon: FC<{ fieldKey: string; Icon: ReactNode }> = ({
   fieldKey,
   Icon,
 }) => (
-  <button className="flex w-full items-center py-5 px-6 text-left hover:dark:bg-neutral-800">
-    <div className="w-48 dark:text-neutral-400">
+  <button className="flex w-full items-center py-5 px-6 text-left">
+    <div className="w-48">
       <div className="h-5 w-5">{Icon}</div>
     </div>
     <div>
       <h4>{fieldKey}</h4>
     </div>
     <div className="ml-auto">
-      <ChevronRightIcon className="w-5 dark:text-neutral-400" />
+      <ChevronRightIcon className="w-5" />
     </div>
   </button>
 );
@@ -108,21 +108,19 @@ const InfoImage: FC<{ fieldKey: string; image: string }> = ({
   fieldKey,
   image,
 }) => (
-  <button className="flex w-full items-center py-5 px-6 text-left hover:dark:bg-neutral-800">
-    <div className="w-48 dark:text-neutral-400">
+  <button className="flex w-full items-center py-5 px-6 text-left">
+    <div className="w-48">
       <h3 className="text-xs font-medium">{fieldKey}</h3>
     </div>
     <div>
       <img
         src={image}
         alt="profile"
-        className="
-cover h-24 w-24 rounded-full	border-2 object-cover p-1 dark:border-indigo-200
-      "
+        className="cover h-24 w-24 rounded-full	border-2 object-cover p-1"
       />
     </div>
     <div className="ml-auto">
-      <ChevronRightIcon className="w-5 dark:text-neutral-400" />
+      <ChevronRightIcon className="w-5" />
     </div>
   </button>
 );

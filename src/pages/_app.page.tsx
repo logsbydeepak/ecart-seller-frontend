@@ -1,6 +1,5 @@
 import Head from "next/head";
 import type { AppProps } from "next/app";
-import { ThemeProvider } from "next-themes";
 import { ReactQueryDevtools } from "react-query/devtools";
 
 import "~/styles/globals.css";
@@ -24,15 +23,13 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         <title>Ecart Seller</title>
       </Head>
 
-      <ThemeProvider attribute="class" defaultTheme="system">
-        <QueryClientProvider client={queryClient}>
-          <ReactQueryDevtools initialIsOpen={false} />
+      <QueryClientProvider client={queryClient}>
+        <ReactQueryDevtools initialIsOpen={false} />
 
-          <AuthProvider>
-            <AppLayout>{getLayout(<Component {...pageProps} />)}</AppLayout>
-          </AuthProvider>
-        </QueryClientProvider>
-      </ThemeProvider>
+        <AuthProvider>
+          <AppLayout>{getLayout(<Component {...pageProps} />)}</AppLayout>
+        </AuthProvider>
+      </QueryClientProvider>
     </>
   );
 }

@@ -5,7 +5,6 @@ module.exports = {
     "./src/components/**/*.{js,ts,jsx,tsx}",
     "./src/layout/**/*.{js,ts,jsx,tsx}",
   ],
-  darkMode: "class",
   theme: {
     fontFamily: {
       inter: ["Inter", "sans-serif"],
