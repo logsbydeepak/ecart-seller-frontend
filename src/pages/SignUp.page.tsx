@@ -14,6 +14,7 @@ import { name, email, password } from "~/utils/validation";
 import InputWithLeftIcon from "~/components/Input/InputWithLeftIcon";
 import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftIcon";
 import Spinner from "~/components/Spinner";
+import { useState } from "react";
 
 const schema = object({ name, email, password });
 const signUpRequest = (getValues: UseFormGetValues<SignUpFormType>) =>
@@ -34,6 +35,9 @@ const SignUp: NextPage = () => {
     return null;
   }
 
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -42,12 +46,12 @@ const SignUp: NextPage = () => {
     formState: { errors },
   } = useForm<SignUpFormType>({ resolver: yupResolver(schema) });
 
-  // const isLoading = true;
-  const { mutateAsync, isLoading } = useMutation(signUpRequest, {
+  const { mutateAsync, isError } = useMutation(signUpRequest, {
     retry: 3,
   });
 
   const onSubmit: SubmitHandler<SignUpFormType> = async () => {
+    setIsLoading(true);
     const signUpUser = await mutateAsync(getValues);
     const createUser = signUpUser.createUser;
     const typename = createUser.__typename;
@@ -56,10 +60,12 @@ const SignUp: NextPage = () => {
       createUser.title === "AUTHENTICATION" &&
       createUser.message === "email already exist"
     ) {
+      setIsLoading(false);
       setError("email", { message: createUser.message }, { shouldFocus: true });
     }
 
     if (typename === "User") {
+      setIsSuccess(true);
       setIsAuth(true);
       router.push("/App");
     }
@@ -79,6 +85,17 @@ const SignUp: NextPage = () => {
             </a>
           </Link>
         </p>
+
+        {isError && (
+          <p className="pb-4 text-center text-red-500">Something went wrong</p>
+        )}
+
+        {isSuccess && (
+          <p className="pb-4 text-center text-green-500">
+            User Created Successfully
+          </p>
+        )}
+
         <form className="w-96" onSubmit={handleSubmit(onSubmit)}>
           <fieldset disabled={isLoading}>
             <InputWithLeftIcon
@@ -109,7 +126,7 @@ const SignUp: NextPage = () => {
 
             <button
               type="submit"
-              className="mt-8 flex h-12 w-full justify-center rounded-md bg-indigo-600 py-3 text-white hover:bg-indigo-500"
+              className="mt-8 flex h-12 w-full justify-center rounded-md bg-indigo-600 py-3 text-white hover:bg-indigo-500 disabled:bg-neutral-900"
             >
               {isLoading ? <Spinner /> : "SignUp"}
             </button>
