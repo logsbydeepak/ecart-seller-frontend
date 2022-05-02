@@ -36,10 +36,11 @@ export const AuthProvider: FC<PropsWithChildrenOnlyType> = ({ children }) => {
   customUseLayoutEffect(() => {
     setIsAuth(getLocalAuthValue());
 
-    window.addEventListener("storage", () => {
-      const currentAuthValue = getLocalAuthValue();
-      if (isAuth === currentAuthValue) return;
-      setIsAuth(currentAuthValue);
+    window.addEventListener("storage", (event: StorageEvent) => {
+      if (event.key !== "auth") return;
+
+      const currentAuthValue = event.newValue === "1";
+      if (isAuth !== currentAuthValue) setIsAuth(currentAuthValue);
     });
   }, [isAuth]);
 
