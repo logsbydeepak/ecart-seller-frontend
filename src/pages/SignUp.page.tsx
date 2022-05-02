@@ -91,9 +91,7 @@ const SignUp: NextPage = () => {
         )}
 
         {isSuccess && (
-          <p className="pb-4 text-center text-green-500">
-            User Created Successfully
-          </p>
+          <p className="pb-4 text-center text-green-500">Login successful</p>
         )}
 
         <form className="w-96" onSubmit={handleSubmit(onSubmit)}>
