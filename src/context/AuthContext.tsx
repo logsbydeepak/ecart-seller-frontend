@@ -1,6 +1,6 @@
-import { createContext, FC, useContext, useState } from "react";
-import { customUseLayoutEffect } from "~/utils/helper/nextMod";
 import { PropsWithChildrenOnlyType } from "~/types/nextMod";
+import { customUseLayoutEffect } from "~/utils/helper/nextMod";
+import { createContext, FC, useContext, useState } from "react";
 
 type AuthContextType = null | {
   isAuth: boolean;
@@ -17,12 +17,16 @@ export const useAuthContext = () => {
   return context;
 };
 
-export const AuthProvider: FC<PropsWithChildrenOnlyType> = ({ children }) => {
-  const [isAuth, changeIsAuth] = useState(false);
+const removeLocalAuth = () => localStorage.removeItem("auth");
+const setLocalAuthToTrue = () => localStorage.setItem("auth", "1");
+const getLocalAuthValue = () => localStorage.getItem("auth") === "1";
 
-  const setIsAuth = (authValue: boolean) => {
-    changeIsAuth(() => {
-      localStorage.setItem("auth", authValue.toString());
+export const AuthProvider: FC<PropsWithChildrenOnlyType> = ({ children }) => {
+  const [isAuth, setIsAuth] = useState(false);
+
+  const setIsAuthLocalAndState = (authValue: boolean) => {
+    setIsAuth(() => {
+      authValue ? setLocalAuthToTrue() : removeLocalAuth();
       return authValue;
     });
 
@@ -30,18 +34,18 @@ export const AuthProvider: FC<PropsWithChildrenOnlyType> = ({ children }) => {
   };
 
   customUseLayoutEffect(() => {
-    changeIsAuth(localStorage.getItem("auth") === "true");
+    setIsAuth(getLocalAuthValue());
 
     window.addEventListener("storage", () => {
-      changeIsAuth(localStorage.getItem("auth") === "true");
+      const currentAuthValue = getLocalAuthValue();
+      if (isAuth === currentAuthValue) return;
+      setIsAuth(currentAuthValue);
     });
   }, [isAuth]);
 
   return (
-    <>
-      <AuthContext.Provider value={{ isAuth, setIsAuth }}>
-        {children}
-      </AuthContext.Provider>
-    </>
+    <AuthContext.Provider value={{ isAuth, setIsAuth: setIsAuthLocalAndState }}>
+      {children}
+    </AuthContext.Provider>
   );
 };
