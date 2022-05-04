@@ -3,23 +3,44 @@ import {
   LogoutIcon,
   TrashIcon,
 } from "@heroicons/react/outline";
-import { FC, ReactNode } from "react";
+import { FC, ReactNode, useState } from "react";
 
 import { classNames } from "~/utils/helper/tailwind";
 import { NextPageLayoutType } from "~/types/nextMod";
 import ProfileNavigationLayout from "~/layout/ProfileNavigation";
+import Spinner from "~/components/Spinner";
 
 const Account: NextPageLayoutType = () => {
+  const [isLoading, setIsLoading] = useState(true);
+
+  return (
+    <>
+      <div className="text-center font-normal">
+        <h1 className="mb-2 text-3xl">Account Info</h1>
+        <p className="">Manage you account basic info</p>
+      </div>
+
+      {isLoading ? <LoadingUserInfo /> : <UserInfo />}
+    </>
+  );
+};
+
+const LoadingUserInfo: FC = () => {
+  return (
+    <>
+      <div className="flex flex-col items-center justify-center p-20">
+        <Spinner className="h-12 w-12 text-indigo-800" />
+      </div>
+    </>
+  );
+};
+
+const UserInfo: FC = () => {
   const image =
     "https://images.unsplash.com/photo-1637633198300-08beaec68c70?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1887&q=80";
 
   return (
     <>
-      <div className="mt-8 mb-16 text-center font-normal">
-        <h1 className="mb-2 text-3xl">Account Info</h1>
-        <p className="">Manage you account basic info</p>
-      </div>
-
       <BorderBox
         title="Basic Info"
         subTitle="All the info required your current Password"

@@ -1,10 +1,10 @@
 import { FC } from "react";
 import { classNames } from "~/utils/helper/tailwind";
 
-const Spinner: FC<{ className?: string }> = ({ className }) => {
+const Spinner: FC<{ className?: string; size?: string }> = ({ className }) => {
   return (
     <svg
-      className={classNames("h-5 w-5 animate-spin text-white", className)}
+      className={classNames("animate-spin text-white", className)}
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"

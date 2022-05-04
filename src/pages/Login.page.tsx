@@ -30,11 +30,6 @@ const Login: NextPage = () => {
   const { isAuth, setIsAuth } = useAuthContext();
   const router = useRouter();
 
-  if (isAuth) {
-    router.push("/App");
-    return null;
-  }
-
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
@@ -75,6 +70,11 @@ const Login: NextPage = () => {
       router.push("/App");
     }
   };
+
+  if (isAuth) {
+    router.push("/App");
+    return null;
+  }
 
   return (
     <>
@@ -127,7 +127,7 @@ const Login: NextPage = () => {
                 type="submit"
                 className="mt-8 flex h-12 w-full justify-center rounded-md bg-indigo-600 py-3 text-white hover:bg-indigo-500 disabled:bg-neutral-900"
               >
-                {isLoading ? <Spinner /> : "Login"}
+                {isLoading ? <Spinner className="h-5 w-5" /> : "SignUp"}
               </button>
             </fieldset>
           </form>
