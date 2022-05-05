@@ -3,15 +3,22 @@ import {
   LogoutIcon,
   TrashIcon,
 } from "@heroicons/react/outline";
-import { FC, ReactNode, useState } from "react";
+import { useImmer } from "use-immer";
+import { FC, ReactNode } from "react";
 
-import { classNames } from "~/utils/helper/tailwind";
-import { NextPageLayoutType } from "~/types/nextMod";
-import ProfileNavigationLayout from "~/layout/ProfileNavigation";
 import Spinner from "~/components/Spinner";
+import { NextPageLayoutType } from "~/types/nextMod";
+import { classNames } from "~/utils/helper/tailwind";
+import ProfileNavigationLayout from "~/layout/ProfileNavigation";
 
 const Account: NextPageLayoutType = () => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [requestStatus, setRequestStatus] = useImmer({
+    isLoading: true,
+    isSuccess: false,
+    isError: false,
+  });
+
+  const { isLoading, isSuccess, isError } = requestStatus;
 
   return (
     <>
@@ -20,20 +27,22 @@ const Account: NextPageLayoutType = () => {
         <p className="">Manage you account basic info</p>
       </div>
 
-      {isLoading ? <LoadingUserInfo /> : <UserInfo />}
+      {isLoading && <LoadingUserInfo />}
+      {isError && <ErrorText />}
+      {isSuccess && <UserInfo />}
     </>
   );
 };
 
-const LoadingUserInfo: FC = () => {
-  return (
-    <>
-      <div className="flex flex-col items-center justify-center p-20">
-        <Spinner className="h-12 w-12 text-indigo-800" />
-      </div>
-    </>
-  );
-};
+const ErrorText: FC = () => (
+  <p className="p-20 pb-4 text-center text-red-500">Something went wrong</p>
+);
+
+const LoadingUserInfo: FC = () => (
+  <div className="flex flex-col items-center justify-center p-20">
+    <Spinner className="h-12 w-12 text-neutral-900" />
+  </div>
+);
 
 const UserInfo: FC = () => {
   const image =
