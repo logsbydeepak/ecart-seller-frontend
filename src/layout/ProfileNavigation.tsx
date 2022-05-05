@@ -52,8 +52,10 @@ const TabLink: FC<{
   <Link href={link}>
     <a
       className={classNames(
-        active ? "text-indigo-700" : "text-neutral-600",
-        "mb-2 flex w-full items-center rounded-md p-3 text-sm font-medium hover:bg-neutral-100"
+        active
+          ? "bg-indigo-50 text-indigo-800 hover:bg-indigo-100"
+          : "text-neutral-600 hover:bg-neutral-100",
+        "mb-2 flex w-full items-center rounded-md p-3 text-sm font-medium "
       )}
     >
       <span className="mr-2 h-6 w-6">{Icon}</span>

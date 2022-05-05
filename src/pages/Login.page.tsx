@@ -53,24 +53,28 @@ const Login: NextPage = () => {
     });
 
   const onSuccess = (data: any) => {
-    const createUser = data.createUser;
-    const typename = createUser.__typename;
-
-    if (
-      createUser.title === "AUTHENTICATION" &&
-      createUser.message === "email already exist"
-    ) {
-      setRequestStatus((draft) => {
-        draft.isLoading = false;
-      });
-      setError("email", { message: createUser.message }, { shouldFocus: true });
-    }
+    const createSession = data.createSession;
+    const typename = createSession.__typename;
 
     if (typename === "User") {
       setRequestStatus((draft) => {
         draft.isSuccess = true;
       });
       setIsAuth(true);
+    } else {
+      setRequestStatus((draft) => {
+        draft.isLoading = false;
+      });
+      setError(
+        "email",
+        { message: "email or password is invalid" },
+        { shouldFocus: true }
+      );
+      setError(
+        "password",
+        { message: "email or password is invalid" },
+        { shouldFocus: true }
+      );
     }
   };
 

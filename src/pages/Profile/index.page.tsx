@@ -10,15 +10,72 @@ import Spinner from "~/components/Spinner";
 import { NextPageLayoutType } from "~/types/nextMod";
 import { classNames } from "~/utils/helper/tailwind";
 import ProfileNavigationLayout from "~/layout/ProfileNavigation";
+import GetUserQuery from "~/utils/gql/User/GetUser.gql";
+import { gqlRequest } from "~/utils/helper/gql";
+import { useQuery, useQueryClient } from "react-query";
+import { useAuthContext } from "~/context/AuthContext";
+import { email } from "~/utils/validation";
+
+const getUserRequest = async (setIsAuth: (authValue: boolean) => boolean) => {
+  try {
+    const request = await gqlRequest(GetUserQuery, {});
+    const readUser = request.readUser;
+    const typename = readUser.__typename;
+
+    const logoutTitle = ["TOKEN_PARSE", "AUTHENTICATION"];
+
+    if (logoutTitle.includes(readUser.title)) {
+      setIsAuth(false);
+    }
+    return request;
+  } catch (error) {
+    throw new Error("Something went wrong");
+  }
+};
 
 const Account: NextPageLayoutType = () => {
+  const { setIsAuth } = useAuthContext();
+
   const [requestStatus, setRequestStatus] = useImmer({
     isLoading: true,
-    isSuccess: false,
     isError: false,
+    isSuccess: false,
   });
 
-  const { isLoading, isSuccess, isError } = requestStatus;
+  const [userInfo, setUserInfo] = useImmer({ name: "", email: "" });
+
+  const onError = () =>
+    setRequestStatus((draft) => {
+      draft.isError === true, draft.isLoading === false;
+    });
+
+  const onSuccess = (data: any) => {
+    const readUser = data.readUser;
+    const typename = readUser.__typename;
+
+    if (typename === "User") {
+      setRequestStatus((draft) => {
+        draft.isSuccess = true;
+        draft.isLoading = false;
+      });
+
+      setUserInfo((draft) => {
+        draft.name = readUser.name;
+        draft.email = readUser.email;
+      });
+    } else {
+      onError();
+    }
+  };
+
+  const { isLoading, isError, isSuccess } = useQuery(
+    "User Info",
+    () => getUserRequest(setIsAuth),
+    {
+      onSuccess,
+      onError,
+    }
+  );
 
   return (
     <>
@@ -29,7 +86,7 @@ const Account: NextPageLayoutType = () => {
 
       {isLoading && <LoadingUserInfo />}
       {isError && <ErrorText />}
-      {isSuccess && <UserInfo />}
+      {isSuccess && <UserInfo name={userInfo.name} email={userInfo.email} />}
     </>
   );
 };
@@ -44,7 +101,7 @@ const LoadingUserInfo: FC = () => (
   </div>
 );
 
-const UserInfo: FC = () => {
+const UserInfo: FC<{ name: string; email: string }> = ({ name, email }) => {
   const image =
     "https://images.unsplash.com/photo-1637633198300-08beaec68c70?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1887&q=80";
 
@@ -56,9 +113,9 @@ const UserInfo: FC = () => {
       >
         <InfoImage fieldKey="Photo" image={image} />
         <Divider />
-        <InfoText fieldKey="NAME" value="Test Name" />
+        <InfoText fieldKey="NAME" value={name} />
         <Divider />
-        <InfoText fieldKey="EMAIL" value="example@abc.com" />
+        <InfoText fieldKey="EMAIL" value={email} />
         <Divider />
         <InfoText fieldKey="PASSWORD" value="*******" />
       </BorderBox>

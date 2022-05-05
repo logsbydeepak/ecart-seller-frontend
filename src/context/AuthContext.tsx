@@ -1,6 +1,7 @@
 import { PropsWithChildrenOnlyType } from "~/types/nextMod";
 import { customUseLayoutEffect } from "~/utils/helper/nextMod";
 import { createContext, FC, useContext, useState } from "react";
+import { useQueryClient } from "react-query";
 
 type AuthContextType = null | {
   isAuth: boolean;
@@ -22,6 +23,7 @@ const setLocalAuthToTrue = () => localStorage.setItem("auth", "1");
 const getLocalAuthValue = () => localStorage.getItem("auth") === "1";
 
 export const AuthProvider: FC<PropsWithChildrenOnlyType> = ({ children }) => {
+  const queryClient = useQueryClient();
   const [isAuth, setIsAuth] = useState(false);
 
   const setIsAuthLocalAndState = (authValue: boolean) => {
@@ -32,6 +34,10 @@ export const AuthProvider: FC<PropsWithChildrenOnlyType> = ({ children }) => {
 
     return authValue;
   };
+
+  if (!isAuth) {
+    queryClient.invalidateQueries();
+  }
 
   customUseLayoutEffect(() => {
     setIsAuth(getLocalAuthValue());

@@ -1,0 +1,14 @@
+query Query {
+  readUser {
+    ... on User {
+      __typename
+      name
+      email
+    }
+    ... on ErrorResponse {
+      __typename
+      title
+      message
+    }
+  }
+}
