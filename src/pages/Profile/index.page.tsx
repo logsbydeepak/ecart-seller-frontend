@@ -11,31 +11,9 @@ import { NextPageLayoutType } from "~/types/nextMod";
 import { classNames } from "~/utils/helper/tailwind";
 import ProfileNavigationLayout from "~/layout/ProfileNavigation";
 import GetUserQuery from "~/utils/gql/User/GetUser.gql";
-import { gqlRequest } from "~/utils/helper/gql";
-import { useQuery, useQueryClient } from "react-query";
-import { useAuthContext } from "~/context/AuthContext";
-import { email } from "~/utils/validation";
-
-const getUserRequest = async (setIsAuth: (authValue: boolean) => boolean) => {
-  try {
-    const request = await gqlRequest(GetUserQuery, {});
-    const readUser = request.readUser;
-    const typename = readUser.__typename;
-
-    const logoutTitle = ["TOKEN_PARSE", "AUTHENTICATION"];
-
-    if (logoutTitle.includes(readUser.title)) {
-      setIsAuth(false);
-    }
-    return request;
-  } catch (error) {
-    throw new Error("Something went wrong");
-  }
-};
+import useAuthRequestHook from "~/hooks/useAuthRequestHook";
 
 const Account: NextPageLayoutType = () => {
-  const { setIsAuth } = useAuthContext();
-
   const [requestStatus, setRequestStatus] = useImmer({
     isLoading: true,
     isError: false,
@@ -43,11 +21,6 @@ const Account: NextPageLayoutType = () => {
   });
 
   const [userInfo, setUserInfo] = useImmer({ name: "", email: "" });
-
-  const onError = () =>
-    setRequestStatus((draft) => {
-      draft.isError === true, draft.isLoading === false;
-    });
 
   const onSuccess = (data: any) => {
     const readUser = data.readUser;
@@ -63,19 +36,15 @@ const Account: NextPageLayoutType = () => {
         draft.name = readUser.name;
         draft.email = readUser.email;
       });
-    } else {
-      onError();
     }
   };
 
-  const { isLoading, isError, isSuccess } = useQuery(
-    "User Info",
-    () => getUserRequest(setIsAuth),
-    {
-      onSuccess,
-      onError,
-    }
-  );
+  const { isLoading, isError, isSuccess } = useAuthRequestHook({
+    queryKey: "User info",
+    name: "readUser",
+    onSuccess,
+    GQLQuery: GetUserQuery,
+  });
 
   return (
     <>

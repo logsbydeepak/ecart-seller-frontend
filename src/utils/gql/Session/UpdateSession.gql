@@ -1,0 +1,13 @@
+mutation Mutation {
+  updateSession {
+    ... on ErrorResponse {
+      __typename
+      title
+      message
+    }
+    ... on SuccessResponse {
+      __typename
+      message
+    }
+  }
+}
