@@ -40,10 +40,12 @@ const Account: NextPageLayoutType = () => {
   };
 
   const { isLoading, isError, isSuccess } = useAuthRequestHook({
-    queryKey: "User info",
+    key: "User info",
     name: "readUser",
-    onSuccess,
-    GQLQuery: GetUserQuery,
+    query: GetUserQuery,
+    option: {
+      onSuccess,
+    },
   });
 
   return (
@@ -111,7 +113,7 @@ const BorderBox: FC<{
   <div
     className={classNames(
       className,
-      "rounded-md border-2 border-neutral-200  font-normal"
+      "mt-20 rounded-md border-2  border-neutral-200 font-normal"
     )}
   >
     <div className="py-5 pl-6">

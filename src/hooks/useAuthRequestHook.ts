@@ -1,87 +1,110 @@
 import { RequestDocument, Variables } from "graphql-request";
-import { QueryKey, useQuery, UseQueryOptions } from "react-query";
+import {
+  useQuery,
+  QueryKey,
+  UseQueryOptions,
+  UseQueryResult,
+  QueryFunction,
+  useQueryClient,
+  QueryClient,
+  UseMutateAsyncFunction,
+} from "react-query";
 import { useAuthContext } from "~/context/AuthContext";
 import { gqlRequest } from "~/utils/helper/gql";
 import useUpdateSession from "./useUpdateSession";
 
-type ReturnType = {
-  isLoading: boolean;
-  isSuccess: boolean;
-  isError: boolean;
-};
-
-type ArgsType = {
-  queryKey: QueryKey;
+interface ArgsType {
+  key: QueryKey;
+  query: RequestDocument;
   name: string;
-  onError?: (data: any) => void;
-  onSuccess: (data: any) => void;
-  GQLQuery: RequestDocument;
-  GQLQueryVariable?: Variables | {};
-  queryOption?: UseQueryOptions | {};
-};
+  variable?: Variables;
+  option?: UseQueryOptions;
+}
 
-type useAuthRequestHookType = (args: ArgsType) => ReturnType;
+type UseAuthRequestHookType = (args: ArgsType) => UseQueryResult;
 
-const useAuthRequestHook: useAuthRequestHookType = ({
-  queryKey,
-  name,
-  onError = () => {},
-  onSuccess,
-  GQLQuery,
-  GQLQueryVariable = {},
-  queryOption = {},
-}) => {
-  const { setIsAuth } = useAuthContext();
+const request = async (
+  key: QueryKey,
+  queryDocument: RequestDocument,
+  variable: Variables,
+  name: string,
+  setIsAuth: (authValue: boolean) => boolean,
+  queryClient: QueryClient,
+  mutateAsync: UseMutateAsyncFunction,
+  signal?: AbortSignal
+) => {
+  try {
+    const response = await gqlRequest({
+      query: queryDocument,
+      variable,
+      signal,
+    });
 
-  const onSuccessUpdateSession = () => {
-    refetch();
-  };
+    const responseData = response[name];
+    const typename = responseData.__typename;
 
-  const onErrorUpdateSession = () => {};
-
-  const { mutateAsync } = useUpdateSession(
-    onSuccessUpdateSession,
-    onErrorUpdateSession
-  );
-
-  const request = async () => {
-    try {
-      const req = await gqlRequest(GQLQuery, GQLQueryVariable);
-      const data = req[name];
-      const typename = data.__typename;
-      const logoutTitle = ["TOKEN_PARSE", "AUTHENTICATION"];
-
-      if (typename === "ErrorResponse") {
-        if (data.title === "TOKEN_PARSE" && data.message === "token expired") {
-          await mutateAsync();
-          return;
-        }
-
-        if (logoutTitle.includes(data.title)) {
-          setIsAuth(false);
-          return;
-        }
-
-        throw new Error();
+    if (typename === "ErrorResponse") {
+      if (
+        (responseData.title === "TOKEN_PARSE",
+        (responseData.message = "token expired"))
+      ) {
+        await mutateAsync();
       }
 
-      return req;
-    } catch (error) {
-      throw new Error("Something went wrong");
+      if (["TOKEN_PARSE", "AUTHENTICATION"].includes(responseData.title)) {
+        queryClient.cancelQueries(key);
+        setIsAuth(false);
+      }
     }
+    return response;
+  } catch (error) {
+    throw { requestError: "Something went wrong" };
+  }
+};
+
+const useAuthRequestHook: UseAuthRequestHookType = ({
+  key,
+  query,
+  name,
+  variable = {},
+  option = {},
+}) => {
+  const { setIsAuth } = useAuthContext();
+  const queryClient = useQueryClient();
+
+  const onUpdateSessionSuccess = () => {
+    useQueryHook.refetch();
   };
 
-  const { isLoading, isSuccess, isError, refetch } = useQuery(
-    queryKey,
-    request,
+  const onUpdateSessionError = () => {
+    queryClient.cancelQueries(key);
+  };
+
+  const { mutateAsync } = useUpdateSession(
     {
-      onError,
-      onSuccess,
-      ...queryOption,
-    }
+      onSuccess: onUpdateSessionSuccess,
+      onError: onUpdateSessionError,
+    },
+    key
   );
 
-  return { isLoading, isSuccess, isError };
+  const performRequest: QueryFunction = ({ signal }) =>
+    request(
+      key,
+      query,
+      variable,
+      name,
+      setIsAuth,
+      queryClient,
+      mutateAsync,
+      signal
+    );
+
+  const useQueryHook = useQuery(key, performRequest, {
+    ...option,
+  });
+
+  return useQueryHook;
 };
 
 export default useAuthRequestHook;

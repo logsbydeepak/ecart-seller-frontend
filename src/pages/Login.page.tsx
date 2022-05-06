@@ -24,7 +24,7 @@ interface LoginFormType {
 const schema = object({ email, password });
 
 const loginRequest = (getValues: UseFormGetValues<LoginFormType>) =>
-  gqlRequest(LoginQuery, getValues());
+  gqlRequest({ query: LoginQuery, variable: getValues() });
 
 const Login: NextPage = () => {
   const { isAuth, setIsAuth } = useAuthContext();

@@ -1,34 +1,41 @@
-import { useMutation } from "react-query";
+import {
+  useMutation,
+  useQueryClient,
+  UseMutationOptions,
+  QueryKey,
+} from "react-query";
 import { useAuthContext } from "~/context/AuthContext";
 import { gqlRequest } from "~/utils/helper/gql";
 import UpdateSessionQuery from "~/utils/gql/Session/UpdateSession.gql";
 
-const useUpdateSession = (onSuccess: () => void, onError: () => void) => {
+const useUpdateSession = (option: UseMutationOptions = {}, key: QueryKey) => {
   const { setIsAuth } = useAuthContext();
+  const queryClient = useQueryClient();
+
   const updateSessionRequestHandler = async () => {
     try {
-      const updateSessionRequest = await gqlRequest(UpdateSessionQuery);
-      const updateSession = updateSessionRequest.updateSession;
-      const logoutTitle = ["TOKEN_PARSE", "AUTHENTICATION"];
+      const response = await gqlRequest({ query: UpdateSessionQuery });
+      const responseData = response.updateSession;
+      const typename = response.__typename;
 
-      if (updateSession.__typename === "ErrorResponse") {
-        if (logoutTitle.includes(updateSession.title)) {
+      if (typename === "ErrorResponse") {
+        if (["TOKEN_PARSE", "AUTHENTICATION"].includes(responseData.title)) {
+          queryClient.cancelMutations();
+          queryClient.cancelQueries(key);
           setIsAuth(false);
         } else {
           throw new Error();
         }
       }
-
-      return updateSession;
+      return response;
     } catch (error) {
-      throw { message: "Something went wrong while updating session" };
+      throw { requestError: "Something went wrong while updating session" };
     }
   };
 
-  const { isSuccess, mutateAsync } = useMutation(updateSessionRequestHandler, {
+  const { mutateAsync } = useMutation(updateSessionRequestHandler, {
     retry: 3,
-    onSuccess,
-    onError,
+    ...option,
   });
 
   return { mutateAsync };

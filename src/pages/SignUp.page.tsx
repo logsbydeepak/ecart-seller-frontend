@@ -18,7 +18,7 @@ import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftI
 
 const schema = object({ name, email, password });
 const signUpRequest = (getValues: UseFormGetValues<SignUpFormType>) =>
-  gqlRequest(SignUpQuery, getValues());
+  gqlRequest({ query: SignUpQuery, variable: getValues() });
 
 interface SignUpFormType {
   name: string;
