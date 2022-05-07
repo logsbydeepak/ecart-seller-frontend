@@ -28,11 +28,16 @@ const request = async (
   queryDocument: RequestDocument,
   variable: Variables,
   name: string,
+  isAuth: boolean,
   setIsAuth: (authValue: boolean) => boolean,
   queryClient: QueryClient,
   mutateAsync: UseMutateAsyncFunction,
   signal?: AbortSignal
 ) => {
+  if (!isAuth) {
+    throw new Error();
+  }
+
   try {
     const response = await gqlRequest({
       query: queryDocument,
@@ -49,9 +54,9 @@ const request = async (
         (responseData.message = "token expired"))
       ) {
         await mutateAsync();
-      }
-
-      if (["TOKEN_PARSE", "AUTHENTICATION"].includes(responseData.title)) {
+      } else if (
+        ["TOKEN_PARSE", "AUTHENTICATION"].includes(responseData.title)
+      ) {
         queryClient.cancelQueries(key);
         setIsAuth(false);
       }
@@ -69,7 +74,7 @@ const useAuthRequestHook: UseAuthRequestHookType = ({
   variable = {},
   option = {},
 }) => {
-  const { setIsAuth } = useAuthContext();
+  const { isAuth, setIsAuth } = useAuthContext();
   const queryClient = useQueryClient();
 
   const onUpdateSessionSuccess = () => {
@@ -94,6 +99,7 @@ const useAuthRequestHook: UseAuthRequestHookType = ({
       query,
       variable,
       name,
+      isAuth,
       setIsAuth,
       queryClient,
       mutateAsync,

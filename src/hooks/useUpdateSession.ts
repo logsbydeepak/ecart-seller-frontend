@@ -9,10 +9,13 @@ import { gqlRequest } from "~/utils/helper/gql";
 import UpdateSessionQuery from "~/utils/gql/Session/UpdateSession.gql";
 
 const useUpdateSession = (option: UseMutationOptions = {}, key: QueryKey) => {
-  const { setIsAuth } = useAuthContext();
+  const { isAuth, setIsAuth } = useAuthContext();
   const queryClient = useQueryClient();
 
   const updateSessionRequestHandler = async () => {
+    if (!isAuth) {
+      throw new Error();
+    }
     try {
       const response = await gqlRequest({ query: UpdateSessionQuery });
       const responseData = response.updateSession;

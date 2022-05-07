@@ -1,6 +1,6 @@
 import { PropsWithChildrenOnlyType } from "~/types/nextMod";
 import { customUseLayoutEffect } from "~/utils/helper/nextMod";
-import { createContext, FC, useContext, useState } from "react";
+import { createContext, FC, useContext, useState, useEffect } from "react";
 import { useQueryClient } from "react-query";
 
 type AuthContextType = null | {
@@ -26,6 +26,22 @@ export const AuthProvider: FC<PropsWithChildrenOnlyType> = ({ children }) => {
   const queryClient = useQueryClient();
   const [isAuth, setIsAuth] = useState(false);
 
+  customUseLayoutEffect(() => {
+    setIsAuth(getLocalAuthValue());
+  }, []);
+
+  useEffect(() => {
+    if (!isAuth) queryClient.clear();
+  }, [isAuth, queryClient]);
+
+  useEffect(() => {
+    window.onstorage = (event: StorageEvent) => {
+      if (event.key !== "auth") return;
+      const currentAuthValue = event.newValue === "1";
+      setIsAuth(currentAuthValue);
+    };
+  }, []);
+
   const setIsAuthLocalAndState = (authValue: boolean) => {
     setIsAuth(() => {
       authValue ? setLocalAuthToTrue() : removeLocalAuth();
@@ -34,21 +50,6 @@ export const AuthProvider: FC<PropsWithChildrenOnlyType> = ({ children }) => {
 
     return authValue;
   };
-
-  if (!isAuth) {
-    queryClient.invalidateQueries();
-  }
-
-  customUseLayoutEffect(() => {
-    setIsAuth(getLocalAuthValue());
-
-    window.addEventListener("storage", (event: StorageEvent) => {
-      if (event.key !== "auth") return;
-
-      const currentAuthValue = event.newValue === "1";
-      if (isAuth !== currentAuthValue) setIsAuth(currentAuthValue);
-    });
-  }, [isAuth]);
 
   return (
     <AuthContext.Provider value={{ isAuth, setIsAuth: setIsAuthLocalAndState }}>
