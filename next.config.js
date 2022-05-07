@@ -2,6 +2,9 @@
 const nextConfig = {
   pageExtensions: ["page.tsx"],
   reactStrictMode: true,
+  images: {
+    domains: ["images.unsplash.com"],
+  },
 
   webpack: (config) => {
     config.module.rules.push({

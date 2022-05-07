@@ -12,6 +12,7 @@ import { classNames } from "~/utils/helper/tailwind";
 import ProfileNavigationLayout from "~/layout/ProfileNavigation";
 import GetUserQuery from "~/utils/gql/User/GetUser.gql";
 import useAuthRequestHook from "~/hooks/useAuthRequestHook";
+import Image from "next/image";
 
 const Account: NextPageLayoutType = () => {
   const [requestStatus, setRequestStatus] = useImmer({
@@ -82,7 +83,7 @@ const UserInfo: FC<{ name: string; email: string }> = ({ name, email }) => {
         title="Basic Info"
         subTitle="All the info required your current Password"
       >
-        <InfoImage fieldKey="Photo" image={image} />
+        <InfoImage fieldKey="PHOTO" image={image} />
         <Divider />
         <InfoText fieldKey="NAME" value={name} />
         <Divider />
@@ -132,7 +133,7 @@ const InfoText: FC<{ fieldKey: string; value: string }> = ({
   fieldKey,
   value,
 }) => (
-  <button className="flex w-full items-center py-5 px-6 text-left">
+  <button className="flex w-full items-center py-5 px-6 text-left hover:bg-neutral-100">
     <div className="w-48">
       <h3 className="text-xs font-medium">{fieldKey}</h3>
     </div>
@@ -149,7 +150,7 @@ const InfoTextIcon: FC<{ fieldKey: string; Icon: ReactNode }> = ({
   fieldKey,
   Icon,
 }) => (
-  <button className="flex w-full items-center py-5 px-6 text-left">
+  <button className="flex w-full items-center py-5 px-6 text-left hover:bg-neutral-100">
     <div className="w-48">
       <div className="h-5 w-5">{Icon}</div>
     </div>
@@ -166,15 +167,17 @@ const InfoImage: FC<{ fieldKey: string; image: string }> = ({
   fieldKey,
   image,
 }) => (
-  <button className="flex w-full items-center py-5 px-6 text-left">
+  <button className="flex w-full items-center py-5 px-6 text-left hover:bg-neutral-100">
     <div className="w-48">
       <h3 className="text-xs font-medium">{fieldKey}</h3>
     </div>
-    <div>
-      <img
+    <div className="h-24 w-24 rounded-full border-2 border-neutral-300 p-1">
+      <Image
         src={image}
         alt="profile"
-        className="cover h-24 w-24 rounded-full	border-2 object-cover p-1"
+        width="96"
+        height="96"
+        className="cover rounded-full	object-cover "
       />
     </div>
     <div className="ml-auto">
