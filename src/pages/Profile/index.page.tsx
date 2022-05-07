@@ -83,13 +83,13 @@ const UserInfo: FC<{ name: string; email: string }> = ({ name, email }) => {
         title="Basic Info"
         subTitle="All the info required your current Password"
       >
-        <InfoImage fieldKey="PHOTO" image={image} />
+        <TextKeyImageValueInformation keyText="PHOTO" valueImageUrl={image} />
         <Divider />
-        <InfoText fieldKey="NAME" value={name} />
+        <TextKeyValueInformation keyText="NAME" valueText={name} />
         <Divider />
-        <InfoText fieldKey="EMAIL" value={email} />
+        <TextKeyValueInformation keyText="EMAIL" valueText={email} />
         <Divider />
-        <InfoText fieldKey="PASSWORD" value="*******" />
+        <TextKeyValueInformation keyText="PASSWORD" valueText="*******" />
       </BorderBox>
 
       <BorderBox
@@ -97,9 +97,15 @@ const UserInfo: FC<{ name: string; email: string }> = ({ name, email }) => {
         subTitle="Danger Zone double check what you select"
         className="mt-24"
       >
-        <InfoTextIcon fieldKey="Logout All" Icon={<LogoutIcon />} />
+        <IconKeyTextValueInformation
+          keyIcon={<LogoutIcon />}
+          valueText="Logout All"
+        />
         <Divider />
-        <InfoTextIcon fieldKey="Delete Account" Icon={<TrashIcon />} />
+        <IconKeyTextValueInformation
+          keyIcon={<TrashIcon />}
+          valueText="Delete Account"
+        />
       </BorderBox>
     </>
   );
@@ -129,61 +135,69 @@ const Divider: FC = () => (
   <div className="w-full border-b-2  border-neutral-200"></div>
 );
 
-const InfoText: FC<{ fieldKey: string; value: string }> = ({
-  fieldKey,
-  value,
-}) => (
+const TextKey: FC<{ text: string }> = ({ text }) => (
+  <h3 className="text-xs font-medium">{text}</h3>
+);
+
+const TextValue: FC<{ text: string }> = ({ text }) => <h4>{text}</h4>;
+
+const IconKey: FC<{ Icon: ReactNode }> = ({ Icon }) => (
+  <div className="h-5 w-5">{Icon}</div>
+);
+
+const ImageValue: FC<{ imageUrl: string }> = ({ imageUrl }) => (
+  <div className="h-24 w-24 rounded-full border-2 border-neutral-300 p-1">
+    <Image
+      src={imageUrl}
+      alt="profile"
+      width="96"
+      height="96"
+      className="cover rounded-full	object-cover "
+    />
+  </div>
+);
+
+const BaseInformationContainer: FC<{
+  keyContainer: ReactNode;
+  valueContainer: ReactNode;
+}> = ({ keyContainer, valueContainer }) => (
   <button className="flex w-full items-center py-5 px-6 text-left hover:bg-neutral-100">
-    <div className="w-48">
-      <h3 className="text-xs font-medium">{fieldKey}</h3>
-    </div>
-    <div>
-      <h4>{value}</h4>
-    </div>
+    <div className="w-48">{keyContainer}</div>
+    <div>{valueContainer}</div>
     <div className="ml-auto">
       <ChevronRightIcon className="w-5" />
     </div>
   </button>
 );
 
-const InfoTextIcon: FC<{ fieldKey: string; Icon: ReactNode }> = ({
-  fieldKey,
-  Icon,
+const TextKeyValueInformation: FC<{ keyText: string; valueText: string }> = ({
+  keyText,
+  valueText,
 }) => (
-  <button className="flex w-full items-center py-5 px-6 text-left hover:bg-neutral-100">
-    <div className="w-48">
-      <div className="h-5 w-5">{Icon}</div>
-    </div>
-    <div>
-      <h4>{fieldKey}</h4>
-    </div>
-    <div className="ml-auto">
-      <ChevronRightIcon className="w-5" />
-    </div>
-  </button>
+  <BaseInformationContainer
+    keyContainer={<TextKey text={keyText} />}
+    valueContainer={<TextValue text={valueText} />}
+  />
 );
 
-const InfoImage: FC<{ fieldKey: string; image: string }> = ({
-  fieldKey,
-  image,
-}) => (
-  <button className="flex w-full items-center py-5 px-6 text-left hover:bg-neutral-100">
-    <div className="w-48">
-      <h3 className="text-xs font-medium">{fieldKey}</h3>
-    </div>
-    <div className="h-24 w-24 rounded-full border-2 border-neutral-300 p-1">
-      <Image
-        src={image}
-        alt="profile"
-        width="96"
-        height="96"
-        className="cover rounded-full	object-cover "
-      />
-    </div>
-    <div className="ml-auto">
-      <ChevronRightIcon className="w-5" />
-    </div>
-  </button>
+const IconKeyTextValueInformation: FC<{
+  keyIcon: ReactNode;
+  valueText: string;
+}> = ({ keyIcon, valueText }) => (
+  <BaseInformationContainer
+    keyContainer={<IconKey Icon={keyIcon} />}
+    valueContainer={<TextValue text={valueText} />}
+  />
+);
+
+const TextKeyImageValueInformation: FC<{
+  keyText: string;
+  valueImageUrl: string;
+}> = ({ keyText, valueImageUrl }) => (
+  <BaseInformationContainer
+    keyContainer={<TextKey text={keyText} />}
+    valueContainer={<ImageValue imageUrl={valueImageUrl} />}
+  />
 );
 
 Account.getLayout = ProfileNavigationLayout;
