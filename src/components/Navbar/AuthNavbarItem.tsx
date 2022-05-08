@@ -1,33 +1,25 @@
-import { v4 } from "uuid";
 import { Menu } from "@headlessui/react";
 import { CogIcon, LogoutIcon } from "@heroicons/react/outline";
-import { NextRouter, useRouter } from "next/router";
-import { classNames } from "~/utils/helper/tailwind";
+import { useRouter } from "next/router";
 import Image from "next/image";
 import { FC, ReactNode, useState } from "react";
 import LogoutModal from "~/components/Modal/LogoutModal";
+import DeleteSessionQuery from "~/utils/gql/Session/DeleteSession.gql";
+import useAuthRequestHook from "~/hooks/useAuthRequestHook";
 
-const profileOptions = [
-  {
-    key: v4(),
-    name: "Profile",
-    icon: <CogIcon />,
-    onSelect: (router: NextRouter) => {
-      router.push("/Profile");
-    },
-  },
-  {
-    key: v4(),
-    name: "Logout",
-    icon: <LogoutIcon />,
-    onSelect: (router: NextRouter) => {
-      router.push("/");
-    },
-  },
-];
-
-const AuthNavbarItem = () => {
+const AuthNavbarItem: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+
+  const { refetch } = useAuthRequestHook({
+    key: "logout User",
+    query: DeleteSessionQuery,
+    name: "deleteSession",
+    option: { enabled: false },
+  });
+
+  const handleLogout = () => {
+    setIsOpen(true);
+  };
 
   const image =
     "https://images.unsplash.com/photo-1637633198300-08beaec68c70?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1887&q=80";
@@ -51,11 +43,7 @@ const AuthNavbarItem = () => {
           Icon={<CogIcon />}
           onClick={() => router.push("/Profile")}
         />
-        <MenuItem
-          text="Logout"
-          Icon={<LogoutIcon />}
-          onClick={() => router.push("/Profile")}
-        />
+        <MenuItem text="Logout" Icon={<LogoutIcon />} onClick={handleLogout} />
       </Menu.Items>
     </Menu>
   );
