@@ -54,9 +54,9 @@ const request = async (
         (responseData.message = "token expired"))
       ) {
         await mutateAsync();
-      } else if (
-        ["TOKEN_PARSE", "AUTHENTICATION"].includes(responseData.title)
-      ) {
+      }
+
+      if (["TOKEN_PARSE", "AUTHENTICATION"].includes(responseData.title)) {
         queryClient.cancelQueries(key);
         setIsAuth(false);
       }
