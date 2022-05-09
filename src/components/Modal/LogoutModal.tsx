@@ -9,7 +9,7 @@ const LogoutModal: FC<{
   return (
     <Dialog
       open={isOpen}
-      onClose={() => setIsOpen(!true)}
+      onClose={() => setIsOpen(true)}
       as="div"
       className="fixed top-0 z-50 flex h-full w-full items-center justify-center bg-neutral-900/60"
     >

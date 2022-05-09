@@ -6,19 +6,31 @@ import { FC, ReactNode, useState } from "react";
 import LogoutModal from "~/components/Modal/LogoutModal";
 import DeleteSessionQuery from "~/utils/gql/Session/DeleteSession.gql";
 import useAuthRequestHook from "~/hooks/useAuthRequestHook";
+import { useAuthContext } from "~/context/AuthContext";
 
 const AuthNavbarItem: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { setIsAuth } = useAuthContext();
+
+  const onSuccess = () => {
+    setIsOpen(false);
+    setIsAuth(false);
+  };
+
+  const onError = () => {
+    setIsOpen(false);
+  };
 
   const { refetch } = useAuthRequestHook({
     key: "logout User",
     query: DeleteSessionQuery,
     name: "deleteSession",
-    option: { enabled: false },
+    option: { enabled: false, onSuccess, onError },
   });
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     setIsOpen(true);
+    await refetch();
   };
 
   const image =
