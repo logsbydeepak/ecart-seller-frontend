@@ -27,7 +27,7 @@ export const TextInput: FC<{
     {...register}
     className={classNames(
       className,
-      "mt-1 block w-full rounded-md border-2 border-slate-200 bg-slate-50 text-base ring-0 focus:border-indigo-600 focus:bg-white focus:ring-indigo-400"
+      "block w-full rounded-md border-2 border-slate-200 bg-slate-50 text-base ring-0 focus:border-indigo-600 focus:bg-white focus:ring-indigo-400"
     )}
   />
 );
@@ -52,11 +52,11 @@ export const RightButtonIcon: FC<{
 );
 
 export const ErrorMessage: FC<{ message?: string }> = ({ message }) => (
-  <p className="mt-1 text-sm font-normal text-red-500">{message}</p>
+  <p className="mt-0.5 text-sm font-normal text-red-600">{message}</p>
 );
 
 export const Label: FC<{ label: string; id: string }> = ({ label, id }) => (
-  <label htmlFor={id} className="text-sm">
+  <label htmlFor={id} className="mb-0.5 text-sm">
     {label}
   </label>
 );

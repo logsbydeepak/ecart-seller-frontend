@@ -15,6 +15,7 @@ import { useAuthContext } from "~/context/AuthContext";
 import { name, email, password } from "~/utils/validation";
 import InputWithLeftIcon from "~/components/Input/InputWithLeftIcon";
 import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftIcon";
+import ButtonWithTextAndSpinner from "~/components/Button/ButtonWithTextAndSpinner";
 
 const schema = object({ name, email, password });
 const signUpRequest = (getValues: UseFormGetValues<SignUpFormType>) =>
@@ -147,16 +148,11 @@ const SignUp: NextPage = () => {
               placeholder="strong password"
             />
 
-            <button
-              type="submit"
-              className="mt-8 flex h-12 w-full justify-center rounded-md bg-indigo-600 py-3 text-white hover:bg-indigo-500 disabled:bg-neutral-900"
-            >
-              {isLoading ? (
-                <Spinner className="h-5 w-5 text-white" />
-              ) : (
-                "SignUp"
-              )}
-            </button>
+            <ButtonWithTextAndSpinner
+              text="SignUp"
+              isLoading={isLoading}
+              className="mt-8"
+            />
           </fieldset>
         </form>
       </div>

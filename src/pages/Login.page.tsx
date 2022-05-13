@@ -15,6 +15,7 @@ import { email, password } from "~/utils/validation";
 import { useAuthContext } from "~/context/AuthContext";
 import InputWithLeftIcon from "~/components/Input/InputWithLeftIcon";
 import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftIcon";
+import ButtonWithTextAndSpinner from "~/components/Button/ButtonWithTextAndSpinner";
 
 interface LoginFormType {
   email: string;
@@ -144,16 +145,11 @@ const Login: NextPage = () => {
               placeholder="strong password"
             />
 
-            <button
-              type="submit"
-              className="mt-8 flex h-12 w-full justify-center rounded-md bg-indigo-600 py-3 text-white hover:bg-indigo-500 disabled:bg-neutral-900"
-            >
-              {isLoading ? (
-                <Spinner className="h-5 w-5 text-white" />
-              ) : (
-                "SignUp"
-              )}
-            </button>
+            <ButtonWithTextAndSpinner
+              text="Login"
+              isLoading={isLoading}
+              className="mt-8"
+            />
           </fieldset>
         </form>
       </div>
