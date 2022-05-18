@@ -16,11 +16,17 @@ import { name, email, password } from "~/utils/validation";
 import InputWithLeftIcon from "~/components/Input/InputWithLeftIcon";
 import ButtonWithTextAndSpinner from "~/components/Button/ButtonWithTextAndSpinner";
 import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftIcon";
+import { rawRequest } from "graphql-request";
+import { useTokenContext } from "~/context/TokenContext";
 
 const schema = object({ name, email, password });
 
-const signUpRequest = (getValues: UseFormGetValues<SignUpFormType>) =>
-  gqlRequest({ query: SignUpQuery, variable: getValues() });
+const signUpRequest = async (getValues: UseFormGetValues<SignUpFormType>) =>
+  await rawRequest(
+    process.env.NEXT_PUBLIC_API_BASE_URL as string,
+    SignUpQuery.loc?.source.body as string,
+    getValues()
+  );
 
 interface SignUpFormType {
   name: string;
@@ -30,6 +36,8 @@ interface SignUpFormType {
 
 const SignUp: NextPage = () => {
   const { isAuth, setIsAuth } = useAuthContext();
+  const { setToken } = useTokenContext();
+
   const router = useRouter();
 
   const [requestStatus, setRequestStatus] = useImmer({
@@ -55,7 +63,8 @@ const SignUp: NextPage = () => {
     });
 
   const onSuccess = (data: any) => {
-    const createUser = data.createUser;
+    const responseData = data.data;
+    const createUser = responseData.createUser;
     const typename = createUser.__typename;
 
     if (
@@ -69,6 +78,7 @@ const SignUp: NextPage = () => {
     }
 
     if (typename === "User") {
+      setToken(data.headers.map["x-access-token"]);
       setRequestStatus((draft) => {
         draft.isSuccess = true;
       });
@@ -117,7 +127,7 @@ const SignUp: NextPage = () => {
           <p className="pb-4 text-center text-red-500">Something went wrong</p>
         </Show>
 
-        <Show when={isLoading}>
+        <Show when={isSuccess}>
           <p className="pb-4 text-center text-green-500">Login successful</p>
         </Show>
 

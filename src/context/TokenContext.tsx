@@ -10,14 +10,12 @@ import {
 } from "react";
 import { useAuthContext } from "./AuthContext";
 
-type TokenContextType =
-  | string
-  | {
-      token: string;
-      setToken: Dispatch<SetStateAction<string>>;
-    };
+type TokenContextType = null | {
+  token: string;
+  setToken: Dispatch<SetStateAction<string>>;
+};
 
-const TokenContext = createContext<TokenContextType>("");
+const TokenContext = createContext<TokenContextType>(null);
 
 export const useTokenContext = () => {
   const context = useContext(TokenContext);

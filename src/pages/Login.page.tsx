@@ -9,10 +9,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { SubmitHandler, useForm, UseFormGetValues } from "react-hook-form";
 
 import Show from "~/components/Show";
-import { gqlRequest } from "~/utils/helper/gql";
+import { rawRequest } from "graphql-request";
 import LoginQuery from "~/utils/gql/User/Login.gql";
 import { email, password } from "~/utils/validation";
 import { useAuthContext } from "~/context/AuthContext";
+import { useTokenContext } from "~/context/TokenContext";
 import InputWithLeftIcon from "~/components/Input/InputWithLeftIcon";
 import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftIcon";
 import ButtonWithTextAndSpinner from "~/components/Button/ButtonWithTextAndSpinner";
@@ -24,11 +25,16 @@ interface LoginFormType {
 
 const schema = object({ email, password });
 
-const loginRequest = (getValues: UseFormGetValues<LoginFormType>) =>
-  gqlRequest({ query: LoginQuery, variable: getValues() });
+const loginRequest = async (getValues: UseFormGetValues<LoginFormType>) =>
+  await rawRequest(
+    process.env.NEXT_PUBLIC_API_BASE_URL as string,
+    LoginQuery.loc?.source.body as string,
+    getValues()
+  );
 
 const Login: NextPage = () => {
   const { isAuth, setIsAuth } = useAuthContext();
+  const { setToken } = useTokenContext();
   const router = useRouter();
 
   const [requestStatus, setRequestStatus] = useImmer({
@@ -54,10 +60,12 @@ const Login: NextPage = () => {
     });
 
   const onSuccess = (data: any) => {
-    const createSession = data.createSession;
+    const responseData = data.data;
+    const createSession = responseData.createSession;
     const typename = createSession.__typename;
 
     if (typename === "User") {
+      setToken(data.headers.map["x-access-token"]);
       setRequestStatus((draft) => {
         draft.isSuccess = true;
       });
