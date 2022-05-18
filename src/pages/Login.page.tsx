@@ -8,7 +8,7 @@ import { MailIcon } from "@heroicons/react/solid";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { SubmitHandler, useForm, UseFormGetValues } from "react-hook-form";
 
-import Spinner from "~/components/Spinner";
+import Show from "~/components/Show";
 import { gqlRequest } from "~/utils/helper/gql";
 import LoginQuery from "~/utils/gql/User/Login.gql";
 import { email, password } from "~/utils/validation";
@@ -116,15 +116,15 @@ const Login: NextPage = () => {
           </Link>
         </p>
 
-        {isError && (
+        <Show when={isError}>
           <p className="pb-4 text-center text-red-500">Something went wrong</p>
-        )}
+        </Show>
 
-        {isSuccess && (
+        <Show when={isSuccess}>
           <p className="pb-4 text-center text-green-500">
             User Created Successfully
           </p>
-        )}
+        </Show>
 
         <form className="w-96" onSubmit={handleSubmit(onSubmit)}>
           <fieldset disabled={isLoading}>

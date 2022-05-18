@@ -8,16 +8,17 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { EmojiHappyIcon, MailIcon } from "@heroicons/react/solid";
 import { SubmitHandler, useForm, UseFormGetValues } from "react-hook-form";
 
-import Spinner from "~/components/Spinner";
+import Show from "~/components/Show";
 import { gqlRequest } from "~/utils/helper/gql";
 import SignUpQuery from "~/utils/gql/User/SignUp.gql";
 import { useAuthContext } from "~/context/AuthContext";
 import { name, email, password } from "~/utils/validation";
 import InputWithLeftIcon from "~/components/Input/InputWithLeftIcon";
-import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftIcon";
 import ButtonWithTextAndSpinner from "~/components/Button/ButtonWithTextAndSpinner";
+import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftIcon";
 
 const schema = object({ name, email, password });
+
 const signUpRequest = (getValues: UseFormGetValues<SignUpFormType>) =>
   gqlRequest({ query: SignUpQuery, variable: getValues() });
 
@@ -112,13 +113,13 @@ const SignUp: NextPage = () => {
           </Link>
         </p>
 
-        {isError && (
+        <Show when={isError}>
           <p className="pb-4 text-center text-red-500">Something went wrong</p>
-        )}
+        </Show>
 
-        {isSuccess && (
+        <Show when={isLoading}>
           <p className="pb-4 text-center text-green-500">Login successful</p>
-        )}
+        </Show>
 
         <form className="w-96" onSubmit={handleSubmit(onSubmit)}>
           <fieldset disabled={isLoading}>
