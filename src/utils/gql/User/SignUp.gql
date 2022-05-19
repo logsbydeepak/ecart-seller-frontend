@@ -1,7 +1,8 @@
 mutation CreateUser($name: String!, $email: String!, $password: String!) {
   createUser(name: $name, email: $email, password: $password) {
-    ... on User {
+    ... on AccessToken {
       __typename
+      token
     }
     ... on ErrorResponse {
       __typename

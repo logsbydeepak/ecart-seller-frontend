@@ -1,23 +1,22 @@
 import { object } from "yup";
 import Link from "next/link";
-import { NextPage } from "next";
 import { useImmer } from "use-immer";
-import { useRouter } from "next/router";
 import { useMutation } from "react-query";
 import { MailIcon } from "@heroicons/react/solid";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { SubmitHandler, useForm, UseFormGetValues } from "react-hook-form";
 
 import Show from "~/components/Show";
-import { rawRequest } from "graphql-request";
+import AuthLayout from "~/layout/AuthLayout";
+import { gqlRequest } from "~/utils/helper/gql";
 import LoginQuery from "~/utils/gql/User/Login.gql";
+import { NextPageLayoutType } from "~/types/nextMod";
 import { email, password } from "~/utils/validation";
 import { useAuthContext } from "~/context/AuthContext";
 import { useTokenContext } from "~/context/TokenContext";
 import InputWithLeftIcon from "~/components/Input/InputWithLeftIcon";
 import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftIcon";
 import ButtonWithTextAndSpinner from "~/components/Button/ButtonWithTextAndSpinner";
-import { gqlRequest } from "~/utils/helper/gql";
 
 interface LoginFormType {
   email: string;
@@ -29,10 +28,9 @@ const schema = object({ email, password });
 const loginRequest = (getValues: UseFormGetValues<LoginFormType>) =>
   gqlRequest({ query: LoginQuery, variable: getValues() });
 
-const Login: NextPage = () => {
-  const { isAuth, setIsAuth } = useAuthContext();
+const Login: NextPageLayoutType = () => {
+  const { setIsAuth } = useAuthContext();
   const { setToken } = useTokenContext();
-  const router = useRouter();
 
   const [requestStatus, setRequestStatus] = useImmer({
     isLoading: false,
@@ -100,11 +98,6 @@ const Login: NextPage = () => {
     }
   };
 
-  if (isAuth) {
-    router.push("/App");
-    return null;
-  }
-
   return (
     <div className="flex flex-col items-center	justify-center py-20">
       <div className="rounded-lg border-2 px-10 py-16 ">
@@ -160,5 +153,9 @@ const Login: NextPage = () => {
     </div>
   );
 };
+
+Login.getLayout = (page) => (
+  <AuthLayout page={page} authShouldBe={false} redirectTo="/App" />
+);
 
 export default Login;

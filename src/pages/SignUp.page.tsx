@@ -1,23 +1,22 @@
 import { object } from "yup";
 import Link from "next/link";
-import { NextPage } from "next";
 import { useImmer } from "use-immer";
-import { useRouter } from "next/router";
 import { useMutation } from "react-query";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { EmojiHappyIcon, MailIcon } from "@heroicons/react/solid";
 import { SubmitHandler, useForm, UseFormGetValues } from "react-hook-form";
 
 import Show from "~/components/Show";
+import AuthLayout from "~/layout/AuthLayout";
 import { gqlRequest } from "~/utils/helper/gql";
+import { NextPageLayoutType } from "~/types/nextMod";
 import SignUpQuery from "~/utils/gql/User/SignUp.gql";
 import { useAuthContext } from "~/context/AuthContext";
+import { useTokenContext } from "~/context/TokenContext";
 import { name, email, password } from "~/utils/validation";
 import InputWithLeftIcon from "~/components/Input/InputWithLeftIcon";
 import ButtonWithTextAndSpinner from "~/components/Button/ButtonWithTextAndSpinner";
 import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftIcon";
-import { rawRequest } from "graphql-request";
-import { useTokenContext } from "~/context/TokenContext";
 
 const schema = object({ name, email, password });
 
@@ -30,11 +29,9 @@ interface SignUpFormType {
   password: string;
 }
 
-const SignUp: NextPage = () => {
-  const { isAuth, setIsAuth } = useAuthContext();
+const SignUp: NextPageLayoutType = () => {
+  const { setIsAuth } = useAuthContext();
   const { setToken } = useTokenContext();
-
-  const router = useRouter();
 
   const [requestStatus, setRequestStatus] = useImmer({
     isLoading: false,
@@ -98,11 +95,6 @@ const SignUp: NextPage = () => {
     }
   };
 
-  if (isAuth) {
-    router.push("/App");
-    return null;
-  }
-
   return (
     <div className="flex flex-col items-center	justify-center py-20">
       <div className="rounded-lg border-2 px-10 py-16">
@@ -165,5 +157,9 @@ const SignUp: NextPage = () => {
     </div>
   );
 };
+
+SignUp.getLayout = (page) => (
+  <AuthLayout page={page} authShouldBe={false} redirectTo="/App" />
+);
 
 export default SignUp;

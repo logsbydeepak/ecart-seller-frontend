@@ -1,7 +1,8 @@
 mutation Mutation($email: String!, $password: String!) {
   createSession(email: $email, password: $password) {
-    ... on User {
+    ... on AccessToken {
       __typename
+      token
     }
     ... on ErrorResponse {
       __typename

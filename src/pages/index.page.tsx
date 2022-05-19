@@ -1,19 +1,10 @@
 import Link from "next/link";
-import type { NextPage } from "next";
-import { useRouter } from "next/router";
 import { ArrowSmRightIcon } from "@heroicons/react/outline";
 
-import { useAuthContext } from "~/context/AuthContext";
+import { NextPageLayoutType } from "~/types/nextMod";
+import AuthLayout from "~/layout/AuthLayout";
 
-const Home: NextPage = () => {
-  const { isAuth } = useAuthContext();
-  const router = useRouter();
-
-  if (isAuth) {
-    router.push("/App");
-    return null;
-  }
-
+const Home: NextPageLayoutType = () => {
   return (
     <div className="py-40">
       <h1 className="text-center text-7xl font-semibold leading-snug">
@@ -31,5 +22,9 @@ const Home: NextPage = () => {
     </div>
   );
 };
+
+Home.getLayout = (page) => (
+  <AuthLayout page={page} authShouldBe={false} redirectTo="/App" />
+);
 
 export default Home;
