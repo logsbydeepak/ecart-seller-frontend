@@ -17,6 +17,7 @@ import { useTokenContext } from "~/context/TokenContext";
 import InputWithLeftIcon from "~/components/Input/InputWithLeftIcon";
 import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftIcon";
 import ButtonWithTextAndSpinner from "~/components/Button/ButtonWithTextAndSpinner";
+import { gqlRequest } from "~/utils/helper/gql";
 
 interface LoginFormType {
   email: string;
@@ -25,12 +26,8 @@ interface LoginFormType {
 
 const schema = object({ email, password });
 
-const loginRequest = async (getValues: UseFormGetValues<LoginFormType>) =>
-  await rawRequest(
-    process.env.NEXT_PUBLIC_API_BASE_URL as string,
-    LoginQuery.loc?.source.body as string,
-    getValues()
-  );
+const loginRequest = (getValues: UseFormGetValues<LoginFormType>) =>
+  gqlRequest({ query: LoginQuery, variable: getValues() });
 
 const Login: NextPage = () => {
   const { isAuth, setIsAuth } = useAuthContext();
@@ -60,12 +57,11 @@ const Login: NextPage = () => {
     });
 
   const onSuccess = (data: any) => {
-    const responseData = data.data;
-    const createSession = responseData.createSession;
+    const createSession = data.createSession;
     const typename = createSession.__typename;
 
-    if (typename === "User") {
-      setToken(data.headers.map["x-access-token"]);
+    if (typename === "AccessToken") {
+      setToken(createSession.token);
       setRequestStatus((draft) => {
         draft.isSuccess = true;
       });

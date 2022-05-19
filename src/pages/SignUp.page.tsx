@@ -21,12 +21,8 @@ import { useTokenContext } from "~/context/TokenContext";
 
 const schema = object({ name, email, password });
 
-const signUpRequest = async (getValues: UseFormGetValues<SignUpFormType>) =>
-  await rawRequest(
-    process.env.NEXT_PUBLIC_API_BASE_URL as string,
-    SignUpQuery.loc?.source.body as string,
-    getValues()
-  );
+const signUpRequest = (getValues: UseFormGetValues<SignUpFormType>) =>
+  gqlRequest({ query: SignUpQuery, variable: getValues() });
 
 interface SignUpFormType {
   name: string;
@@ -63,8 +59,7 @@ const SignUp: NextPage = () => {
     });
 
   const onSuccess = (data: any) => {
-    const responseData = data.data;
-    const createUser = responseData.createUser;
+    const createUser = data.createUser;
     const typename = createUser.__typename;
 
     if (
@@ -77,8 +72,8 @@ const SignUp: NextPage = () => {
       setError("email", { message: createUser.message }, { shouldFocus: true });
     }
 
-    if (typename === "User") {
-      setToken(data.headers.map["x-access-token"]);
+    if (typename === "AccessToken") {
+      setToken(createUser.token);
       setRequestStatus((draft) => {
         draft.isSuccess = true;
       });
