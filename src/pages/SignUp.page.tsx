@@ -159,7 +159,7 @@ const SignUp: NextPageLayoutType = () => {
 };
 
 SignUp.getLayout = (page) => (
-  <AuthLayout page={page} authShouldBe={false} redirectTo="/App" />
+  <AuthLayout page={page} isAuth={false} redirect="/App" />
 );
 
 export default SignUp;

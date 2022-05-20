@@ -1,19 +1,19 @@
 import { useRouter } from "next/router";
-import { FC, ReactElement, ReactNode } from "react";
+import { FC, ReactElement } from "react";
 import { useAuthContext } from "~/context/AuthContext";
 
 interface Props {
-  authShouldBe: boolean;
-  redirectTo: string;
+  isAuth: boolean;
+  redirect: string;
   page: ReactElement;
 }
 
-const AuthLayout: FC<Props> = ({ authShouldBe, redirectTo, page }) => {
+const AuthLayout: FC<Props> = ({ isAuth: isisAuth, redirect, page }) => {
   const { isAuth } = useAuthContext();
   const router = useRouter();
 
-  if (isAuth !== authShouldBe) {
-    router.push(redirectTo);
+  if (isAuth !== isisAuth) {
+    router.push(redirect);
     return null;
   }
 

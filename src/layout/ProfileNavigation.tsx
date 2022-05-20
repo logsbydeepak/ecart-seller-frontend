@@ -4,7 +4,6 @@ import { useRouter } from "next/router";
 import { CreditCardIcon, IdentificationIcon } from "@heroicons/react/outline";
 
 import { classNames } from "~/utils/helper/tailwind";
-import { useAuthContext } from "~/context/AuthContext";
 import { PropsWithChildrenOnlyType } from "~/types/nextMod";
 import AuthLayout from "./AuthLayout";
 
@@ -12,8 +11,8 @@ const ProfileNavigationLayout = (page: ReactElement) => {
   return (
     <AuthLayout
       page={<ProfileNavigation>{page}</ProfileNavigation>}
-      authShouldBe={true}
-      redirectTo="/Login"
+      isAuth={true}
+      redirect="/Login"
     />
   );
 };

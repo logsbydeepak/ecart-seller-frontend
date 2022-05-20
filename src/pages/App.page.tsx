@@ -1,22 +1,16 @@
-import { NextPage } from "next";
-import { useRouter } from "next/router";
+import AuthLayout from "~/layout/AuthLayout";
+import { NextPageLayoutType } from "~/types/nextMod";
 
-import { useAuthContext } from "~/context/AuthContext";
-
-const App: NextPage = () => {
-  const { isAuth } = useAuthContext();
-  const router = useRouter();
-
-  if (!isAuth) {
-    router.push("/Login");
-    return null;
-  }
-
+const App: NextPageLayoutType = () => {
   return (
     <>
       <h1>App</h1>
     </>
   );
 };
+
+App.getLayout = (page) => (
+  <AuthLayout page={page} isAuth={true} redirect="/Login" />
+);
 
 export default App;

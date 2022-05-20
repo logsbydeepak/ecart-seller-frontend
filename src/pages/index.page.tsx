@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { ArrowSmRightIcon } from "@heroicons/react/outline";
 
-import { NextPageLayoutType } from "~/types/nextMod";
 import AuthLayout from "~/layout/AuthLayout";
+import { NextPageLayoutType } from "~/types/nextMod";
 
 const Home: NextPageLayoutType = () => {
   return (
@@ -24,7 +24,7 @@ const Home: NextPageLayoutType = () => {
 };
 
 Home.getLayout = (page) => (
-  <AuthLayout page={page} authShouldBe={false} redirectTo="/App" />
+  <AuthLayout page={page} isAuth={false} redirect="/App" />
 );
 
 export default Home;

@@ -155,7 +155,7 @@ const Login: NextPageLayoutType = () => {
 };
 
 Login.getLayout = (page) => (
-  <AuthLayout page={page} authShouldBe={false} redirectTo="/App" />
+  <AuthLayout page={page} isAuth={false} redirect="/App" />
 );
 
 export default Login;
