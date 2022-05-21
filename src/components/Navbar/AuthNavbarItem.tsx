@@ -1,8 +1,8 @@
-import { Menu } from "@headlessui/react";
+import { Menu, Transition } from "@headlessui/react";
 import { CogIcon, LogoutIcon } from "@heroicons/react/outline";
 import { useRouter } from "next/router";
 import Image from "next/image";
-import { FC, ReactNode, useState } from "react";
+import { FC, ReactNode, useState, Fragment } from "react";
 import LogoutModal from "~/components/Modal/LogoutModal";
 import DeleteSessionQuery from "~/utils/gql/Session/DeleteSession.gql";
 import useAuthRequestHook from "~/hooks/useAuthRequestHook";
@@ -37,7 +37,7 @@ const AuthNavbarItem: FC = () => {
     "https://images.unsplash.com/photo-1637633198300-08beaec68c70?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1887&q=80";
   const router = useRouter();
   return (
-    <Menu>
+    <Menu as="div" className="relative">
       <LogoutModal isOpen={isOpen} setIsOpen={setIsOpen} />
       <Menu.Button className="inline-block h-8 w-8 rounded-full border-2 border-neutral-300 p-0.5 hover:border-indigo-600">
         <Image
@@ -49,14 +49,28 @@ const AuthNavbarItem: FC = () => {
         />
       </Menu.Button>
 
-      <Menu.Items className="absolute right-0 top-0 mr-20 mt-16 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-        <MenuItem
-          text="Profile"
-          Icon={<CogIcon />}
-          onClick={() => router.push("/Profile")}
-        />
-        <MenuItem text="Logout" Icon={<LogoutIcon />} onClick={handleLogout} />
-      </Menu.Items>
+      <Transition
+        as={Fragment}
+        enter="transition ease-out duration-100"
+        enterFrom="transform opacity-0 scale-95"
+        enterTo="transform opacity-100 scale-100"
+        leave="transition ease-in duration-75"
+        leaveFrom="transform opacity-100 scale-100"
+        leaveTo="transform opacity-0 scale-95"
+      >
+        <Menu.Items className="absolute right-0 mt-2 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+          <MenuItem
+            text="Profile"
+            Icon={<CogIcon />}
+            onClick={() => router.push("/Profile")}
+          />
+          <MenuItem
+            text="Logout"
+            Icon={<LogoutIcon />}
+            onClick={handleLogout}
+          />
+        </Menu.Items>
+      </Transition>
     </Menu>
   );
 };
