@@ -1,15 +1,13 @@
 import Head from "next/head";
 import type { AppProps } from "next/app";
 import { ReactQueryDevtools } from "react-query/devtools";
+import { QueryClient, QueryClientProvider } from "react-query";
 
 import "~/styles/globals.css";
 import AppLayout from "~/layout/AppLayout";
 import { AuthProvider } from "~/context/AuthContext";
-import { QueryClient, QueryClientProvider } from "react-query";
 import { NextPageLayoutType } from "~/types/nextMod";
 import { TokenProvider } from "~/context/TokenContext";
-import TokenLayout from "~/layout/TokenLayout";
-import { UserProvider } from "~/context/UserContext";
 
 type AppPropsWithLayout = AppProps & {
   Component: NextPageLayoutType;
@@ -31,9 +29,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
 
         <AuthProvider>
           <TokenProvider>
-            <UserProvider>
-              <AppLayout>{getLayout(<Component {...pageProps} />)}</AppLayout>
-            </UserProvider>
+            <AppLayout>{getLayout(<Component {...pageProps} />)}</AppLayout>
           </TokenProvider>
         </AuthProvider>
       </QueryClientProvider>

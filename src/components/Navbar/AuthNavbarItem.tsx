@@ -1,19 +1,25 @@
-import { Menu, Transition } from "@headlessui/react";
-import { CogIcon, LogoutIcon } from "@heroicons/react/outline";
-import { useRouter } from "next/router";
 import Image from "next/image";
+import { useRouter } from "next/router";
+import { Menu, Transition } from "@headlessui/react";
 import { FC, ReactNode, useState, Fragment } from "react";
-import LogoutModal from "~/components/Modal/LogoutModal";
-import DeleteSessionQuery from "~/utils/gql/Session/DeleteSession.gql";
-import useAuthRequestHook from "~/hooks/useAuthRequestHook";
+import { CogIcon, LogoutIcon } from "@heroicons/react/outline";
+
 import { useAuthContext } from "~/context/AuthContext";
-import { useUserContext } from "~/context/UserContext";
 import GetUserQuery from "~/utils/gql/User/GetUser.gql";
+import LogoutModal from "~/components/Modal/LogoutModal";
+import useAuthRequestHook from "~/hooks/useAuthRequestHook";
+import DeleteSessionQuery from "~/utils/gql/Session/DeleteSession.gql";
+
+const defaultData = {
+  name: "User Name",
+  profile:
+    "https://images.unsplash.com/photo-1637633198300-08beaec68c70?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1887&q=80",
+};
 
 const AuthNavbarItem: FC = () => {
   const { setIsAuth } = useAuthContext();
   const [isOpen, setIsOpen] = useState(false);
-  const { userInfo, setUserInfo } = useUserContext();
+  const [userInfo, setUserInfo] = useState(defaultData);
 
   const router = useRouter();
 
@@ -72,9 +78,7 @@ const AuthNavbarItem: FC = () => {
           height="28"
           className="rounded-full object-cover"
         />
-        <h1 className="ml-2 block  font-semibold text-neutral-500">
-          {userName}
-        </h1>
+        <h1 className="ml-2 block font-medium">{userName}</h1>
       </Menu.Button>
 
       <Transition
@@ -86,7 +90,7 @@ const AuthNavbarItem: FC = () => {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute right-0 mt-1 w-full rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <Menu.Items className="absolute right-0 mt-1.5 w-full rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           <MenuItem
             text="Profile"
             Icon={<CogIcon />}
@@ -111,10 +115,12 @@ const MenuItem: FC<{ text: string; Icon: ReactNode; onClick: () => void }> = ({
   return (
     <Menu.Item
       as="button"
-      className="flex w-full cursor-pointer items-center rounded-md p-3 hover:bg-neutral-50"
+      className="flex w-full cursor-pointer items-center rounded-md px-4 py-2 hover:bg-neutral-50"
       onClick={onClick}
     >
-      <div className="text-black-500 mr-2 ml-2 h-4 w-4">{Icon}</div>
+      <div className="text-black-500 mr-2 ml-2 flex h-7 w-7 items-center justify-center">
+        <div className="h-5 w-5 text-neutral-600">{Icon}</div>
+      </div>
       <p>{text}</p>
     </Menu.Item>
   );
