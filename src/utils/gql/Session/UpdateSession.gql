@@ -5,9 +5,9 @@ mutation Mutation {
       title
       message
     }
-    ... on SuccessResponse {
+    ... on AccessToken {
       __typename
-      message
+      token
     }
   }
 }

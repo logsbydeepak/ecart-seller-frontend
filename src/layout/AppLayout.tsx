@@ -1,17 +1,16 @@
 import { FC, useState } from "react";
 
 import Navbar from "~/components/Navbar";
-import { customUseLayoutEffect } from "~/utils/helper/nextMod";
-import { PropsWithChildrenOnlyType } from "~/types/nextMod";
 import { useAuthContext } from "~/context/AuthContext";
+import { PropsWithChildrenOnlyType } from "~/types/nextMod";
+import { customUseLayoutEffect } from "~/utils/helper/nextMod";
 
 const AppLayout: FC<PropsWithChildrenOnlyType> = ({ children }) => {
   const [isAppReady, setIsAppReady] = useState(false);
   const { isAuth } = useAuthContext();
 
   customUseLayoutEffect(() => {
-    if (isAuth === null) return;
-    setIsAppReady(true);
+    if (isAuth !== null) setIsAppReady(true);
   }, [isAuth]);
 
   if (!isAppReady) return null;
