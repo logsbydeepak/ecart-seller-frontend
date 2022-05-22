@@ -7,11 +7,10 @@ import {
   QueryFunction,
   useQueryClient,
   QueryClient,
-  UseMutateAsyncFunction,
 } from "react-query";
 import { useAuthContext } from "~/context/AuthContext";
+import { useTokenContext } from "~/context/TokenContext";
 import { gqlRequest } from "~/utils/helper/gql";
-import useUpdateSession from "./useUpdateSession";
 
 interface ArgsType {
   key: QueryKey;
@@ -31,7 +30,7 @@ const request = async (
   isAuth: boolean,
   setIsAuth: (authValue: boolean) => boolean,
   queryClient: QueryClient,
-  mutateAsync: UseMutateAsyncFunction,
+  token: string,
   signal?: AbortSignal
 ) => {
   if (!isAuth) {
@@ -43,6 +42,7 @@ const request = async (
       query: queryDocument,
       variable,
       signal,
+      token,
     });
 
     const responseData = response[name];
@@ -53,7 +53,7 @@ const request = async (
         (responseData.title === "TOKEN_PARSE",
         (responseData.message = "token expired"))
       ) {
-        await mutateAsync();
+        setIsAuth(false);
       }
 
       if (["TOKEN_PARSE", "AUTHENTICATION"].includes(responseData.title)) {
@@ -61,6 +61,7 @@ const request = async (
         setIsAuth(false);
       }
     }
+
     return response;
   } catch (error) {
     throw { requestError: "Something went wrong" };
@@ -76,22 +77,7 @@ const useAuthRequestHook: UseAuthRequestHookType = ({
 }) => {
   const { isAuth, setIsAuth } = useAuthContext();
   const queryClient = useQueryClient();
-
-  const onUpdateSessionSuccess = () => {
-    useQueryHook.refetch();
-  };
-
-  const onUpdateSessionError = () => {
-    queryClient.cancelQueries(key);
-  };
-
-  const { mutateAsync } = useUpdateSession(
-    {
-      onSuccess: onUpdateSessionSuccess,
-      onError: onUpdateSessionError,
-    },
-    key
-  );
+  const { token } = useTokenContext();
 
   const performRequest: QueryFunction = ({ signal }) =>
     request(
@@ -102,7 +88,7 @@ const useAuthRequestHook: UseAuthRequestHookType = ({
       isAuth,
       setIsAuth,
       queryClient,
-      mutateAsync,
+      token,
       signal
     );
 

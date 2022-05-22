@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useMemo, useState } from "react";
 
 import { useMutation } from "react-query";
 import { gqlRequest } from "~/utils/helper/gql";
@@ -61,9 +61,9 @@ const TokenLayout: FC<PropsWithChildrenOnlyType> = ({ children }) => {
     } else {
       setIsAppReady(true);
     }
-  }, [isAuth, token, mutateAsync]);
+  }, [isAuth, mutateAsync, token]);
 
-  if (isAppReady) {
+  if (!isAppReady) {
     return (
       <div className="flex h-screen w-full flex-col items-center justify-center">
         <ShoppingCartIcon className="mb-2 h-14 text-indigo-600" />

@@ -26,6 +26,8 @@ export const useTokenContext = () => {
   return context;
 };
 
+const RefreshTime = 840000;
+
 export const TokenProvider: FC<PropsWithChildrenOnlyType> = ({ children }) => {
   const [token, setToken] = useState("");
 
@@ -34,6 +36,17 @@ export const TokenProvider: FC<PropsWithChildrenOnlyType> = ({ children }) => {
   useEffect(() => {
     if (!isAuth) setToken("");
   }, [isAuth]);
+
+  useEffect(() => {
+    if (!isAuth) return;
+    const authRefreshToken = setTimeout(() => {
+      setToken("");
+    }, RefreshTime);
+
+    return () => {
+      clearTimeout(authRefreshToken);
+    };
+  }, [isAuth, token]);
 
   return (
     <TokenContext.Provider value={{ token, setToken }}>
