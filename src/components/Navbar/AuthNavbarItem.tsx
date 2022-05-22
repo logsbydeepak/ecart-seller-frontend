@@ -7,10 +7,33 @@ import LogoutModal from "~/components/Modal/LogoutModal";
 import DeleteSessionQuery from "~/utils/gql/Session/DeleteSession.gql";
 import useAuthRequestHook from "~/hooks/useAuthRequestHook";
 import { useAuthContext } from "~/context/AuthContext";
+import { useUserContext } from "~/context/UserContext";
+import GetUserQuery from "~/utils/gql/User/GetUser.gql";
 
 const AuthNavbarItem: FC = () => {
-  const [isOpen, setIsOpen] = useState(false);
   const { setIsAuth } = useAuthContext();
+  const [isOpen, setIsOpen] = useState(false);
+  const { userInfo, setUserInfo } = useUserContext();
+
+  const router = useRouter();
+
+  const onSuccessUser = (data: any) => {
+    const readUser = data.readUser;
+    const typename = readUser.__typename;
+
+    if (typename === "User") {
+      setUserInfo((preValue) => ({ ...preValue, name: readUser.name }));
+    }
+  };
+
+  const { isSuccess } = useAuthRequestHook({
+    key: "Navbar User Info",
+    name: "readUser",
+    query: GetUserQuery,
+    option: {
+      onSuccess: onSuccessUser,
+    },
+  });
 
   const onSuccess = () => {
     setIsOpen(false);
@@ -33,20 +56,25 @@ const AuthNavbarItem: FC = () => {
     await refetch();
   };
 
-  const image =
-    "https://images.unsplash.com/photo-1637633198300-08beaec68c70?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1887&q=80";
-  const router = useRouter();
+  const name = userInfo.name;
+  const userName = name.length >= 10 ? name.substring(0, 9) + "..." : name;
+
+  if (!isSuccess) return null;
+
   return (
     <Menu as="div" className="relative">
       <LogoutModal isOpen={isOpen} setIsOpen={setIsOpen} />
-      <Menu.Button className="inline-block h-8 w-8 rounded-full border-2 border-neutral-300 p-0.5 hover:border-indigo-600">
+      <Menu.Button className="flex items-center rounded-md border-2 border-neutral-100 px-4 py-2 hover:bg-neutral-50">
         <Image
-          src={image}
+          src={userInfo.profile}
           alt="Profile"
-          width="32"
-          height="32"
+          width="28"
+          height="28"
           className="rounded-full object-cover"
         />
+        <h1 className="ml-2 block  font-semibold text-neutral-500">
+          {userName}
+        </h1>
       </Menu.Button>
 
       <Transition
@@ -58,7 +86,7 @@ const AuthNavbarItem: FC = () => {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute right-0 mt-2 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <Menu.Items className="absolute right-0 mt-1 w-full rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           <MenuItem
             text="Profile"
             Icon={<CogIcon />}

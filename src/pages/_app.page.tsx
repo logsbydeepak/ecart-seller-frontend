@@ -9,6 +9,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { NextPageLayoutType } from "~/types/nextMod";
 import { TokenProvider } from "~/context/TokenContext";
 import TokenLayout from "~/layout/TokenLayout";
+import { UserProvider } from "~/context/UserContext";
 
 type AppPropsWithLayout = AppProps & {
   Component: NextPageLayoutType;
@@ -30,7 +31,9 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
 
         <AuthProvider>
           <TokenProvider>
-            <AppLayout>{getLayout(<Component {...pageProps} />)}</AppLayout>
+            <UserProvider>
+              <AppLayout>{getLayout(<Component {...pageProps} />)}</AppLayout>
+            </UserProvider>
           </TokenProvider>
         </AuthProvider>
       </QueryClientProvider>
