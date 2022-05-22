@@ -7,6 +7,9 @@ import { useTokenContext } from "~/context/TokenContext";
 import { PropsWithChildrenOnlyType } from "~/types/nextMod";
 import { customUseLayoutEffect } from "~/utils/helper/nextMod";
 import UpdateSessionQuery from "~/utils/gql/Session/UpdateSession.gql";
+import { ShoppingCartIcon } from "@heroicons/react/solid";
+import Spinner from "~/components/Spinner";
+import Show from "~/components/Show";
 
 const updateSessionRequest = async () => {
   try {
@@ -21,7 +24,12 @@ const TokenLayout: FC<PropsWithChildrenOnlyType> = ({ children }) => {
   const { token, setToken } = useTokenContext();
   const [isAppReady, setIsAppReady] = useState(false);
 
-  const onError = () => {};
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+
+  const onError = () => {
+    setIsError(true);
+  };
 
   const onSuccess = (data: any) => {
     const updateSession = data.updateSession;
@@ -34,32 +42,40 @@ const TokenLayout: FC<PropsWithChildrenOnlyType> = ({ children }) => {
     if (typename === "ErrorResponse") {
       if (["TOKEN_PARSE", "AUTHENTICATION"].includes(updateSession.title)) {
         setIsAuth(false);
+      } else {
+        setIsError(true);
       }
     }
   };
 
-  const { mutateAsync, isLoading, isError } = useMutation(
-    updateSessionRequest,
-    {
-      retry: 3,
-      onError,
-      onSuccess,
-    }
-  );
+  const { mutateAsync } = useMutation(updateSessionRequest, {
+    retry: 3,
+    onError,
+    onSuccess,
+  });
 
   customUseLayoutEffect(() => {
     if (token === "" && isAuth === true) {
+      setIsLoading(true);
       mutateAsync();
     } else {
       setIsAppReady(true);
     }
   }, [isAuth, token, mutateAsync]);
 
-  if (!isAppReady) {
+  if (isAppReady) {
     return (
-      <h1>
-        {isLoading && "Getting Token"} {isError && "Error"}
-      </h1>
+      <div className="flex h-screen w-full flex-col items-center justify-center">
+        <ShoppingCartIcon className="mb-2 h-14 text-indigo-600" />
+        <Show when={isLoading}>
+          <Spinner className="h-4 w-4 text-indigo-500" />
+        </Show>
+        <Show when={isError}>
+          <p className="pb-4 text-center text-neutral-400">
+            Something went wrong
+          </p>{" "}
+        </Show>
+      </div>
     );
   }
 

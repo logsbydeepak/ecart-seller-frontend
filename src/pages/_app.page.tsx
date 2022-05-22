@@ -30,11 +30,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
 
         <AuthProvider>
           <TokenProvider>
-            <AppLayout>
-              <TokenLayout>
-                {getLayout(<Component {...pageProps} />)}
-              </TokenLayout>
-            </AppLayout>
+            <AppLayout>{getLayout(<Component {...pageProps} />)}</AppLayout>
           </TokenProvider>
         </AuthProvider>
       </QueryClientProvider>

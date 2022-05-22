@@ -4,6 +4,7 @@ import Navbar from "~/components/Navbar";
 import { useAuthContext } from "~/context/AuthContext";
 import { PropsWithChildrenOnlyType } from "~/types/nextMod";
 import { customUseLayoutEffect } from "~/utils/helper/nextMod";
+import TokenLayout from "./TokenLayout";
 
 const AppLayout: FC<PropsWithChildrenOnlyType> = ({ children }) => {
   const [isAppReady, setIsAppReady] = useState(false);
@@ -16,10 +17,10 @@ const AppLayout: FC<PropsWithChildrenOnlyType> = ({ children }) => {
   if (!isAppReady) return null;
 
   return (
-    <>
+    <TokenLayout>
       <Navbar auth={isAuth} />
       <div className="mx-auto max-w-screen-2xl px-20 pt-16">{children}</div>
-    </>
+    </TokenLayout>
   );
 };
 
