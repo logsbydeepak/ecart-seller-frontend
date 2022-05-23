@@ -13,18 +13,20 @@ import { NextPageLayoutType } from "~/types/nextMod";
 import SignUpQuery from "~/utils/gql/User/SignUp.gql";
 import { useAuthContext } from "~/context/AuthContext";
 import { useTokenContext } from "~/context/TokenContext";
-import { name, email, password } from "~/utils/validation";
+import { firstName, lastName, email, password } from "~/utils/validation";
 import InputWithLeftIcon from "~/components/Input/InputWithLeftIcon";
 import ButtonWithTextAndSpinner from "~/components/Button/ButtonWithTextAndSpinner";
 import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftIcon";
+import SimpleInput from "~/components/Input/SimpleInput";
 
-const schema = object({ name, email, password });
+const schema = object({ firstName, lastName, email, password });
 
 const signUpRequest = (getValues: UseFormGetValues<SignUpFormType>) =>
   gqlRequest({ query: SignUpQuery, variable: getValues() });
 
 interface SignUpFormType {
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
 }
@@ -120,13 +122,23 @@ const SignUp: NextPageLayoutType = () => {
 
         <form className="w-96" onSubmit={handleSubmit(onSubmit)}>
           <fieldset disabled={isLoading}>
-            <InputWithLeftIcon
-              register={register("name")}
-              label="Name"
-              errorMessage={errors.name?.message}
-              placeholder="seller name"
-              Icon={<EmojiHappyIcon />}
-            />
+            <div className="flex">
+              <InputWithLeftIcon
+                register={register("firstName")}
+                label="First Name"
+                errorMessage={errors.firstName?.message}
+                placeholder="first name"
+                className="mr-4"
+                Icon={<EmojiHappyIcon />}
+              />
+
+              <SimpleInput
+                register={register("lastName")}
+                label="Last Name"
+                errorMessage={errors.lastName?.message}
+                placeholder="last name"
+              />
+            </div>
 
             <InputWithLeftIcon
               register={register("email")}

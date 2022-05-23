@@ -12,4 +12,5 @@ export const password = yup
     "password must container min 1 uppercase, lowercase, number, and symbol"
   );
 
-export const name = yup.string().trim().required().min(3);
+export const firstName = yup.string().trim().required("required");
+export const lastName = yup.string().trim().required("required");

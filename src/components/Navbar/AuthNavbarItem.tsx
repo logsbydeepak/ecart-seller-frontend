@@ -4,7 +4,6 @@ import { Menu, Transition } from "@headlessui/react";
 import { FC, ReactNode, useState, Fragment } from "react";
 import { CogIcon, LogoutIcon } from "@heroicons/react/outline";
 
-import { useAuthContext } from "~/context/AuthContext";
 import GetUserQuery from "~/utils/gql/User/GetUser.gql";
 import LogoutModal from "~/components/Modal/LogoutModal";
 import useAuthRequestHook from "~/hooks/useAuthRequestHook";
@@ -26,7 +25,7 @@ const AuthNavbarItem: FC = () => {
     const typename = readUser.__typename;
 
     if (typename === "User") {
-      setUserInfo((preValue) => ({ ...preValue, name: readUser.name }));
+      setUserInfo((preValue) => ({ ...preValue, name: readUser.firstName }));
     }
   };
 

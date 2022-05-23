@@ -2,7 +2,8 @@ query Query {
   readUser {
     ... on User {
       __typename
-      name
+      firstName
+      lastName
       email
     }
     ... on ErrorResponse {
