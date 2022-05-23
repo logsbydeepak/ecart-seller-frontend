@@ -47,7 +47,7 @@ const AuthNavbarItem: FC = () => {
   return (
     <Menu as="div" className="relative">
       <LogoutModal isOpen={isOpen} setIsOpen={setIsOpen} />
-      <Menu.Button className="flex items-center rounded-md border-2 border-neutral-100 px-4 py-2 hover:bg-neutral-50">
+      <Menu.Button className="flex min-w-[128px] items-center rounded-md border-2 border-neutral-100 px-4 py-2 hover:bg-neutral-50">
         <Image
           src={userInfo.profile}
           alt="Profile"
@@ -95,7 +95,7 @@ const MenuItem: FC<{ text: string; Icon: ReactNode; onClick: () => void }> = ({
       className="flex w-full cursor-pointer items-center rounded-md px-4 py-2 hover:bg-neutral-50"
       onClick={onClick}
     >
-      <div className="text-black-500 mr-2 ml-2 flex h-7 w-7 items-center justify-center">
+      <div className="text-black-500 mr-2 flex h-7 w-7 items-center justify-center">
         <div className="h-5 w-5 text-neutral-600">{Icon}</div>
       </div>
       <p>{text}</p>

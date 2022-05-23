@@ -1,3 +1,4 @@
+import AppNavbarLayout from "~/layout/AppNavbar";
 import AuthLayout from "~/layout/AuthLayout";
 import { NextPageLayoutType } from "~/types/nextMod";
 
@@ -9,8 +10,6 @@ const App: NextPageLayoutType = () => {
   );
 };
 
-App.getLayout = (page) => (
-  <AuthLayout page={page} isAuth={true} redirect="/Login" />
-);
+App.getLayout = AppNavbarLayout;
 
 export default App;
