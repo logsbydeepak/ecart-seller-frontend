@@ -8,7 +8,6 @@ import { useAuthContext } from "~/context/AuthContext";
 import GetUserQuery from "~/utils/gql/User/GetUser.gql";
 import LogoutModal from "~/components/Modal/LogoutModal";
 import useAuthRequestHook from "~/hooks/useAuthRequestHook";
-import DeleteSessionQuery from "~/utils/gql/Session/DeleteSession.gql";
 
 const defaultData = {
   name: "User Name",
@@ -17,7 +16,6 @@ const defaultData = {
 };
 
 const AuthNavbarItem: FC = () => {
-  const { setIsAuth } = useAuthContext();
   const [isOpen, setIsOpen] = useState(false);
   const [userInfo, setUserInfo] = useState(defaultData);
 
@@ -40,27 +38,6 @@ const AuthNavbarItem: FC = () => {
       onSuccess: onSuccessUser,
     },
   });
-
-  const onSuccess = () => {
-    setIsOpen(false);
-    setIsAuth(false);
-  };
-
-  const onError = () => {
-    setIsOpen(false);
-  };
-
-  const { refetch } = useAuthRequestHook({
-    key: "logout User",
-    query: DeleteSessionQuery,
-    name: "deleteSession",
-    option: { enabled: false, onSuccess, onError },
-  });
-
-  const handleLogout = async () => {
-    setIsOpen(true);
-    await refetch();
-  };
 
   const name = userInfo.name;
   const userName = name.length >= 10 ? name.substring(0, 9) + "..." : name;
@@ -99,7 +76,7 @@ const AuthNavbarItem: FC = () => {
           <MenuItem
             text="Logout"
             Icon={<LogoutIcon />}
-            onClick={handleLogout}
+            onClick={() => setIsOpen(true)}
           />
         </Menu.Items>
       </Transition>

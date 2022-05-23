@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 #nprogress .bar {
-  @apply !top-16 !h-[2.5px] !bg-indigo-500;
+  @apply !h-[2.5px] !bg-indigo-700;
 }
 
 #nprogress .peg {
