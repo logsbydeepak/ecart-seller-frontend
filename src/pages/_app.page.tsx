@@ -8,6 +8,7 @@ import AppLayout from "~/layout/AppLayout";
 import { AuthProvider } from "~/context/AuthContext";
 import { NextPageLayoutType } from "~/types/nextMod";
 import { TokenProvider } from "~/context/TokenContext";
+import NextNProgress from "nextjs-progressbar";
 
 type AppPropsWithLayout = AppProps & {
   Component: NextPageLayoutType;
@@ -33,6 +34,11 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
           </TokenProvider>
         </AuthProvider>
       </QueryClientProvider>
+      <NextNProgress
+        options={{
+          showSpinner: false,
+        }}
+      />
     </>
   );
 }

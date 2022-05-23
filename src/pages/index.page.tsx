@@ -3,6 +3,7 @@ import { ArrowSmRightIcon } from "@heroicons/react/outline";
 
 import AuthLayout from "~/layout/AuthLayout";
 import { NextPageLayoutType } from "~/types/nextMod";
+import ContainerLayout from "~/layout/ContainerLayout";
 
 const Home: NextPageLayoutType = () => {
   return (
@@ -24,7 +25,9 @@ const Home: NextPageLayoutType = () => {
 };
 
 Home.getLayout = (page) => (
-  <AuthLayout page={page} isAuth={false} redirect="/App" />
+  <ContainerLayout>
+    <AuthLayout page={page} isAuth={false} redirect="/Dashboard" />
+  </ContainerLayout>
 );
 
 export default Home;

@@ -18,6 +18,7 @@ import InputWithLeftIcon from "~/components/Input/InputWithLeftIcon";
 import ButtonWithTextAndSpinner from "~/components/Button/ButtonWithTextAndSpinner";
 import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftIcon";
 import SimpleInput from "~/components/Input/SimpleInput";
+import ContainerLayout from "~/layout/ContainerLayout";
 
 const schema = object({ firstName, lastName, email, password });
 
@@ -171,7 +172,9 @@ const SignUp: NextPageLayoutType = () => {
 };
 
 SignUp.getLayout = (page) => (
-  <AuthLayout page={page} isAuth={false} redirect="/App" />
+  <ContainerLayout>
+    <AuthLayout page={page} isAuth={false} redirect="/Dashboard" />
+  </ContainerLayout>
 );
 
 export default SignUp;

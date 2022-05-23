@@ -17,6 +17,7 @@ import { useTokenContext } from "~/context/TokenContext";
 import InputWithLeftIcon from "~/components/Input/InputWithLeftIcon";
 import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftIcon";
 import ButtonWithTextAndSpinner from "~/components/Button/ButtonWithTextAndSpinner";
+import ContainerLayout from "~/layout/ContainerLayout";
 
 interface LoginFormType {
   email: string;
@@ -155,7 +156,9 @@ const Login: NextPageLayoutType = () => {
 };
 
 Login.getLayout = (page) => (
-  <AuthLayout page={page} isAuth={false} redirect="/App" />
+  <ContainerLayout>
+    <AuthLayout page={page} isAuth={false} redirect="/Dashboard" />
+  </ContainerLayout>
 );
 
 export default Login;
