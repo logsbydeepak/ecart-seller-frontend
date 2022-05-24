@@ -68,9 +68,9 @@ const AuthNavbarItem: FC = () => {
       >
         <Menu.Items className="absolute right-0 mt-1.5 w-full rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           <MenuItem
-            text="Profile"
+            text="Account"
             Icon={<CogIcon />}
-            onClick={() => router.push("/Profile")}
+            onClick={() => router.push("/Account")}
           />
           <MenuItem
             text="Logout"

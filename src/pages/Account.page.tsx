@@ -13,6 +13,7 @@ import AccountSideBarLayout from "~/layout/AccountSideBarLayout";
 import GetUserQuery from "~/utils/gql/User/GetUser.gql";
 import useAuthRequestHook from "~/hooks/useAuthRequestHook";
 import Image from "next/image";
+import SideBarContent from "~/components/Sidebar/SideBarContent";
 
 const Account: NextPageLayoutType = () => {
   const [requestStatus, setRequestStatus] = useImmer({
@@ -50,16 +51,11 @@ const Account: NextPageLayoutType = () => {
   });
 
   return (
-    <>
-      <div className="text-center font-normal">
-        <h1 className="mb-2 text-3xl">Account Info</h1>
-        <p className="">Manage you account basic info</p>
-      </div>
-
+    <SideBarContent title="Account">
       {isLoading && <LoadingUserInfo />}
       {isError && <ErrorText />}
       {isSuccess && <UserInfo name={userInfo.name} email={userInfo.email} />}
-    </>
+    </SideBarContent>
   );
 };
 

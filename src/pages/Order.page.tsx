@@ -1,12 +1,9 @@
+import SideBarContent from "~/components/Sidebar/SideBarContent";
 import DashboardSideBarLayout from "~/layout/DashboardSideBarLayout";
 import { NextPageLayoutType } from "~/types/nextMod";
 
 const Order: NextPageLayoutType = () => {
-  return (
-    <>
-      <h1 className="text-2xl font-semibold">Order</h1>
-    </>
-  );
+  return <SideBarContent title="Order"></SideBarContent>;
 };
 
 Order.getLayout = DashboardSideBarLayout;

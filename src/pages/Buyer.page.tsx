@@ -1,12 +1,9 @@
+import SideBarContent from "~/components/Sidebar/SideBarContent";
 import DashboardSideBarLayout from "~/layout/DashboardSideBarLayout";
 import { NextPageLayoutType } from "~/types/nextMod";
 
 const Buyer: NextPageLayoutType = () => {
-  return (
-    <>
-      <h1 className="text-2xl font-semibold">Buyer</h1>
-    </>
-  );
+  return <SideBarContent title="Buyer"></SideBarContent>;
 };
 
 Buyer.getLayout = DashboardSideBarLayout;

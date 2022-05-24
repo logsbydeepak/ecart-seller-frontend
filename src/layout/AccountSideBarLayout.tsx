@@ -32,15 +32,15 @@ const AccountSideBar: FC<PropsWithChildrenOnlyType> = ({ children }) => {
         icon={<IdentificationIcon />}
         solidIcon={<IdentificationIconSolid />}
         name="Account"
-        url="/Profile"
-        active={currentPath === "/profile"}
+        url="/Account"
+        active={currentPath === "/account"}
       />
       <SideBarItem
         icon={<CreditCardIcon />}
         solidIcon={<CreditCardIconSolid />}
         name="Payment"
-        url="/Profile/Payment"
-        active={currentPath === "/profile/payment"}
+        url="/Payment"
+        active={currentPath === "/payment"}
       />
     </SideBarContainer>
   );
