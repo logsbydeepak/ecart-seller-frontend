@@ -1,18 +1,18 @@
 import AuthLayout from "./AuthLayout";
-import { ReactElement, FC, ReactNode, Children } from "react";
+import { ReactElement, FC, ReactNode, Children, useEffect } from "react";
 import { PropsWithChildrenOnlyType } from "~/types/nextMod";
 import Link from "next/link";
 import {
   ClipboardListIcon,
   HomeIcon,
   ShoppingBagIcon,
-  UserAddIcon,
+  UserCircleIcon,
 } from "@heroicons/react/outline";
 import {
   ClipboardListIcon as ClipboardListIconSolid,
   HomeIcon as HomeIconSolid,
   ShoppingBagIcon as ShoppingBagIconSolid,
-  UserAddIcon as UserAddIconSolid,
+  UserCircleIcon as UserCircleIconSolid,
 } from "@heroicons/react/solid";
 import { useRouter } from "next/router";
 import { classNames } from "~/utils/helper/tailwind";
@@ -30,15 +30,19 @@ const AppNavbarLayout = (page: ReactElement) => (
 const AppNavigation: FC<PropsWithChildrenOnlyType> = ({ children }) => {
   const router = useRouter();
   const currentPath = router.pathname.toLowerCase();
-  const { sideBarIsOpen } = useSideBarContext();
+  const { sideBarIsOpen, setSideBarIsOpen } = useSideBarContext();
+
+  useEffect(() => {
+    setSideBarIsOpen(true);
+  }, [setSideBarIsOpen]);
 
   return (
     <>
-      <div className="flex pt-20">
+      <div className="flex ">
         <div
           className={classNames(
             sideBarIsOpen ? "inline-block" : "hidden",
-            "h-screen w-60"
+            "mr-8 h-screen w-72 pt-20"
           )}
         >
           <Item
@@ -65,12 +69,12 @@ const AppNavigation: FC<PropsWithChildrenOnlyType> = ({ children }) => {
           <Item
             url="/Buyer"
             name="Buyer"
-            icon={<UserAddIcon />}
-            solidIcon={<UserAddIconSolid />}
+            icon={<UserCircleIcon />}
+            solidIcon={<UserCircleIconSolid />}
             active={currentPath === "/buyer"}
           />
         </div>
-        <div className="mx-auto w-full max-w-screen-2xl px-8 pb-8">
+        <div className="mx-auto w-full max-w-screen-2xl px-8 py-20">
           {children}
         </div>
       </div>

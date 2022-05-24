@@ -4,9 +4,7 @@ import { NextPageLayoutType } from "~/types/nextMod";
 const Dashboard: NextPageLayoutType = () => {
   return (
     <>
-      <div className="w-full bg-red-600">
-        <h1>Dashboard</h1>
-      </div>
+      <h1 className="text-2xl font-semibold">Dashboard</h1>
     </>
   );
 };

@@ -4,7 +4,7 @@ import { NextPageLayoutType } from "~/types/nextMod";
 const Order: NextPageLayoutType = () => {
   return (
     <>
-      <h1>Order</h1>
+      <h1 className="text-2xl font-semibold">Order</h1>
     </>
   );
 };

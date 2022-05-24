@@ -4,7 +4,7 @@ import { NextPageLayoutType } from "~/types/nextMod";
 const Product: NextPageLayoutType = () => {
   return (
     <>
-      <h1>Product</h1>
+      <h1 className="text-2xl font-semibold">Product</h1>
     </>
   );
 };
