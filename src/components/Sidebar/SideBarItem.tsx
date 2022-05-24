@@ -17,7 +17,7 @@ const SideBarItem: FC<{
           active
             ? "bg-neutral-700 text-white hover:bg-neutral-800"
             : "hover:bg-neutral-100",
-          "flex items-center rounded-r-full py-3 pl-6 "
+          "flex items-center rounded-r-lg py-3 pl-6 "
         )}
       >
         <div className="mr-4 h-4 w-4">

@@ -35,7 +35,7 @@ const Account: NextPageLayoutType = () => {
       });
 
       setUserInfo((draft) => {
-        draft.name = readUser.name;
+        draft.name = readUser.firstName + " " + readUser.lastName;
         draft.email = readUser.email;
       });
     }
