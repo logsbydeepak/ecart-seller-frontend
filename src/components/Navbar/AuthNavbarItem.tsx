@@ -46,7 +46,7 @@ const AuthNavbarItem: FC = () => {
   return (
     <Menu as="div" className="relative">
       <LogoutModal isOpen={isOpen} setIsOpen={setIsOpen} />
-      <Menu.Button className="flex min-w-[128px] items-center rounded-md border-2 border-neutral-100 px-4 py-2 hover:bg-neutral-50">
+      <Menu.Button className="flex  items-center rounded-md px-4 py-2 hover:bg-neutral-50">
         <Image
           src={userInfo.profile}
           alt="Profile"
