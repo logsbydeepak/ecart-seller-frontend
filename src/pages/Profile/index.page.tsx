@@ -9,7 +9,7 @@ import { FC, ReactNode } from "react";
 import Spinner from "~/components/Spinner";
 import { NextPageLayoutType } from "~/types/nextMod";
 import { classNames } from "~/utils/helper/tailwind";
-import ProfileNavigationLayout from "~/layout/ProfileNavigation";
+import AccountSideBarLayout from "~/layout/AccountSideBarLayout";
 import GetUserQuery from "~/utils/gql/User/GetUser.gql";
 import useAuthRequestHook from "~/hooks/useAuthRequestHook";
 import Image from "next/image";
@@ -200,6 +200,6 @@ const TextKeyImageValueInformation: FC<{
   />
 );
 
-Account.getLayout = ProfileNavigationLayout;
+Account.getLayout = AccountSideBarLayout;
 
 export default Account;

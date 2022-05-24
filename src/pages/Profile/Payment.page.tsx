@@ -1,10 +1,10 @@
 import { NextPageLayoutType } from "~/types/nextMod";
-import ProfileNavigationLayout from "~/layout/ProfileNavigation";
+import AccountSideBarLayout from "~/layout/AccountSideBarLayout";
 
 const Account: NextPageLayoutType = () => {
   return <>Payment</>;
 };
 
-Account.getLayout = ProfileNavigationLayout;
+Account.getLayout = AccountSideBarLayout;
 
 export default Account;

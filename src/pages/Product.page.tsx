@@ -1,4 +1,4 @@
-import AppNavbarLayout from "~/layout/AppNavbar";
+import DashboardSideBarLayout from "~/layout/DashboardSideBarLayout";
 import { NextPageLayoutType } from "~/types/nextMod";
 
 const Product: NextPageLayoutType = () => {
@@ -9,6 +9,6 @@ const Product: NextPageLayoutType = () => {
   );
 };
 
-Product.getLayout = AppNavbarLayout;
+Product.getLayout = DashboardSideBarLayout;
 
 export default Product;
