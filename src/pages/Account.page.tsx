@@ -5,29 +5,20 @@ import AccountSideBarLayout from "~/layout/AccountSideBarLayout";
 import GetUserQuery from "~/utils/gql/User/GetUser.gql";
 import useAuthRequestHook from "~/hooks/useAuthRequestHook";
 import SideBarContent from "~/components/Sidebar/SideBarContent";
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import Link from "next/link";
 import { classNames } from "~/utils/helper/tailwind";
+import LogoutAllModal from "~/components/Modal/LogoutAllModal";
 
 const Account: NextPageLayoutType = () => {
-  const [requestStatus, setRequestStatus] = useImmer({
-    isLoading: true,
-    isError: false,
-    isSuccess: false,
-  });
-
   const [userInfo, setUserInfo] = useImmer({ name: "", email: "" });
+  const [isOpenLogoutAllModal, setIsOpenLogoutAllModal] = useState(false);
 
   const onSuccess = (data: any) => {
     const readUser = data.readUser;
     const typename = readUser.__typename;
 
     if (typename === "User") {
-      setRequestStatus((draft) => {
-        draft.isSuccess = true;
-        draft.isLoading = false;
-      });
-
       setUserInfo((draft) => {
         draft.name = readUser.firstName + " " + readUser.lastName;
         draft.email = readUser.email;
@@ -46,7 +37,9 @@ const Account: NextPageLayoutType = () => {
 
   const handleDeleteAccount = () => {};
 
-  const handleLogoutAll = () => {};
+  const handleLogoutAll = () => {
+    setIsOpenLogoutAllModal(true);
+  };
 
   return (
     <SideBarContent
@@ -55,6 +48,10 @@ const Account: NextPageLayoutType = () => {
       isSuccess={isSuccess}
       isError={isError}
     >
+      <LogoutAllModal
+        isOpen={isOpenLogoutAllModal}
+        setIsOpen={setIsOpenLogoutAllModal}
+      />
       <div className="max-w-2xl">
         <div className="rounded-lg border-2 border-neutral-200 p-8">
           <ItemContainer fieldValue="Name" value={userInfo.name} url="" />
