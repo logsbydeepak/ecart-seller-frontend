@@ -1,0 +1,11 @@
+mutation DeleteAllSession($currentPassword: String!) {
+  deleteAllSession(currentPassword: $currentPassword) {
+    ... on SuccessResponse {
+      message
+    }
+    ... on ErrorResponse {
+      title
+      message
+    }
+  }
+}

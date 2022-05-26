@@ -44,6 +44,10 @@ const Account: NextPageLayoutType = () => {
     },
   });
 
+  const handleDeleteAccount = () => {};
+
+  const handleLogoutAll = () => {};
+
   return (
     <SideBarContent
       title="Account"
@@ -61,9 +65,15 @@ const Account: NextPageLayoutType = () => {
         </div>
 
         <div className="mt-8 rounded-lg border-2 border-neutral-200 p-8">
-          <ItemContainerButton fieldName="Logout All" />
+          <ItemContainerButton
+            fieldName="Logout All"
+            handleOnClick={handleLogoutAll}
+          />
           <Divider />
-          <ItemContainerButton fieldName="Delete Account" />
+          <ItemContainerButton
+            fieldName="Delete Account"
+            handleOnClick={handleDeleteAccount}
+          />
         </div>
       </div>
     </SideBarContent>
@@ -91,9 +101,15 @@ const ItemContainer: FC<{
   );
 };
 
-const ItemContainerButton: FC<{ fieldName: string }> = ({ fieldName }) => {
+const ItemContainerButton: FC<{
+  fieldName: string;
+  handleOnClick: () => void;
+}> = ({ fieldName, handleOnClick }) => {
   return (
-    <button className="w-full text-center text-base font-semibold hover:text-indigo-700">
+    <button
+      className="w-full text-center text-base font-semibold hover:text-indigo-700"
+      onClick={handleOnClick}
+    >
       {fieldName}
     </button>
   );
