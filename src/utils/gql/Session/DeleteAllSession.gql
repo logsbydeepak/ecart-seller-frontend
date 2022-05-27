@@ -1,9 +1,11 @@
 mutation DeleteAllSession($currentPassword: String!) {
   deleteAllSession(currentPassword: $currentPassword) {
     ... on SuccessResponse {
+      __typename
       message
     }
     ... on ErrorResponse {
+      __typename
       title
       message
     }

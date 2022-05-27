@@ -2,15 +2,13 @@ import { Dispatch, FC, SetStateAction } from "react";
 
 import ModalContainer from "./Atom/ModalContainer";
 import { useAuthContext } from "~/context/AuthContext";
-import { useMutation } from "react-query";
 import PasswordInputWithLeftIcon from "../Input/PasswordInputWithLeftIcon";
-import { useForm, UseFormGetValues } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { password } from "~/utils/validation";
 import { object } from "yup";
-import Show from "../Show";
-import { gqlRequest } from "~/utils/helper/gql";
 import LogoutAllSessionQuery from "~/utils/gql/Session/DeleteAllSession.gql";
+import useAuthMutationRequestHook from "~/hooks/useAuthMutationRequest";
 
 interface FormType {
   password: string;
@@ -20,47 +18,38 @@ const schema = object({
   password: password,
 });
 
-const logoutAllRequest = async (getValues: UseFormGetValues<FormType>) => {
-  try {
-    const request = await gqlRequest({
-      query: LogoutAllSessionQuery,
-      variable: getValues(),
-    });
-    return request;
-  } catch {
-    throw { message: "Something went wrong" };
-  }
-};
-
 const LogoutAllModal: FC<{
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }> = ({ isOpen, setIsOpen }) => {
   const { setIsAuth } = useAuthContext();
-
   const {
     register,
     handleSubmit,
     getValues,
+    setError,
     formState: { errors },
   } = useForm<FormType>({ resolver: yupResolver(schema) });
 
   const onSuccess = (data: any) => {
-    const deleteAllSession = data.createSession;
-    const typename = deleteAllSession.__typename;
-
-    if (typename === "SuccessResponse") {
-      setIsOpen(false);
-      setIsAuth(false);
-    }
+    setIsAuth(false);
   };
 
-  const onError = () => {};
+  const onError = (data: any) => {
+    setError(
+      "password",
+      { message: "invalid password" },
+      { shouldFocus: true }
+    );
+  };
 
-  const { mutateAsync, isLoading, isError } = useMutation(logoutAllRequest, {
-    onSuccess,
-    onError,
-    retry: 3,
+  const { isLoading, mutateAsync } = useAuthMutationRequestHook({
+    query: LogoutAllSessionQuery,
+    name: "deleteAllSession",
+    ErrorResponse: [{ title: "BODY_PARSE", message: "invalid password" }],
+    successTitle: "SuccessResponse",
+    variable: { currentPassword: getValues("password") },
+    options: { onSuccess, onError },
   });
 
   const exitModal = () => {
@@ -68,14 +57,11 @@ const LogoutAllModal: FC<{
   };
 
   const onSubmit = () => {
-    mutateAsync(getValues);
+    mutateAsync();
   };
 
   return (
     <ModalContainer title="Logout All" isOpen={isOpen} exitModal={exitModal}>
-      <Show when={isError}>
-        <p className="pb-4 text-center text-red-500">Something went wrong</p>
-      </Show>
       <form onSubmit={handleSubmit(onSubmit)} className="w-96">
         <fieldset disabled={isLoading}>
           <PasswordInputWithLeftIcon
