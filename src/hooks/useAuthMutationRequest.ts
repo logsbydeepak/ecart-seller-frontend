@@ -32,46 +32,33 @@ const useAuthMutationRequestHook = ({
 
   const request = async () => {
     try {
-      const response = await gqlRequest({ query, variable, token });
-      const data = response[name];
-      const typename = data.__typename;
-
-      if (typename === successTitle) {
-        return { successData: { ...data } };
-      }
-
-      if (typename === "ErrorResponse") {
-        if (["TOKEN_PARSE", "AUTHENTICATION"].includes(data.title)) {
-          return { isLogout: true };
-        }
-
-        ErrorResponse.forEach((value) => {
-          if (data.title === value.title && data.message === value.message) {
-            return { errorData: { ...data } };
-          }
-        });
-      }
-
-      return {};
+      const request = await gqlRequest({ query, variable, token });
+      return request;
     } catch (error: any) {
       throw { message: "Something went wrong" };
     }
   };
 
   const onSuccess = (data: any) => {
-    if (data.isLogout) {
-      setIsAuth(false);
-    }
+    const responseData = data[name];
+    const typename = responseData.__typename;
 
-    if (data.successData) {
+    if (typename === successTitle) {
       onSuccessMutation(data);
     }
 
-    if (data.errorData) {
-      onErrorMutation(data);
+    if (["TOKEN_PARSE", "AUTHENTICATION"].includes(data.title)) {
+      setIsAuth(false);
     }
 
-    onError();
+    ErrorResponse.forEach((value) => {
+      if (
+        responseData.title === value.title &&
+        responseData.message === value.message
+      ) {
+        onErrorMutation(data);
+      }
+    });
   };
 
   const onError = () => {

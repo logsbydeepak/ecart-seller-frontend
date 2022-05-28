@@ -35,10 +35,7 @@ const LogoutAllModal: FC<{
   };
 
   const onErrorMutation = (data: any) => {
-    console.log(data);
-    setErrors({
-      password: "invalid password",
-    });
+    setErrors({ password: "invalid password" });
   };
 
   const exitModal = () => {
