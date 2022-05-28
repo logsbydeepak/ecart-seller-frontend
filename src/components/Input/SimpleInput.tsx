@@ -7,8 +7,8 @@ const SimpleInput: FC<CommonInputType> = ({
   className,
   label,
   placeholder,
-  register,
   type,
+  getFieldProps,
   errorMessage,
 }) => {
   const id = v4();
@@ -17,7 +17,7 @@ const SimpleInput: FC<CommonInputType> = ({
       <Label id={id} label={label} />
       <TextInput
         placeholder={placeholder}
-        register={register}
+        getFieldProps={getFieldProps}
         id={id}
         className=""
         type={type}

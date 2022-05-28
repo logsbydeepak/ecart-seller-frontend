@@ -2,29 +2,30 @@ import { FC, ReactNode } from "react";
 import { UseFormRegisterReturn } from "react-hook-form";
 import { classNames } from "~/utils/helper/tailwind";
 import { PropsWithChildrenOnlyType } from "~/types/nextMod";
+import { FieldInputProps } from "formik";
 
 export interface CommonInputType {
   label: string;
   placeholder: string;
-  register: UseFormRegisterReturn;
+  getFieldProps: FieldInputProps<any>;
 
   className?: string;
-  errorMessage?: string;
+  errorMessage?: string | boolean;
   type?: string;
 }
 
 export const TextInput: FC<{
   placeholder: string;
-  register: UseFormRegisterReturn;
   id: string;
+  getFieldProps: FieldInputProps<any>;
   className: string;
   type?: string;
-}> = ({ placeholder, id, type, register, className }) => (
+}> = ({ placeholder, id, type, getFieldProps, className }) => (
   <input
     placeholder={placeholder}
     id={id}
     type={type}
-    {...register}
+    {...getFieldProps}
     className={classNames(
       className,
       "block w-full rounded-md border-2 border-slate-200 bg-slate-50 text-base ring-0 focus:border-indigo-600 focus:bg-white focus:ring-indigo-400"

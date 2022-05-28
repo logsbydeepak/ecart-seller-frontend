@@ -9,12 +9,17 @@ import { password } from "~/utils/validation";
 import { object } from "yup";
 import LogoutAllSessionQuery from "~/utils/gql/Session/DeleteAllSession.gql";
 import useAuthMutationRequestHook from "~/hooks/useAuthMutationRequest";
+import { useFormik } from "formik";
 
 interface FormType {
   password: string;
 }
 
-const schema = object({
+const initialValues = {
+  password: "",
+};
+
+const validationSchema = object({
   password: password,
 });
 
@@ -23,34 +28,18 @@ const LogoutAllModal: FC<{
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }> = ({ isOpen, setIsOpen }) => {
   const { setIsAuth } = useAuthContext();
-  const {
-    register,
-    handleSubmit,
-    getValues,
-    setError,
-    formState: { errors },
-  } = useForm<FormType>({ resolver: yupResolver(schema) });
 
-  const onSuccess = (data: any) => {
+  const onSuccessMutation = (data: any) => {
+    console.log(data);
     setIsAuth(false);
   };
 
-  const onError = (data: any) => {
-    setError(
-      "password",
-      { message: "invalid password" },
-      { shouldFocus: true }
-    );
+  const onErrorMutation = (data: any) => {
+    console.log(data);
+    setErrors({
+      password: "invalid password",
+    });
   };
-
-  const { isLoading, mutateAsync } = useAuthMutationRequestHook({
-    query: LogoutAllSessionQuery,
-    name: "deleteAllSession",
-    ErrorResponse: [{ title: "BODY_PARSE", message: "invalid password" }],
-    successTitle: "SuccessResponse",
-    variable: { currentPassword: getValues("password") },
-    options: { onSuccess, onError },
-  });
 
   const exitModal = () => {
     if (!isLoading) setIsOpen(false);
@@ -60,16 +49,35 @@ const LogoutAllModal: FC<{
     mutateAsync();
   };
 
+  const { errors, handleSubmit, touched, getFieldProps, setErrors, values } =
+    useFormik<FormType>({
+      initialValues,
+      validationSchema,
+      onSubmit,
+    });
+
+  const { isLoading, mutateAsync } = useAuthMutationRequestHook({
+    query: LogoutAllSessionQuery,
+    name: "deleteAllSession",
+    ErrorResponse: [{ title: "BODY_PARSE", message: "invalid password" }],
+    successTitle: "SuccessResponse",
+    variable: { currentPassword: values.password },
+    onErrorMutation,
+    onSuccessMutation,
+  });
+
+  const errorMessage = (key: keyof FormType) =>
+    errors[key] && touched[key] && errors[key];
   return (
     <ModalContainer title="Logout All" isOpen={isOpen} exitModal={exitModal}>
-      <form onSubmit={handleSubmit(onSubmit)} className="w-96">
+      <form onSubmit={handleSubmit} className="w-96">
         <fieldset disabled={isLoading}>
           <PasswordInputWithLeftIcon
-            register={register("password")}
+            getFieldProps={getFieldProps("password")}
             className="mb-6 text-left"
             label="Current Password"
             type="password"
-            errorMessage={errors.password?.message}
+            errorMessage={errorMessage("password")}
             placeholder="********"
           />
 

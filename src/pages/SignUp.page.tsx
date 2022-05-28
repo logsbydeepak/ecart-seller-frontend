@@ -1,26 +1,25 @@
-import { object, ref } from "yup";
 import Link from "next/link";
+import { object, ref } from "yup";
 import { useImmer } from "use-immer";
 import { useMutation } from "react-query";
-import { yupResolver } from "@hookform/resolvers/yup";
+import { FormikHelpers, useFormik } from "formik";
 import { EmojiHappyIcon, MailIcon } from "@heroicons/react/solid";
-import { SubmitHandler, useForm, UseFormGetValues } from "react-hook-form";
 
 import Show from "~/components/Show";
 import AuthLayout from "~/layout/AuthLayout";
 import { gqlRequest } from "~/utils/helper/gql";
 import { NextPageLayoutType } from "~/types/nextMod";
 import SignUpQuery from "~/utils/gql/User/SignUp.gql";
+import ContainerLayout from "~/layout/ContainerLayout";
 import { useAuthContext } from "~/context/AuthContext";
 import { useTokenContext } from "~/context/TokenContext";
-import { firstName, lastName, email, password } from "~/utils/validation";
+import SimpleInput from "~/components/Input/SimpleInput";
 import InputWithLeftIcon from "~/components/Input/InputWithLeftIcon";
+import { firstName, lastName, email, password } from "~/utils/validation";
 import ButtonWithTextAndSpinner from "~/components/Button/ButtonWithTextAndSpinner";
 import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftIcon";
-import SimpleInput from "~/components/Input/SimpleInput";
-import ContainerLayout from "~/layout/ContainerLayout";
 
-const schema = object({
+const validationSchema = object({
   firstName,
   lastName,
   email,
@@ -28,14 +27,14 @@ const schema = object({
   confirmPassword: password.oneOf([ref("password")], "Password does not match"),
 });
 
-const signUpRequest = (getValues: UseFormGetValues<SignUpFormType>) =>
+const signUpRequest = (value: SignUpFormType) =>
   gqlRequest({
     query: SignUpQuery,
     variable: {
-      firstName: getValues("firstName"),
-      lastName: getValues("lastName"),
-      email: getValues("email"),
-      password: getValues("password"),
+      firstName: value.firstName,
+      lastName: value.lastName,
+      email: value.email,
+      password: value.password,
     },
   });
 
@@ -59,14 +58,6 @@ const SignUp: NextPageLayoutType = () => {
 
   const { isLoading, isSuccess, isError } = requestStatus;
 
-  const {
-    register,
-    handleSubmit,
-    setError,
-    getValues,
-    formState: { errors },
-  } = useForm<SignUpFormType>({ resolver: yupResolver(schema) });
-
   const onError = () =>
     setRequestStatus((draft) => {
       draft.isError = true;
@@ -84,7 +75,7 @@ const SignUp: NextPageLayoutType = () => {
       setRequestStatus((draft) => {
         draft.isLoading = false;
       });
-      setError("email", { message: createUser.message }, { shouldFocus: true });
+      setErrors({ email: "email already exist" });
     }
 
     if (typename === "AccessToken") {
@@ -102,16 +93,34 @@ const SignUp: NextPageLayoutType = () => {
     onSuccess,
   });
 
-  const onSubmit: SubmitHandler<SignUpFormType> = async () => {
+  const onSubmit = (value: SignUpFormType) => {
     try {
       setRequestStatus((draft) => {
         draft.isLoading = true;
       });
-      await mutateAsync(getValues);
+      mutateAsync(value);
     } catch (error) {
       onError();
     }
   };
+
+  const initialValues: SignUpFormType = {
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  };
+
+  const { errors, handleSubmit, touched, getFieldProps, setErrors } =
+    useFormik<SignUpFormType>({
+      initialValues,
+      validationSchema,
+      onSubmit,
+    });
+
+  const errorMessage = (key: keyof SignUpFormType) =>
+    errors[key] && touched[key] && errors[key];
 
   return (
     <div className="flex flex-col items-center	justify-center py-20">
@@ -136,50 +145,50 @@ const SignUp: NextPageLayoutType = () => {
           <p className="pb-4 text-center text-green-500">Login successful</p>
         </Show>
 
-        <form className="w-96" onSubmit={handleSubmit(onSubmit)}>
+        <form className="w-96" onSubmit={handleSubmit}>
           <fieldset disabled={isLoading}>
             <div className="flex">
               <InputWithLeftIcon
-                register={register("firstName")}
                 label="First Name"
-                errorMessage={errors.firstName?.message}
+                getFieldProps={getFieldProps("firstName")}
+                errorMessage={errorMessage("firstName")}
                 placeholder="first name"
                 className="mr-4"
                 Icon={<EmojiHappyIcon />}
               />
 
               <SimpleInput
-                register={register("lastName")}
+                getFieldProps={getFieldProps("lastName")}
                 label="Last Name"
-                errorMessage={errors.lastName?.message}
+                errorMessage={errorMessage("lastName")}
                 placeholder="last name"
               />
             </div>
 
             <InputWithLeftIcon
-              register={register("email")}
+              getFieldProps={getFieldProps("email")}
+              errorMessage={errorMessage("email")}
               label="Email"
               className="my-4"
-              errorMessage={errors.email?.message}
               placeholder="example@abc.com"
               Icon={<MailIcon />}
             />
 
             <PasswordInputWithLeftIcon
-              register={register("password")}
+              getFieldProps={getFieldProps("password")}
               className="mt-4"
               label="Password"
+              errorMessage={errorMessage("password")}
               type="password"
-              errorMessage={errors.password?.message}
               placeholder="strong password"
             />
 
             <PasswordInputWithLeftIcon
-              register={register("confirmPassword")}
+              getFieldProps={getFieldProps("confirmPassword")}
+              errorMessage={errorMessage("confirmPassword")}
               className="mt-4"
               label="Confirm Password"
               type="password"
-              errorMessage={errors.confirmPassword?.message}
               placeholder="retype password"
             />
 

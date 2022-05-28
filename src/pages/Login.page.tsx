@@ -1,10 +1,9 @@
 import { object } from "yup";
 import Link from "next/link";
+import { useFormik } from "formik";
 import { useImmer } from "use-immer";
 import { useMutation } from "react-query";
 import { MailIcon } from "@heroicons/react/solid";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { SubmitHandler, useForm, UseFormGetValues } from "react-hook-form";
 
 import Show from "~/components/Show";
 import AuthLayout from "~/layout/AuthLayout";
@@ -13,21 +12,26 @@ import LoginQuery from "~/utils/gql/User/Login.gql";
 import { NextPageLayoutType } from "~/types/nextMod";
 import { email, password } from "~/utils/validation";
 import { useAuthContext } from "~/context/AuthContext";
+import ContainerLayout from "~/layout/ContainerLayout";
 import { useTokenContext } from "~/context/TokenContext";
 import InputWithLeftIcon from "~/components/Input/InputWithLeftIcon";
 import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftIcon";
 import ButtonWithTextAndSpinner from "~/components/Button/ButtonWithTextAndSpinner";
-import ContainerLayout from "~/layout/ContainerLayout";
 
 interface LoginFormType {
   email: string;
   password: string;
 }
 
-const schema = object({ email, password });
+const validationSchema = object({ email, password });
 
-const loginRequest = (getValues: UseFormGetValues<LoginFormType>) =>
-  gqlRequest({ query: LoginQuery, variable: getValues() });
+const initialValues: LoginFormType = {
+  email: "",
+  password: "",
+};
+
+const loginRequest = (variable: LoginFormType) =>
+  gqlRequest({ query: LoginQuery, variable });
 
 const Login: NextPageLayoutType = () => {
   const { setIsAuth } = useAuthContext();
@@ -40,14 +44,6 @@ const Login: NextPageLayoutType = () => {
   });
 
   const { isLoading, isSuccess, isError } = requestStatus;
-
-  const {
-    register,
-    handleSubmit,
-    setError,
-    getValues,
-    formState: { errors },
-  } = useForm<LoginFormType>({ resolver: yupResolver(schema) });
 
   const onError = () =>
     setRequestStatus((draft) => {
@@ -69,16 +65,8 @@ const Login: NextPageLayoutType = () => {
       setRequestStatus((draft) => {
         draft.isLoading = false;
       });
-      setError(
-        "email",
-        { message: "email or password is invalid" },
-        { shouldFocus: true }
-      );
-      setError(
-        "password",
-        { message: "email or password is invalid" },
-        { shouldFocus: true }
-      );
+      setErrors({ email: "email or password is invalid" });
+      setErrors({ password: "email or password is invalid" });
     }
   };
 
@@ -88,16 +76,26 @@ const Login: NextPageLayoutType = () => {
     onSuccess,
   });
 
-  const onSubmit: SubmitHandler<LoginFormType> = async () => {
+  const onSubmit = (value: LoginFormType) => {
     try {
       setRequestStatus((draft) => {
         draft.isLoading = true;
       });
-      await mutateAsync(getValues);
+      mutateAsync(value);
     } catch (error) {
       onError();
     }
   };
+
+  const { errors, handleSubmit, touched, getFieldProps, setErrors } =
+    useFormik<LoginFormType>({
+      initialValues,
+      validationSchema,
+      onSubmit,
+    });
+
+  const errorMessage = (key: keyof LoginFormType) =>
+    errors[key] && touched[key] && errors[key];
 
   return (
     <div className="flex flex-col items-center	justify-center py-20">
@@ -124,22 +122,22 @@ const Login: NextPageLayoutType = () => {
           </p>
         </Show>
 
-        <form className="w-96" onSubmit={handleSubmit(onSubmit)}>
+        <form className="w-96" onSubmit={handleSubmit}>
           <fieldset disabled={isLoading}>
             <InputWithLeftIcon
-              register={register("email")}
+              getFieldProps={getFieldProps("email")}
               label="Email"
-              errorMessage={errors.email?.message}
+              errorMessage={errorMessage("email")}
               placeholder="example@abc.com"
               Icon={<MailIcon />}
             />
 
             <PasswordInputWithLeftIcon
-              register={register("password")}
+              getFieldProps={getFieldProps("password")}
               className="mt-4"
               label="Password"
               type="password"
-              errorMessage={errors.password?.message}
+              errorMessage={errorMessage("password")}
               placeholder="strong password"
             />
 

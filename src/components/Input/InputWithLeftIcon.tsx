@@ -19,7 +19,7 @@ const InputWithLeftIcon: FC<PropType> = ({
   className,
   label,
   placeholder,
-  register,
+  getFieldProps,
   type,
   errorMessage,
   Icon,
@@ -34,7 +34,7 @@ const InputWithLeftIcon: FC<PropType> = ({
         </LeftIconContainer>
         <TextInput
           placeholder={placeholder}
-          register={register}
+          getFieldProps={getFieldProps}
           id={id}
           className="pl-10"
           type={type}

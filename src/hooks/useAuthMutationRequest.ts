@@ -1,6 +1,6 @@
-import { DocumentNode, TypeNameMetaFieldDef } from "graphql";
+import { DocumentNode } from "graphql";
 import { Variables } from "graphql-request";
-import { useMutation, UseMutationOptions, useQueryClient } from "react-query";
+import { useMutation, UseMutationOptions } from "react-query";
 
 import { gqlRequest } from "~/utils/helper/gql";
 import { useAuthContext } from "~/context/AuthContext";
@@ -13,6 +13,8 @@ interface Props {
   options?: UseMutationOptions;
   successTitle: string;
   ErrorResponse: { title: string; message: string }[];
+  onSuccessMutation: (data: any) => void;
+  onErrorMutation: (data: any) => void;
 }
 
 const useAuthMutationRequestHook = ({
@@ -22,44 +24,66 @@ const useAuthMutationRequestHook = ({
   options = {},
   successTitle,
   ErrorResponse,
+  onSuccessMutation,
+  onErrorMutation,
 }: Props) => {
   const { token } = useTokenContext();
-  const { setIsAuth, isAuth } = useAuthContext();
+  const { setIsAuth } = useAuthContext();
 
   const request = async () => {
     try {
-      if (!isAuth && !token) throw {};
-
       const response = await gqlRequest({ query, variable, token });
       const data = response[name];
       const typename = data.__typename;
 
       if (typename === successTitle) {
-        return data;
+        return { successData: { ...data } };
       }
 
       if (typename === "ErrorResponse") {
         if (["TOKEN_PARSE", "AUTHENTICATION"].includes(data.title)) {
-          setIsAuth(false);
+          return { isLogout: true };
         }
 
         ErrorResponse.forEach((value) => {
           if (data.title === value.title && data.message === value.message) {
-            throw { isData: true, data: { ...data } };
+            return { errorData: { ...data } };
           }
         });
       }
 
-      throw {};
+      return {};
     } catch (error: any) {
-      if (error.isData) {
-        return error.data;
-      }
       throw { message: "Something went wrong" };
     }
   };
 
-  const useMutationHook = useMutation(request, { retry: 3, ...options });
+  const onSuccess = (data: any) => {
+    if (data.isLogout) {
+      setIsAuth(false);
+    }
+
+    if (data.successData) {
+      onSuccessMutation(data);
+    }
+
+    if (data.errorData) {
+      onErrorMutation(data);
+    }
+
+    onError();
+  };
+
+  const onError = () => {
+    console.log("Something went wrong");
+  };
+
+  const useMutationHook = useMutation(request, {
+    retry: 3,
+    onSuccess,
+    onError,
+    ...options,
+  });
 
   return useMutationHook;
 };

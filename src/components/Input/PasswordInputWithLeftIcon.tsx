@@ -19,7 +19,7 @@ const PasswordInputWithLeftIcon: FC<PropType> = ({
   className,
   label,
   placeholder,
-  register,
+  getFieldProps,
   errorMessage,
 }) => {
   const [isPasswordHidden, setIsPasswordHidden] = useState(false);
@@ -45,7 +45,7 @@ const PasswordInputWithLeftIcon: FC<PropType> = ({
 
         <TextInput
           placeholder={placeholder}
-          register={register}
+          getFieldProps={getFieldProps}
           id={id}
           className="px-10"
           type={isPasswordHidden ? "text" : "password"}
