@@ -1,4 +1,4 @@
-import { object } from "yup";
+import { object, ref } from "yup";
 import Link from "next/link";
 import { useImmer } from "use-immer";
 import { useMutation } from "react-query";
@@ -20,16 +20,31 @@ import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftI
 import SimpleInput from "~/components/Input/SimpleInput";
 import ContainerLayout from "~/layout/ContainerLayout";
 
-const schema = object({ firstName, lastName, email, password });
+const schema = object({
+  firstName,
+  lastName,
+  email,
+  password,
+  confirmPassword: password.oneOf([ref("password")], "Password does not match"),
+});
 
 const signUpRequest = (getValues: UseFormGetValues<SignUpFormType>) =>
-  gqlRequest({ query: SignUpQuery, variable: getValues() });
+  gqlRequest({
+    query: SignUpQuery,
+    variable: {
+      firstName: getValues("firstName"),
+      lastName: getValues("lastName"),
+      email: getValues("email"),
+      password: getValues("password"),
+    },
+  });
 
 interface SignUpFormType {
   firstName: string;
   lastName: string;
   email: string;
   password: string;
+  confirmPassword: string;
 }
 
 const SignUp: NextPageLayoutType = () => {
@@ -157,6 +172,15 @@ const SignUp: NextPageLayoutType = () => {
               type="password"
               errorMessage={errors.password?.message}
               placeholder="strong password"
+            />
+
+            <PasswordInputWithLeftIcon
+              register={register("confirmPassword")}
+              className="mt-4"
+              label="Confirm Password"
+              type="password"
+              errorMessage={errors.confirmPassword?.message}
+              placeholder="retype password"
             />
 
             <ButtonWithTextAndSpinner
