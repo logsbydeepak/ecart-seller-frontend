@@ -2,7 +2,7 @@ import Link from "next/link";
 import { object, ref } from "yup";
 import { useImmer } from "use-immer";
 import { useMutation } from "react-query";
-import { FormikHelpers, useFormik } from "formik";
+import { useForm, SubmitHandler, UseFormGetValues } from "react-hook-form";
 import { EmojiHappyIcon, MailIcon } from "@heroicons/react/solid";
 
 import Show from "~/components/Show";
@@ -18,8 +18,9 @@ import InputWithLeftIcon from "~/components/Input/InputWithLeftIcon";
 import { firstName, lastName, email, password } from "~/utils/validation";
 import ButtonWithTextAndSpinner from "~/components/Button/ButtonWithTextAndSpinner";
 import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftIcon";
+import { yupResolver } from "@hookform/resolvers/yup";
 
-const validationSchema = object({
+const schema = object({
   firstName,
   lastName,
   email,
@@ -27,14 +28,14 @@ const validationSchema = object({
   confirmPassword: password.oneOf([ref("password")], "Password does not match"),
 });
 
-const signUpRequest = (value: SignUpFormType) =>
+const signUpRequest = (getValues: UseFormGetValues<SignUpFormType>) =>
   gqlRequest({
     query: SignUpQuery,
     variable: {
-      firstName: value.firstName,
-      lastName: value.lastName,
-      email: value.email,
-      password: value.password,
+      firstName: getValues("firstName"),
+      lastName: getValues("lastName"),
+      email: getValues("email"),
+      password: getValues("password"),
     },
   });
 
@@ -75,7 +76,7 @@ const SignUp: NextPageLayoutType = () => {
       setRequestStatus((draft) => {
         draft.isLoading = false;
       });
-      setErrors({ email: "email already exist" });
+      setError("email", { message: createUser.message }, { shouldFocus: true });
     }
 
     if (typename === "AccessToken") {
@@ -93,34 +94,24 @@ const SignUp: NextPageLayoutType = () => {
     onSuccess,
   });
 
-  const onSubmit = (value: SignUpFormType) => {
+  const onSubmit: SubmitHandler<SignUpFormType> = () => {
     try {
       setRequestStatus((draft) => {
         draft.isLoading = true;
       });
-      mutateAsync(value);
+      mutateAsync(getValues);
     } catch (error) {
       onError();
     }
   };
 
-  const initialValues: SignUpFormType = {
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-  };
-
-  const { errors, handleSubmit, touched, getFieldProps, setErrors } =
-    useFormik<SignUpFormType>({
-      initialValues,
-      validationSchema,
-      onSubmit,
-    });
-
-  const errorMessage = (key: keyof SignUpFormType) =>
-    errors[key] && touched[key] && errors[key];
+  const {
+    register,
+    getValues,
+    setError,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SignUpFormType>({ resolver: yupResolver(schema) });
 
   return (
     <div className="flex flex-col items-center	justify-center py-20">
@@ -145,50 +136,55 @@ const SignUp: NextPageLayoutType = () => {
           <p className="pb-4 text-center text-green-500">Login successful</p>
         </Show>
 
-        <form className="w-96" onSubmit={handleSubmit}>
+        <form className="w-96" onSubmit={handleSubmit(onSubmit)}>
           <fieldset disabled={isLoading}>
             <div className="flex">
               <InputWithLeftIcon
                 label="First Name"
-                getFieldProps={getFieldProps("firstName")}
-                errorMessage={errorMessage("firstName")}
+                disabled={isLoading}
+                register={register("firstName")}
+                errorMessage={errors.firstName?.message}
                 placeholder="first name"
                 className="mr-4"
                 Icon={<EmojiHappyIcon />}
               />
 
               <SimpleInput
-                getFieldProps={getFieldProps("lastName")}
                 label="Last Name"
-                errorMessage={errorMessage("lastName")}
+                disabled={isLoading}
+                register={register("lastName")}
+                errorMessage={errors.lastName?.message}
                 placeholder="last name"
               />
             </div>
 
             <InputWithLeftIcon
-              getFieldProps={getFieldProps("email")}
-              errorMessage={errorMessage("email")}
+              register={register("email")}
+              errorMessage={errors.email?.message}
               label="Email"
+              disabled={isLoading}
               className="my-4"
               placeholder="example@abc.com"
               Icon={<MailIcon />}
             />
 
             <PasswordInputWithLeftIcon
-              getFieldProps={getFieldProps("password")}
               className="mt-4"
+              register={register("password")}
+              errorMessage={errors.password?.message}
+              disabled={isLoading}
               label="Password"
-              errorMessage={errorMessage("password")}
               type="password"
               placeholder="strong password"
             />
 
             <PasswordInputWithLeftIcon
-              getFieldProps={getFieldProps("confirmPassword")}
-              errorMessage={errorMessage("confirmPassword")}
+              register={register("confirmPassword")}
+              errorMessage={errors.confirmPassword?.message}
               className="mt-4"
               label="Confirm Password"
               type="password"
+              disabled={isLoading}
               placeholder="retype password"
             />
 

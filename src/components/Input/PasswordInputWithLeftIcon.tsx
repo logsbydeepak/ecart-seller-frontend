@@ -1,6 +1,7 @@
 import { EyeIcon, EyeOffIcon, LockClosedIcon } from "@heroicons/react/solid";
 import { FC, useState } from "react";
 import { v4 } from "uuid";
+import { classNames } from "~/utils/helper/tailwind";
 
 import {
   CommonInputType,
@@ -19,7 +20,8 @@ const PasswordInputWithLeftIcon: FC<PropType> = ({
   className,
   label,
   placeholder,
-  getFieldProps,
+  register,
+  disabled,
   errorMessage,
 }) => {
   const [isPasswordHidden, setIsPasswordHidden] = useState(false);
@@ -30,7 +32,7 @@ const PasswordInputWithLeftIcon: FC<PropType> = ({
 
   const id = v4();
   return (
-    <div className={className}>
+    <div className={classNames(className, disabled && "pointer-events-none")}>
       <Label id={id} label={label} />
       <IconContainer>
         <LeftIconContainer>
@@ -45,7 +47,7 @@ const PasswordInputWithLeftIcon: FC<PropType> = ({
 
         <TextInput
           placeholder={placeholder}
-          getFieldProps={getFieldProps}
+          register={register}
           id={id}
           className="px-10"
           type={isPasswordHidden ? "text" : "password"}

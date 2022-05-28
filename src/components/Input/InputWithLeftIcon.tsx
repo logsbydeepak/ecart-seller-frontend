@@ -1,5 +1,6 @@
 import { FC, ReactNode } from "react";
 import { v4 } from "uuid";
+import { classNames } from "~/utils/helper/tailwind";
 
 import {
   CommonInputType,
@@ -19,14 +20,15 @@ const InputWithLeftIcon: FC<PropType> = ({
   className,
   label,
   placeholder,
-  getFieldProps,
+  register,
+  disabled = false,
   type,
   errorMessage,
   Icon,
 }) => {
   const id = v4();
   return (
-    <div className={className}>
+    <div className={classNames(className, disabled && "pointer-events-none")}>
       <Label id={id} label={label} />
       <IconContainer>
         <LeftIconContainer>
@@ -34,7 +36,7 @@ const InputWithLeftIcon: FC<PropType> = ({
         </LeftIconContainer>
         <TextInput
           placeholder={placeholder}
-          getFieldProps={getFieldProps}
+          register={register}
           id={id}
           className="pl-10"
           type={type}

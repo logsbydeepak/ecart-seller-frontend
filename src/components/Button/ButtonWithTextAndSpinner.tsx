@@ -10,6 +10,7 @@ const ButtonWithTextAndSpinner: FC<{
   return (
     <button
       type="submit"
+      disabled={isLoading}
       className={classNames(
         className,
         "mt-8 flex h-12 w-full justify-center rounded-md bg-indigo-600 py-3 font-medium text-white hover:bg-indigo-500 disabled:bg-neutral-900"

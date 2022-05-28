@@ -1,9 +1,9 @@
 import { object } from "yup";
 import Link from "next/link";
-import { useFormik } from "formik";
 import { useImmer } from "use-immer";
 import { useMutation } from "react-query";
 import { MailIcon } from "@heroicons/react/solid";
+import { useForm, SubmitHandler, UseFormGetValues } from "react-hook-form";
 
 import Show from "~/components/Show";
 import AuthLayout from "~/layout/AuthLayout";
@@ -17,21 +17,17 @@ import { useTokenContext } from "~/context/TokenContext";
 import InputWithLeftIcon from "~/components/Input/InputWithLeftIcon";
 import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftIcon";
 import ButtonWithTextAndSpinner from "~/components/Button/ButtonWithTextAndSpinner";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 interface LoginFormType {
   email: string;
   password: string;
 }
 
-const validationSchema = object({ email, password });
+const schema = object({ email, password });
 
-const initialValues: LoginFormType = {
-  email: "",
-  password: "",
-};
-
-const loginRequest = (variable: LoginFormType) =>
-  gqlRequest({ query: LoginQuery, variable });
+const loginRequest = (getValues: UseFormGetValues<LoginFormType>) =>
+  gqlRequest({ query: LoginQuery, variable: getValues() });
 
 const Login: NextPageLayoutType = () => {
   const { setIsAuth } = useAuthContext();
@@ -65,8 +61,16 @@ const Login: NextPageLayoutType = () => {
       setRequestStatus((draft) => {
         draft.isLoading = false;
       });
-      setErrors({ email: "email or password is invalid" });
-      setErrors({ password: "email or password is invalid" });
+      setError(
+        "email",
+        { message: "email or password is invalid" },
+        { shouldFocus: true }
+      );
+      setError(
+        "password",
+        { message: "email or password is invalid" },
+        { shouldFocus: true }
+      );
     }
   };
 
@@ -76,26 +80,24 @@ const Login: NextPageLayoutType = () => {
     onSuccess,
   });
 
-  const onSubmit = (value: LoginFormType) => {
+  const onSubmit: SubmitHandler<LoginFormType> = async () => {
     try {
       setRequestStatus((draft) => {
         draft.isLoading = true;
       });
-      mutateAsync(value);
+      mutateAsync(getValues);
     } catch (error) {
       onError();
     }
   };
 
-  const { errors, handleSubmit, touched, getFieldProps, setErrors } =
-    useFormik<LoginFormType>({
-      initialValues,
-      validationSchema,
-      onSubmit,
-    });
-
-  const errorMessage = (key: keyof LoginFormType) =>
-    errors[key] && touched[key] && errors[key];
+  const {
+    register,
+    getValues,
+    setError,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginFormType>({ resolver: yupResolver(schema) });
 
   return (
     <div className="flex flex-col items-center	justify-center py-20">
@@ -122,31 +124,31 @@ const Login: NextPageLayoutType = () => {
           </p>
         </Show>
 
-        <form className="w-96" onSubmit={handleSubmit}>
-          <fieldset disabled={isLoading}>
-            <InputWithLeftIcon
-              getFieldProps={getFieldProps("email")}
-              label="Email"
-              errorMessage={errorMessage("email")}
-              placeholder="example@abc.com"
-              Icon={<MailIcon />}
-            />
+        <form className="w-96" onSubmit={handleSubmit(onSubmit)}>
+          <InputWithLeftIcon
+            disabled={isLoading}
+            register={register("email")}
+            label="Email"
+            errorMessage={errors.email?.message}
+            placeholder="example@abc.com"
+            Icon={<MailIcon />}
+          />
 
-            <PasswordInputWithLeftIcon
-              getFieldProps={getFieldProps("password")}
-              className="mt-4"
-              label="Password"
-              type="password"
-              errorMessage={errorMessage("password")}
-              placeholder="strong password"
-            />
+          <PasswordInputWithLeftIcon
+            register={register("password")}
+            disabled={isLoading}
+            className="mt-4"
+            label="Password"
+            type="password"
+            errorMessage={errors.password?.message}
+            placeholder="strong password"
+          />
 
-            <ButtonWithTextAndSpinner
-              text="Login"
-              isLoading={isLoading}
-              className="mt-8"
-            />
-          </fieldset>
+          <ButtonWithTextAndSpinner
+            text="Login"
+            isLoading={isLoading}
+            className="mt-8"
+          />
         </form>
       </div>
     </div>
