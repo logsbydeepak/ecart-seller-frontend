@@ -9,6 +9,7 @@ import { password } from "~/utils/validation";
 import { object } from "yup";
 import LogoutAllSessionQuery from "~/utils/gql/Session/DeleteAllSession.gql";
 import useAuthMutationRequestHook from "~/hooks/useAuthMutationRequest";
+import SmallButton from "../Button/SmallButton";
 
 interface FormType {
   password: string;
@@ -24,11 +25,20 @@ const LogoutAllModal: FC<{
 }> = ({ isOpen, setIsOpen }) => {
   const { setIsAuth } = useAuthContext();
 
-  const onSuccessMutation = (data: any) => {
+  const {
+    reset,
+    register,
+    getValues,
+    setError,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormType>({ resolver: yupResolver(schema) });
+
+  const onSuccessMutation = () => {
     setIsAuth(false);
   };
 
-  const onErrorMutation = (data: any) => {
+  const onErrorMutation = () => {
     setError(
       "password",
       { message: "invalid password" },
@@ -38,21 +48,14 @@ const LogoutAllModal: FC<{
 
   const exitModal = () => {
     if (!isLoading) setIsOpen(false);
+    reset();
   };
 
   const onSubmit: SubmitHandler<FormType> = async () => {
     mutateAsync();
   };
 
-  const {
-    register,
-    getValues,
-    setError,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormType>({ resolver: yupResolver(schema) });
-
-  const { isLoading, mutateAsync } = useAuthMutationRequestHook({
+  const { mutateAsync, isLoading } = useAuthMutationRequestHook({
     query: LogoutAllSessionQuery,
     name: "deleteAllSession",
     ErrorResponse: [{ title: "BODY_PARSE", message: "invalid password" }],
@@ -75,19 +78,21 @@ const LogoutAllModal: FC<{
           placeholder="********"
         />
 
-        <button
-          className="mr-5 rounded-md border-2 border-slate-100 px-4 py-2 text-sm hover:text-indigo-600"
-          type="button"
-          onClick={exitModal}
-        >
-          Cancel
-        </button>
-        <button
-          type="submit"
-          className="rounded-md border-2 border-red-600 bg-red-600 px-4 py-1.5 text-sm text-white hover:border-red-700 hover:bg-red-700"
-        >
-          Logout
-        </button>
+        <fieldset disabled={isLoading} className="flex justify-center">
+          <SmallButton
+            text="Cancel"
+            type="button"
+            className="bg-red-white mr-5 text-black hover:text-indigo-600"
+            onClick={exitModal}
+          />
+
+          <SmallButton
+            text="Logout All"
+            type="submit"
+            className="border-red-600 bg-red-600 text-white hover:border-red-700 hover:bg-red-700 disabled:border-black disabled:bg-black"
+            isLoading={isLoading}
+          />
+        </fieldset>
       </form>
     </ModalContainer>
   );

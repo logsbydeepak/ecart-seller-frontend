@@ -5,6 +5,7 @@ import { Dispatch, FC, SetStateAction } from "react";
 import { useAuthContext } from "~/context/AuthContext";
 import useAuthRequestHook from "~/hooks/useAuthRequestHook";
 import DeleteSessionQuery from "~/utils/gql/Session/DeleteSession.gql";
+import SmallButton from "../Button/SmallButton";
 import ModalContainer from "./Atom/ModalContainer";
 
 const LogoutModal: FC<{
@@ -40,24 +41,26 @@ const LogoutModal: FC<{
 
   return (
     <ModalContainer title="Logout" isOpen={isOpen} exitModal={exitModal}>
-      <p className="mb-4 max-w-md font-normal text-neutral-700">
+      <p className="mb-4 max-w-md  text-neutral-600 ">
         Are you sure you want to logout? Click Logout Button to continue and
         Cancel Button to abort the process.
       </p>
-      <button
-        disabled={isLoading}
-        className="mr-5 rounded-md border-2 border-slate-100 px-4 py-2 text-sm hover:text-indigo-600"
-        onClick={exitModal}
-      >
-        Cancel
-      </button>
-      <button
-        disabled={isLoading}
-        className="rounded-md border-2 border-red-600 bg-red-600 px-4 py-1.5 text-sm text-white hover:border-red-700 hover:bg-red-700"
-        onClick={handleLogout}
-      >
-        Logout
-      </button>
+      <fieldset disabled={isLoading} className="flex justify-center">
+        <SmallButton
+          text="Cancel"
+          type="button"
+          className="bg-red-white mr-5 text-black hover:text-indigo-600"
+          onClick={exitModal}
+        />
+
+        <SmallButton
+          text="Logout"
+          type="submit"
+          onClick={handleLogout}
+          className="border-red-600 bg-red-600 text-white hover:border-red-700 hover:bg-red-700 disabled:border-black disabled:bg-black"
+          isLoading={isLoading}
+        />
+      </fieldset>
     </ModalContainer>
   );
 };
