@@ -1,9 +1,11 @@
 mutation Mutation {
   deleteSession {
     ... on SuccessResponse {
+      __typename
       message
     }
     ... on ErrorResponse {
+      __typename
       title
       message
     }

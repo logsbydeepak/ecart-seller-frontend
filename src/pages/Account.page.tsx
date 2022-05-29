@@ -3,18 +3,18 @@ import { useImmer } from "use-immer";
 import { NextPageLayoutType } from "~/types/nextMod";
 import AccountSideBarLayout from "~/layout/AccountSideBarLayout";
 import GetUserQuery from "~/utils/gql/User/GetUser.gql";
-import useAuthRequestHook from "~/hooks/useAuthRequestHook";
 import SideBarContent from "~/components/Sidebar/SideBarContent";
 import { FC, useEffect, useState } from "react";
 import Link from "next/link";
 import { classNames } from "~/utils/helper/tailwind";
 import LogoutAllModal from "~/components/Modal/LogoutAllModal";
+import useAuthQueryRequestHook from "~/hooks/useAuthQueryRequest";
 
 const Account: NextPageLayoutType = () => {
   const [userInfo, setUserInfo] = useImmer({ name: "", email: "" });
   const [isOpenLogoutAllModal, setIsOpenLogoutAllModal] = useState(false);
 
-  const onSuccess = (data: any) => {
+  const onSuccessMutation = (data: any) => {
     const readUser = data.readUser;
     const typename = readUser.__typename;
 
@@ -26,13 +26,15 @@ const Account: NextPageLayoutType = () => {
     }
   };
 
-  const { isLoading, isError, isSuccess } = useAuthRequestHook({
+  const onErrorMutation = () => {};
+
+  const { isLoading, isError, isSuccess } = useAuthQueryRequestHook({
     key: "User info",
     name: "readUser",
     query: GetUserQuery,
-    option: {
-      onSuccess,
-    },
+    successTitle: "User",
+    onSuccessMutation,
+    onErrorMutation,
   });
 
   const handleDeleteAccount = () => {};

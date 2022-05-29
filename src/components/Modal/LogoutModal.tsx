@@ -3,7 +3,8 @@ import { XIcon } from "@heroicons/react/outline";
 import { Dispatch, FC, SetStateAction } from "react";
 
 import { useAuthContext } from "~/context/AuthContext";
-import useAuthRequestHook from "~/hooks/useAuthRequestHook";
+import useAuthMutationRequestHook from "~/hooks/useAuthMutationRequest";
+import useAuthQueryRequestHook from "~/hooks/useAuthQueryRequest";
 import DeleteSessionQuery from "~/utils/gql/Session/DeleteSession.gql";
 import SmallButton from "../Button/SmallButton";
 import ModalContainer from "./Atom/ModalContainer";
@@ -14,25 +15,26 @@ const LogoutModal: FC<{
 }> = ({ isOpen, setIsOpen }) => {
   const { setIsAuth } = useAuthContext();
 
-  const onSuccess = () => {
+  const onSuccessMutation = () => {
     setIsOpen(false);
     setIsAuth(false);
   };
 
-  const onError = () => {
+  const onErrorMutation = () => {
     setIsOpen(false);
   };
 
-  const { refetch, isLoading } = useAuthRequestHook({
-    key: "logout User",
+  const { mutateAsync, isLoading } = useAuthMutationRequestHook({
     query: DeleteSessionQuery,
     name: "deleteSession",
-    option: { enabled: false, onSuccess, onError },
+    successTitle: "SuccessResponse",
+    onSuccessMutation,
+    onErrorMutation,
   });
 
   const handleLogout = async () => {
     setIsOpen(true);
-    await refetch();
+    mutateAsync();
   };
 
   const exitModal = () => {

@@ -6,7 +6,7 @@ import { CogIcon, LogoutIcon } from "@heroicons/react/outline";
 
 import GetUserQuery from "~/utils/gql/User/GetUser.gql";
 import LogoutModal from "~/components/Modal/LogoutModal";
-import useAuthRequestHook from "~/hooks/useAuthRequestHook";
+import useAuthQueryRequestHook from "~/hooks/useAuthQueryRequest";
 
 const defaultData = {
   name: "User Name",
@@ -20,7 +20,7 @@ const AuthNavbarItem: FC = () => {
 
   const router = useRouter();
 
-  const onSuccessUser = (data: any) => {
+  const onSuccessMutation = (data: any) => {
     const readUser = data.readUser;
     const typename = readUser.__typename;
 
@@ -29,13 +29,15 @@ const AuthNavbarItem: FC = () => {
     }
   };
 
-  const { isSuccess } = useAuthRequestHook({
+  const onErrorMutation = () => {};
+
+  const { isSuccess } = useAuthQueryRequestHook({
     key: "Navbar User Info",
     name: "readUser",
     query: GetUserQuery,
-    option: {
-      onSuccess: onSuccessUser,
-    },
+    successTitle: "User",
+    onSuccessMutation,
+    onErrorMutation,
   });
 
   const name = userInfo.name;

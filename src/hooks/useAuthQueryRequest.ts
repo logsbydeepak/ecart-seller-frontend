@@ -1,6 +1,6 @@
 import { DocumentNode } from "graphql";
 import { Variables } from "graphql-request";
-import { useMutation, UseMutationOptions } from "react-query";
+import { useQuery, UseQueryOptions } from "react-query";
 
 import { gqlRequest } from "~/utils/helper/gql";
 import { useAuthContext } from "~/context/AuthContext";
@@ -10,14 +10,15 @@ interface Props {
   query: DocumentNode;
   variable?: Variables;
   name: string;
-  options?: UseMutationOptions;
+  options?: UseQueryOptions;
   successTitle: string;
   ErrorResponse?: { title: string; message: string }[];
   onSuccessMutation: (data: any) => void;
   onErrorMutation: (data: any) => void;
+  key: string;
 }
 
-const useAuthMutationRequestHook = ({
+const useAuthQueryRequestHook = ({
   query,
   variable = {},
   name,
@@ -26,6 +27,7 @@ const useAuthMutationRequestHook = ({
   ErrorResponse = [],
   onSuccessMutation,
   onErrorMutation,
+  key,
 }: Props) => {
   const { token } = useTokenContext();
   const { setIsAuth } = useAuthContext();
@@ -65,14 +67,13 @@ const useAuthMutationRequestHook = ({
     console.log("Something went wrong");
   };
 
-  const useMutationHook = useMutation(request, {
-    retry: 3,
-    onSuccess,
+  const useQueryHook = useQuery(key, request, {
     onError,
+    onSuccess,
     ...options,
   });
 
-  return useMutationHook;
+  return useQueryHook;
 };
 
-export default useAuthMutationRequestHook;
+export default useAuthQueryRequestHook;

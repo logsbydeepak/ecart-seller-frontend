@@ -4,9 +4,9 @@ import AuthNavbarItem from "./AuthNavbarItem";
 import NoAuthNavbarItem from "./NoAuthNavbarItem";
 import { ShoppingCartIcon } from "@heroicons/react/solid";
 import { useAuthContext } from "~/context/AuthContext";
-import { MenuAlt1Icon, MenuIcon } from "@heroicons/react/outline";
+import { MenuIcon } from "@heroicons/react/outline";
 import Show from "../Show";
-import { SideBarProvider, useSideBarContext } from "~/context/SideBarContext";
+import { useSideBarContext } from "~/context/SideBarContext";
 
 interface props {
   auth: boolean;
