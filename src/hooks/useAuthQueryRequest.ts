@@ -13,8 +13,8 @@ interface Props {
   options?: UseQueryOptions;
   successTitle: string;
   ErrorResponse?: { title: string; message: string }[];
-  onSuccessMutation: (data: any) => void;
-  onErrorMutation: (data: any) => void;
+  onSuccessQuery: (data: any) => void;
+  onErrorQuery: (data: any) => void;
   key: string;
 }
 
@@ -25,8 +25,8 @@ const useAuthQueryRequestHook = ({
   options = {},
   successTitle,
   ErrorResponse = [],
-  onSuccessMutation,
-  onErrorMutation,
+  onSuccessQuery,
+  onErrorQuery,
   key,
 }: Props) => {
   const { token } = useTokenContext();
@@ -46,7 +46,7 @@ const useAuthQueryRequestHook = ({
     const typename = responseData.__typename;
 
     if (typename === successTitle) {
-      onSuccessMutation(data);
+      onSuccessQuery(data);
     }
 
     if (["TOKEN_PARSE", "AUTHENTICATION"].includes(data.title)) {
@@ -58,7 +58,7 @@ const useAuthQueryRequestHook = ({
         responseData.title === value.title &&
         responseData.message === value.message
       ) {
-        onErrorMutation(data);
+        onErrorQuery(data);
       }
     });
   };

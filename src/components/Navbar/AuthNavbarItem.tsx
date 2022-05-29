@@ -20,7 +20,7 @@ const AuthNavbarItem: FC = () => {
 
   const router = useRouter();
 
-  const onSuccessMutation = (data: any) => {
+  const onSuccessQuery = (data: any) => {
     const readUser = data.readUser;
     const typename = readUser.__typename;
 
@@ -29,15 +29,15 @@ const AuthNavbarItem: FC = () => {
     }
   };
 
-  const onErrorMutation = () => {};
+  const onErrorQuery = () => {};
 
   const { isSuccess } = useAuthQueryRequestHook({
     key: "Navbar User Info",
     name: "readUser",
     query: GetUserQuery,
     successTitle: "User",
-    onSuccessMutation,
-    onErrorMutation,
+    onSuccessQuery,
+    onErrorQuery,
   });
 
   const name = userInfo.name;
