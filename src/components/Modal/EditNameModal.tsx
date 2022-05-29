@@ -55,7 +55,6 @@ const EditNameModal: FC<{
 
   const exitModal = () => {
     if (!isLoading) setIsOpen(false);
-    reset();
   };
 
   const onSubmit: SubmitHandler<FormType> = async () => {
@@ -73,7 +72,7 @@ const EditNameModal: FC<{
   });
 
   return (
-    <ModalContainer title="Logout All" isOpen={isOpen} exitModal={exitModal}>
+    <ModalContainer title="Edit Name" isOpen={isOpen} exitModal={exitModal}>
       <form onSubmit={handleSubmit(onSubmit)} className="w-96">
         <div className="mb-4 flex text-left">
           <InputWithLeftIcon

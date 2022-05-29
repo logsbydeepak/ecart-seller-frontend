@@ -9,6 +9,7 @@ import { classNames } from "~/utils/helper/tailwind";
 import LogoutAllModal from "~/components/Modal/LogoutAllModal";
 import useAuthQueryRequestHook from "~/hooks/useAuthQueryRequest";
 import EditNameModal from "~/components/Modal/EditNameModal";
+import Show from "~/components/Show";
 
 const Account: NextPageLayoutType = () => {
   const [userInfo, setUserInfo] = useImmer({ name: "", email: "" });
@@ -53,14 +54,19 @@ const Account: NextPageLayoutType = () => {
       isSuccess={isSuccess}
       isError={isError}
     >
-      <LogoutAllModal
-        isOpen={isOpenLogoutAllModal}
-        setIsOpen={setIsOpenLogoutAllModal}
-      />
-      <EditNameModal
-        isOpen={isOpenEditNameModal}
-        setIsOpen={setIsOpenEditNameModal}
-      />
+      <Show when={isOpenLogoutAllModal}>
+        <LogoutAllModal
+          isOpen={isOpenLogoutAllModal}
+          setIsOpen={setIsOpenLogoutAllModal}
+        />
+      </Show>
+
+      <Show when={isOpenEditNameModal}>
+        <EditNameModal
+          isOpen={isOpenEditNameModal}
+          setIsOpen={setIsOpenEditNameModal}
+        />
+      </Show>
       <div className="max-w-2xl">
         <div className="rounded-lg border-2 border-neutral-200 p-8">
           <ItemContainer

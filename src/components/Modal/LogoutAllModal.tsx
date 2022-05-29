@@ -48,7 +48,6 @@ const LogoutAllModal: FC<{
 
   const exitModal = () => {
     if (!isLoading) setIsOpen(false);
-    reset();
   };
 
   const onSubmit: SubmitHandler<FormType> = async () => {
