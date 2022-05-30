@@ -1,7 +1,6 @@
 import { Dispatch, FC, SetStateAction } from "react";
 
 import ModalContainer from "./Atom/ModalContainer";
-import { useAuthContext } from "~/context/AuthContext";
 import PasswordInputWithLeftIcon from "../Input/PasswordInputWithLeftIcon";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -13,6 +12,8 @@ import SmallButton from "../Button/SmallButton";
 import SimpleInput from "../Input/SimpleInput";
 import InputWithLeftIcon from "../Input/InputWithLeftIcon";
 import { EmojiHappyIcon } from "@heroicons/react/outline";
+import EditNameQuery from "~/utils/gql/User/Edit/EditName.gql";
+import { useQueryClient } from "react-query";
 
 interface FormType {
   firstName: string;
@@ -29,20 +30,26 @@ const schema = object({
 const EditNameModal: FC<{
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
-}> = ({ isOpen, setIsOpen }) => {
-  const { setIsAuth } = useAuthContext();
+  firstName: string;
+  lastName: string;
+}> = ({ isOpen, setIsOpen, firstName, lastName }) => {
+  const queryClient = useQueryClient();
 
   const {
-    reset,
     register,
     getValues,
     setError,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormType>({ resolver: yupResolver(schema) });
+  } = useForm<FormType>({
+    resolver: yupResolver(schema),
+    defaultValues: { firstName, lastName, currentPassword: "" },
+  });
 
   const onSuccessMutation = () => {
-    setIsAuth(false);
+    queryClient.invalidateQueries("User info");
+    queryClient.invalidateQueries("Navbar User Info");
+    exitModal();
   };
 
   const onErrorMutation = () => {
@@ -61,12 +68,21 @@ const EditNameModal: FC<{
     mutateAsync();
   };
 
+  const variable = () => ({
+    toUpdate: "name",
+    currentPassword: getValues("currentPassword"),
+    name: {
+      firstName: getValues("firstName"),
+      lastName: getValues("lastName"),
+    },
+  });
+
   const { mutateAsync, isLoading } = useAuthMutationRequestHook({
-    query: LogoutAllSessionQuery,
-    name: "deleteAllSession",
+    query: EditNameQuery,
+    name: "updateUser",
     ErrorResponse: [{ title: "BODY_PARSE", message: "invalid password" }],
-    successTitle: "SuccessResponse",
-    variable: { currentPassword: getValues("currentPassword") },
+    successTitle: "User",
+    variable,
     onErrorMutation,
     onSuccessMutation,
   });
@@ -77,8 +93,8 @@ const EditNameModal: FC<{
         <div className="mb-4 flex text-left">
           <InputWithLeftIcon
             label="First Name"
-            disabled={false}
             register={register("firstName")}
+            disabled={isLoading}
             errorMessage={errors.firstName?.message}
             placeholder="first name"
             className="mr-4"
@@ -87,7 +103,7 @@ const EditNameModal: FC<{
 
           <SimpleInput
             label="Last Name"
-            disabled={false}
+            disabled={isLoading}
             register={register("lastName")}
             errorMessage={errors.lastName?.message}
             placeholder="last name"

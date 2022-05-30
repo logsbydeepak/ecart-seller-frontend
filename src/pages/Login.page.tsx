@@ -129,7 +129,9 @@ const Login: NextPageLayoutType = () => {
             disabled={isLoading}
             register={register("email")}
             label="Email"
-            errorMessage={errors.email?.message}
+            errorMessage={
+              errors.email?.message && "email or password is invalid"
+            }
             placeholder="example@abc.com"
             Icon={<MailIcon />}
           />
@@ -140,7 +142,9 @@ const Login: NextPageLayoutType = () => {
             className="mt-4"
             label="Password"
             type="password"
-            errorMessage={errors.password?.message}
+            errorMessage={
+              errors.password?.message && "email or password is invalid"
+            }
             placeholder="strong password"
           />
 

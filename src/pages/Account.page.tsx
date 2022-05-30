@@ -12,7 +12,11 @@ import EditNameModal from "~/components/Modal/EditNameModal";
 import Show from "~/components/Show";
 
 const Account: NextPageLayoutType = () => {
-  const [userInfo, setUserInfo] = useImmer({ name: "", email: "" });
+  const [userInfo, setUserInfo] = useImmer({
+    firstName: "",
+    lastName: "",
+    email: "",
+  });
   const [isOpenLogoutAllModal, setIsOpenLogoutAllModal] = useState(false);
   const [isOpenEditNameModal, setIsOpenEditNameModal] = useState(false);
   const [isOpenEditEmailModal, setIsOpenEditEmailModal] = useState(false);
@@ -24,7 +28,8 @@ const Account: NextPageLayoutType = () => {
 
     if (typename === "User") {
       setUserInfo((draft) => {
-        draft.name = readUser.firstName + " " + readUser.lastName;
+        draft.firstName = readUser.firstName;
+        draft.lastName = readUser.lastName;
         draft.email = readUser.email;
       });
     }
@@ -65,13 +70,15 @@ const Account: NextPageLayoutType = () => {
         <EditNameModal
           isOpen={isOpenEditNameModal}
           setIsOpen={setIsOpenEditNameModal}
+          firstName={userInfo.firstName}
+          lastName={userInfo.lastName}
         />
       </Show>
       <div className="max-w-2xl">
         <div className="rounded-lg border-2 border-neutral-200 p-8">
           <ItemContainer
             fieldValue="Name"
-            value={userInfo.name}
+            value={`${userInfo.firstName} ${userInfo.lastName}`}
             onClick={() => setIsOpenEditNameModal(true)}
           />
           <Divider />

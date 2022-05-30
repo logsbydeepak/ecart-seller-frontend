@@ -8,7 +8,7 @@ import { useTokenContext } from "~/context/TokenContext";
 
 interface Props {
   query: DocumentNode;
-  variable?: Variables;
+  variable: () => Variables;
   name: string;
   options?: UseMutationOptions;
   successTitle: string;
@@ -19,7 +19,7 @@ interface Props {
 
 const useAuthMutationRequestHook = ({
   query,
-  variable = {},
+  variable,
   name,
   options = {},
   successTitle,
@@ -32,7 +32,7 @@ const useAuthMutationRequestHook = ({
 
   const request = async () => {
     try {
-      const request = await gqlRequest({ query, variable, token });
+      const request = await gqlRequest({ query, variable: variable(), token });
       return request;
     } catch (error: any) {
       throw { message: "Something went wrong" };
