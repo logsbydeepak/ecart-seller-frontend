@@ -10,6 +10,7 @@ import LogoutAllModal from "~/components/Modal/LogoutAllModal";
 import useAuthQueryRequestHook from "~/hooks/useAuthQueryRequest";
 import EditNameModal from "~/components/Modal/EditNameModal";
 import Show from "~/components/Show";
+import EditEmailModal from "~/components/Modal/EditEmailModal";
 
 const Account: NextPageLayoutType = () => {
   const [userInfo, setUserInfo] = useImmer({
@@ -74,6 +75,15 @@ const Account: NextPageLayoutType = () => {
           lastName={userInfo.lastName}
         />
       </Show>
+
+      <Show when={isOpenEditEmailModal}>
+        <EditEmailModal
+          isOpen={isOpenEditEmailModal}
+          setIsOpen={setIsOpenEditEmailModal}
+          email={userInfo.email}
+        />
+      </Show>
+
       <div className="max-w-2xl">
         <div className="rounded-lg border-2 border-neutral-200 p-8">
           <ItemContainer

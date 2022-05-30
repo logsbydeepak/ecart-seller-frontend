@@ -1,0 +1,20 @@
+mutation UpdateUser(
+  $toUpdate: String!
+  $currentPassword: String!
+  $email: String
+) {
+  updateUser(
+    toUpdate: $toUpdate
+    currentPassword: $currentPassword
+    email: $email
+  ) {
+    ... on User {
+      __typename
+    }
+    ... on ErrorResponse {
+      __typename
+      title
+      message
+    }
+  }
+}
