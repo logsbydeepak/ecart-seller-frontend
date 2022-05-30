@@ -11,6 +11,7 @@ import useAuthQueryRequestHook from "~/hooks/useAuthQueryRequest";
 import EditNameModal from "~/components/Modal/EditNameModal";
 import Show from "~/components/Show";
 import EditEmailModal from "~/components/Modal/EditEmailModal";
+import EditPasswordModal from "~/components/Modal/EditPasswordModal";
 
 const Account: NextPageLayoutType = () => {
   const [userInfo, setUserInfo] = useImmer({
@@ -81,6 +82,13 @@ const Account: NextPageLayoutType = () => {
           isOpen={isOpenEditEmailModal}
           setIsOpen={setIsOpenEditEmailModal}
           email={userInfo.email}
+        />
+      </Show>
+
+      <Show when={isOpenEditPasswordModal}>
+        <EditPasswordModal
+          isOpen={isOpenEditPasswordModal}
+          setIsOpen={setIsOpenEditPasswordModal}
         />
       </Show>
 
