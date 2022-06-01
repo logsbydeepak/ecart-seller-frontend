@@ -42,10 +42,10 @@
     "minimatch" "^3.1.2"
     "strip-json-comments" "^3.1.1"
 
-"@headlessui/react@^1.6.3":
-  "integrity" "sha512-WNu/ypGzl0JmJ+sD34KtdycEu2n7EZjKFx2rq6fivsszPdoEyOVZ/GYQMJ437dfAJI0/ZxoRYfrOVduZHjlokQ=="
-  "resolved" "https://registry.npmjs.org/@headlessui/react/-/react-1.6.3.tgz"
-  "version" "1.6.3"
+"@headlessui/react@^1.6.4":
+  "integrity" "sha512-0yqz1scwbFtwljmbbKjXsSGl5ABEYNICVHZnMCWo0UtOZodo2Tpu94uOVgCRjRZ77l2WcTi2S0uidINDvG7lsA=="
+  "resolved" "https://registry.npmjs.org/@headlessui/react/-/react-1.6.4.tgz"
+  "version" "1.6.4"
 
 "@heroicons/react@^1.0.6":
   "integrity" "sha512-JJCXydOFWMDpCP4q13iEplA503MQO3xLoZiKum+955ZCtHINWnx26CUxVxxFQu/uLb4LW3ge15ZpzIkXKkJ8oQ=="
@@ -136,10 +136,10 @@
   "resolved" "https://registry.npmjs.org/@types/lodash/-/lodash-4.14.181.tgz"
   "version" "4.14.181"
 
-"@types/node@17.0.35":
-  "integrity" "sha512-vu1SrqBjbbZ3J6vwY17jBs8Sr/BKA+/a/WtjRG+whKg1iuLFOosq872EXS0eXWILdO36DHQQeku/ZcL6hz2fpg=="
-  "resolved" "https://registry.npmjs.org/@types/node/-/node-17.0.35.tgz"
-  "version" "17.0.35"
+"@types/node@17.0.38":
+  "integrity" "sha512-5jY9RhV7c0Z4Jy09G+NIDTsCZ5G0L5n+Z+p+Y7t5VJHM30bgwzSjVtlcBxqAj+6L/swIlvtOSzr8rBk/aNyV2g=="
+  "resolved" "https://registry.npmjs.org/@types/node/-/node-17.0.38.tgz"
+  "version" "17.0.38"
 
 "@types/prop-types@*":
   "integrity" "sha512-rZ5drC/jWjrArrS8BR6SIr4cWpW09RNTYt9AMZo3Jwwif+iacXAqgVjm0B0Bv/S1jhDXKHqRVNCbACkJ89RAnQ=="
@@ -153,10 +153,10 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@^18.0.9":
-  "integrity" "sha512-9bjbg1hJHUm4De19L1cHiW0Jvx3geel6Qczhjd0qY5VKVE2X5+x77YxAepuCwVh4vrgZJdgEJw48zrhRIeF4Nw=="
-  "resolved" "https://registry.npmjs.org/@types/react/-/react-18.0.9.tgz"
-  "version" "18.0.9"
+"@types/react@*", "@types/react@^18.0.10":
+  "integrity" "sha512-dIugadZuIPrRzvIEevIu7A1smqOAjkSMv8qOfwPt9Ve6i6JT/FQcCHyk2qIAxwsQNKZt5/oGR0T4z9h2dXRAkg=="
+  "resolved" "https://registry.npmjs.org/@types/react/-/react-18.0.10.tgz"
+  "version" "18.0.10"
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"
@@ -1067,10 +1067,10 @@
     "merge2" "^1.4.1"
     "slash" "^3.0.0"
 
-"graphql-request@^4.2.0":
-  "integrity" "sha512-uFeMyhhl8ss4LFgjlfPeAn2pqYw+CJto+cjj71uaBYIMMK2jPIqgHm5KEFxUk0YDD41A8Bq31a2b4G2WJBlp2Q=="
-  "resolved" "https://registry.npmjs.org/graphql-request/-/graphql-request-4.2.0.tgz"
-  "version" "4.2.0"
+"graphql-request@^4.3.0":
+  "integrity" "sha512-2v6hQViJvSsifK606AliqiNiijb1uwWp6Re7o0RTyH+uRTv/u7Uqm2g4Fjq/LgZIzARB38RZEvVBFOQOVdlBow=="
+  "resolved" "https://registry.npmjs.org/graphql-request/-/graphql-request-4.3.0.tgz"
+  "version" "4.3.0"
   dependencies:
     "cross-fetch" "^3.1.5"
     "extract-files" "^9.0.0"
@@ -1800,10 +1800,10 @@
   "resolved" "https://registry.npmjs.org/react-is/-/react-is-16.13.1.tgz"
   "version" "16.13.1"
 
-"react-query@^3.39.0":
-  "integrity" "sha512-Od0IkSuS79WJOhzWBx/ys0x13+7wFqgnn64vBqqAAnZ9whocVhl/y1padD5uuZ6EIkXbFbInax0qvY7zGM0thA=="
-  "resolved" "https://registry.npmjs.org/react-query/-/react-query-3.39.0.tgz"
-  "version" "3.39.0"
+"react-query@^3.39.1":
+  "integrity" "sha512-qYKT1bavdDiQZbngWZyPotlBVzcBjDYEJg5RQLBa++5Ix5jjfbEYJmHSZRZD+USVHUSvl/ey9Hu+QfF1QAK80A=="
+  "resolved" "https://registry.npmjs.org/react-query/-/react-query-3.39.1.tgz"
+  "version" "3.39.1"
   dependencies:
     "@babel/runtime" "^7.5.5"
     "broadcast-channel" "^3.4.1"
