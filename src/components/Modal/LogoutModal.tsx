@@ -1,5 +1,3 @@
-import { Dialog } from "@headlessui/react";
-import { XIcon } from "@heroicons/react/outline";
 import { Dispatch, FC, SetStateAction } from "react";
 
 import { useAuthContext } from "~/context/AuthContext";
@@ -13,11 +11,11 @@ const LogoutModal: FC<{
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }> = ({ isOpen, setIsOpen }) => {
-  const { setIsAuth } = useAuthContext();
+  const { setAuthToken } = useAuthContext();
 
   const onSuccessMutation = () => {
     setIsOpen(false);
-    setIsAuth(false);
+    setAuthToken("");
   };
 
   const onErrorMutation = () => {
@@ -28,6 +26,7 @@ const LogoutModal: FC<{
     query: DeleteSessionQuery,
     name: "deleteSession",
     successTitle: "SuccessResponse",
+    variable: () => ({}),
     onSuccessMutation,
     onErrorMutation,
   });

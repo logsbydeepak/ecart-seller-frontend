@@ -4,7 +4,7 @@ import { Menu, Transition } from "@headlessui/react";
 import { FC, ReactNode, useState, Fragment } from "react";
 import { CogIcon, LogoutIcon } from "@heroicons/react/outline";
 
-import GetUserQuery from "~/utils/gql/User/GetUser.gql";
+import ReadUserQuery from "~/utils/gql/User/ReadUser.gql";
 import LogoutModal from "~/components/Modal/LogoutModal";
 import useAuthQueryRequestHook from "~/hooks/useAuthQueryRequest";
 
@@ -34,7 +34,7 @@ const AuthNavbarItem: FC = () => {
   const { isSuccess } = useAuthQueryRequestHook({
     key: "Navbar User Info",
     name: "readUser",
-    query: GetUserQuery,
+    query: ReadUserQuery,
     successTitle: "User",
     onSuccessQuery,
     onErrorQuery,

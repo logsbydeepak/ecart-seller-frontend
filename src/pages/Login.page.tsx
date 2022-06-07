@@ -8,12 +8,11 @@ import { useForm, SubmitHandler, UseFormGetValues } from "react-hook-form";
 import Show from "~/components/Show";
 import AuthLayout from "~/layout/AuthLayout";
 import { gqlRequest } from "~/utils/helper/gql";
-import LoginQuery from "~/utils/gql/User/Login.gql";
+import CreateSessionQuery from "~/utils/gql/Session/CreateSession.gql";
 import { NextPageLayoutType } from "~/types/nextMod";
 import { email, password } from "~/utils/validation";
 import { useAuthContext } from "~/context/AuthContext";
 import ContainerLayout from "~/layout/ContainerLayout";
-import { useTokenContext } from "~/context/TokenContext";
 import InputWithLeftIcon from "~/components/Input/InputWithLeftIcon";
 import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftIcon";
 import ButtonWithTextAndSpinner from "~/components/Button/ButtonWithTextAndSpinner";
@@ -27,11 +26,10 @@ interface LoginFormType {
 const schema = object({ email, password });
 
 const loginRequest = (getValues: UseFormGetValues<LoginFormType>) =>
-  gqlRequest({ query: LoginQuery, variable: getValues() });
+  gqlRequest({ query: CreateSessionQuery, variable: getValues() });
 
 const Login: NextPageLayoutType = () => {
-  const { setIsAuth } = useAuthContext();
-  const { setToken } = useTokenContext();
+  const { setAuthToken } = useAuthContext();
 
   const [requestStatus, setRequestStatus] = useImmer({
     isLoading: false,
@@ -52,11 +50,10 @@ const Login: NextPageLayoutType = () => {
     const typename = createSession.__typename;
 
     if (typename === "AccessToken") {
-      setToken(createSession.token);
       setRequestStatus((draft) => {
         draft.isSuccess = true;
       });
-      setIsAuth(true);
+      setAuthToken(createSession.token);
     } else {
       setRequestStatus((draft) => {
         draft.isLoading = false;

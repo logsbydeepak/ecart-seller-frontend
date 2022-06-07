@@ -7,7 +7,6 @@ import "~/styles/globals.css";
 import AppLayout from "~/layout/AppLayout";
 import { AuthProvider } from "~/context/AuthContext";
 import { NextPageLayoutType } from "~/types/nextMod";
-import { TokenProvider } from "~/context/TokenContext";
 import NextNProgress from "nextjs-progressbar";
 
 type AppPropsWithLayout = AppProps & {
@@ -29,9 +28,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         <ReactQueryDevtools initialIsOpen={false} />
 
         <AuthProvider>
-          <TokenProvider>
-            <AppLayout>{getLayout(<Component {...pageProps} />)}</AppLayout>
-          </TokenProvider>
+          <AppLayout>{getLayout(<Component {...pageProps} />)}</AppLayout>
         </AuthProvider>
       </QueryClientProvider>
       <NextNProgress

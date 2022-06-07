@@ -10,7 +10,7 @@ mutation CreateUser(
     email: $email
     password: $password
   ) {
-    ... on AccessToken {
+    ... on Token {
       __typename
       token
     }

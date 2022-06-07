@@ -2,23 +2,22 @@ import Link from "next/link";
 import { object, ref } from "yup";
 import { useImmer } from "use-immer";
 import { useMutation } from "react-query";
-import { useForm, SubmitHandler, UseFormGetValues } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { EmojiHappyIcon, MailIcon } from "@heroicons/react/solid";
+import { useForm, SubmitHandler, UseFormGetValues } from "react-hook-form";
 
 import Show from "~/components/Show";
 import AuthLayout from "~/layout/AuthLayout";
 import { gqlRequest } from "~/utils/helper/gql";
 import { NextPageLayoutType } from "~/types/nextMod";
-import SignUpQuery from "~/utils/gql/User/SignUp.gql";
+import CreateUserQuery from "~/utils/gql/User/CreateUser.gql";
 import ContainerLayout from "~/layout/ContainerLayout";
 import { useAuthContext } from "~/context/AuthContext";
-import { useTokenContext } from "~/context/TokenContext";
 import SimpleInput from "~/components/Input/SimpleInput";
 import InputWithLeftIcon from "~/components/Input/InputWithLeftIcon";
 import { firstName, lastName, email, password } from "~/utils/validation";
 import ButtonWithTextAndSpinner from "~/components/Button/ButtonWithTextAndSpinner";
 import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftIcon";
-import { yupResolver } from "@hookform/resolvers/yup";
 
 const schema = object({
   firstName,
@@ -30,7 +29,7 @@ const schema = object({
 
 const signUpRequest = (getValues: UseFormGetValues<SignUpFormType>) =>
   gqlRequest({
-    query: SignUpQuery,
+    query: CreateUserQuery,
     variable: {
       firstName: getValues("firstName"),
       lastName: getValues("lastName"),
@@ -48,8 +47,7 @@ interface SignUpFormType {
 }
 
 const SignUp: NextPageLayoutType = () => {
-  const { setIsAuth } = useAuthContext();
-  const { setToken } = useTokenContext();
+  const { setAuthToken } = useAuthContext();
 
   const [requestStatus, setRequestStatus] = useImmer({
     isLoading: false,
@@ -80,11 +78,10 @@ const SignUp: NextPageLayoutType = () => {
     }
 
     if (typename === "AccessToken") {
-      setToken(createUser.token);
       setRequestStatus((draft) => {
         draft.isSuccess = true;
       });
-      setIsAuth(true);
+      setAuthToken(createUser.token);
     }
   };
 

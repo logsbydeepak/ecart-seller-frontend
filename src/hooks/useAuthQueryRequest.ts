@@ -4,7 +4,6 @@ import { useQuery, UseQueryOptions } from "react-query";
 
 import { gqlRequest } from "~/utils/helper/gql";
 import { useAuthContext } from "~/context/AuthContext";
-import { useTokenContext } from "~/context/TokenContext";
 
 interface Props {
   query: DocumentNode;
@@ -29,12 +28,11 @@ const useAuthQueryRequestHook = ({
   onErrorQuery,
   key,
 }: Props) => {
-  const { token } = useTokenContext();
-  const { setIsAuth } = useAuthContext();
+  const { authToken, setAuthToken } = useAuthContext();
 
   const request = async () => {
     try {
-      const request = await gqlRequest({ query, variable, token });
+      const request = await gqlRequest({ query, variable, token: authToken });
       return request;
     } catch (error: any) {
       throw { message: "Something went wrong" };
@@ -50,7 +48,7 @@ const useAuthQueryRequestHook = ({
     }
 
     if (["TOKEN_PARSE", "AUTHENTICATION"].includes(data.title)) {
-      setIsAuth(false);
+      setAuthToken("");
     }
 
     ErrorResponse.forEach((value) => {

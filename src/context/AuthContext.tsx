@@ -1,11 +1,11 @@
+import { useQueryClient } from "react-query";
 import { PropsWithChildrenOnlyType } from "~/types/nextMod";
 import { customUseLayoutEffect } from "~/utils/helper/nextMod";
 import { createContext, FC, useContext, useState, useEffect } from "react";
-import { useQueryClient } from "react-query";
 
 type AuthContextType = null | {
-  isAuth: boolean;
-  setIsAuth: (authValue: boolean) => boolean;
+  authToken: string;
+  setAuthToken: (authValue: string) => string;
 };
 
 const AuthContext = createContext<AuthContextType>(null);
@@ -18,41 +18,45 @@ export const useAuthContext = () => {
   return context;
 };
 
-const removeLocalAuth = () => localStorage.removeItem("auth");
-const setLocalAuthToTrue = () => localStorage.setItem("auth", "1");
-const getLocalAuthValue = () => localStorage.getItem("auth") === "1";
+const getLocalTokenValue = () => localStorage.getItem("token") || "";
+const setLocalToken = (token: string) => localStorage.setItem("token", token);
+const removeLocalToken = () => localStorage.removeItem("auth");
 
 export const AuthProvider: FC<PropsWithChildrenOnlyType> = ({ children }) => {
   const queryClient = useQueryClient();
-  const [isAuth, setIsAuth] = useState(false);
+  const [authToken, setAuthToken] = useState("");
 
   customUseLayoutEffect(() => {
-    setIsAuth(getLocalAuthValue());
+    setAuthToken(getLocalTokenValue());
   }, []);
 
   useEffect(() => {
-    if (!isAuth) queryClient.clear();
-  }, [isAuth, queryClient]);
+    if (!authToken) queryClient.clear();
+  }, [authToken, queryClient]);
 
   useEffect(() => {
     window.onstorage = (event: StorageEvent) => {
-      if (event.key !== "auth") return;
-      const currentAuthValue = event.newValue === "1";
-      setIsAuth(currentAuthValue);
+      if (event.key !== "token") return;
+      const currentAuthToken = event.newValue || "";
+      setAuthToken(() => {
+        return currentAuthToken;
+      });
     };
   }, []);
 
-  const setIsAuthLocalAndState = (authValue: boolean) => {
-    setIsAuth(() => {
-      authValue ? setLocalAuthToTrue() : removeLocalAuth();
-      return authValue;
+  const setAuthTokenLocalAndState = (token: string) => {
+    setAuthToken(() => {
+      token ? setLocalToken(token) : removeLocalToken();
+      return token;
     });
 
-    return authValue;
+    return token;
   };
 
   return (
-    <AuthContext.Provider value={{ isAuth, setIsAuth: setIsAuthLocalAndState }}>
+    <AuthContext.Provider
+      value={{ authToken, setAuthToken: setAuthTokenLocalAndState }}
+    >
       {children}
     </AuthContext.Provider>
   );
