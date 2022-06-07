@@ -1,92 +1,39 @@
 import { object } from "yup";
 import Link from "next/link";
-import { useImmer } from "use-immer";
-import { useMutation } from "react-query";
+import { useState } from "react";
 import { MailIcon } from "@heroicons/react/solid";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, SubmitHandler, UseFormGetValues } from "react-hook-form";
 
-import Show from "~/components/Show";
 import AuthLayout from "~/layout/AuthLayout";
 import { gqlRequest } from "~/utils/helper/gql";
-import CreateSessionQuery from "~/utils/gql/Session/CreateSession.gql";
 import { NextPageLayoutType } from "~/types/nextMod";
 import { email, password } from "~/utils/validation";
 import { useAuthContext } from "~/context/AuthContext";
 import ContainerLayout from "~/layout/ContainerLayout";
 import InputWithLeftIcon from "~/components/Input/InputWithLeftIcon";
-import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftIcon";
+import CreateSessionQuery from "~/utils/gql/Session/CreateSession.gql";
 import ButtonWithTextAndSpinner from "~/components/Button/ButtonWithTextAndSpinner";
-import { yupResolver } from "@hookform/resolvers/yup";
+import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftIcon";
 
-interface LoginFormType {
+interface FormType {
   email: string;
   password: string;
 }
 
-const schema = object({ email, password });
+const fromValidationSchema = object({ email, password });
 
-const loginRequest = (getValues: UseFormGetValues<LoginFormType>) =>
+const errorMessage = {
+  message: "email or password is invalid",
+  shouldFocus: true,
+};
+
+const createSessionRequest = (getValues: UseFormGetValues<FormType>) =>
   gqlRequest({ query: CreateSessionQuery, variable: getValues() });
 
 const Login: NextPageLayoutType = () => {
   const { setAuthToken } = useAuthContext();
-
-  const [requestStatus, setRequestStatus] = useImmer({
-    isLoading: false,
-    isSuccess: false,
-    isError: false,
-  });
-
-  const { isLoading, isSuccess, isError } = requestStatus;
-
-  const onError = () =>
-    setRequestStatus((draft) => {
-      draft.isError = true;
-      draft.isLoading = false;
-    });
-
-  const onSuccess = (data: any) => {
-    const createSession = data.createSession;
-    const typename = createSession.__typename;
-
-    if (typename === "AccessToken") {
-      setRequestStatus((draft) => {
-        draft.isSuccess = true;
-      });
-      setAuthToken(createSession.token);
-    } else {
-      setRequestStatus((draft) => {
-        draft.isLoading = false;
-      });
-      setError(
-        "email",
-        { message: "email or password is invalid" },
-        { shouldFocus: true }
-      );
-      setError(
-        "password",
-        { message: "email or password is invalid" },
-        { shouldFocus: true }
-      );
-    }
-  };
-
-  const { mutateAsync } = useMutation(loginRequest, {
-    retry: 3,
-    onError,
-    onSuccess,
-  });
-
-  const onSubmit: SubmitHandler<LoginFormType> = async () => {
-    try {
-      setRequestStatus((draft) => {
-        draft.isLoading = true;
-      });
-      mutateAsync(getValues);
-    } catch (error) {
-      onError();
-    }
-  };
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
     register,
@@ -94,7 +41,33 @@ const Login: NextPageLayoutType = () => {
     setError,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginFormType>({ resolver: yupResolver(schema) });
+  } = useForm<FormType>({ resolver: yupResolver(fromValidationSchema) });
+
+  const onSubmit: SubmitHandler<FormType> = async () => {
+    try {
+      setIsLoading(true);
+
+      const request = await createSessionRequest(getValues);
+      const data = request.createSession;
+
+      if (data.__typename === "Token") {
+        setAuthToken(data.token);
+        return;
+      }
+
+      const title = data.title;
+
+      if (["BODY_PARSE", "AUTHENTICATION"].includes(title)) {
+        setIsLoading(false);
+        setError("email", errorMessage);
+        setError("password", errorMessage);
+        return;
+      }
+      throw { message: "Something went wrong" };
+    } catch (error) {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="flex flex-col items-center	justify-center py-20">
@@ -110,16 +83,6 @@ const Login: NextPageLayoutType = () => {
             </a>
           </Link>
         </p>
-
-        <Show when={isError}>
-          <p className="pb-4 text-center text-red-500">Something went wrong</p>
-        </Show>
-
-        <Show when={isSuccess}>
-          <p className="pb-4 text-center text-green-500">
-            User Created Successfully
-          </p>
-        </Show>
 
         <form className="w-96" onSubmit={handleSubmit(onSubmit)}>
           <InputWithLeftIcon

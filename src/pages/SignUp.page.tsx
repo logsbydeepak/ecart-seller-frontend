@@ -1,25 +1,31 @@
 import Link from "next/link";
+import { useState } from "react";
 import { object, ref } from "yup";
-import { useImmer } from "use-immer";
-import { useMutation } from "react-query";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { EmojiHappyIcon, MailIcon } from "@heroicons/react/solid";
 import { useForm, SubmitHandler, UseFormGetValues } from "react-hook-form";
 
-import Show from "~/components/Show";
 import AuthLayout from "~/layout/AuthLayout";
 import { gqlRequest } from "~/utils/helper/gql";
 import { NextPageLayoutType } from "~/types/nextMod";
-import CreateUserQuery from "~/utils/gql/User/CreateUser.gql";
 import ContainerLayout from "~/layout/ContainerLayout";
 import { useAuthContext } from "~/context/AuthContext";
 import SimpleInput from "~/components/Input/SimpleInput";
+import CreateUserQuery from "~/utils/gql/User/CreateUser.gql";
 import InputWithLeftIcon from "~/components/Input/InputWithLeftIcon";
 import { firstName, lastName, email, password } from "~/utils/validation";
 import ButtonWithTextAndSpinner from "~/components/Button/ButtonWithTextAndSpinner";
 import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftIcon";
 
-const schema = object({
+interface FormType {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
+
+const formValidationSchema = object({
   firstName,
   lastName,
   email,
@@ -27,7 +33,7 @@ const schema = object({
   confirmPassword: password.oneOf([ref("password")], "Password does not match"),
 });
 
-const signUpRequest = (getValues: UseFormGetValues<SignUpFormType>) =>
+const createUserRequest = (getValues: UseFormGetValues<FormType>) =>
   gqlRequest({
     query: CreateUserQuery,
     variable: {
@@ -38,69 +44,9 @@ const signUpRequest = (getValues: UseFormGetValues<SignUpFormType>) =>
     },
   });
 
-interface SignUpFormType {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
-
 const SignUp: NextPageLayoutType = () => {
   const { setAuthToken } = useAuthContext();
-
-  const [requestStatus, setRequestStatus] = useImmer({
-    isLoading: false,
-    isSuccess: false,
-    isError: false,
-  });
-
-  const { isLoading, isSuccess, isError } = requestStatus;
-
-  const onError = () =>
-    setRequestStatus((draft) => {
-      draft.isError = true;
-      draft.isLoading = false;
-    });
-
-  const onSuccess = (data: any) => {
-    const createUser = data.createUser;
-    const typename = createUser.__typename;
-
-    if (
-      createUser.title === "AUTHENTICATION" &&
-      createUser.message === "email already exist"
-    ) {
-      setRequestStatus((draft) => {
-        draft.isLoading = false;
-      });
-      setError("email", { message: createUser.message }, { shouldFocus: true });
-    }
-
-    if (typename === "AccessToken") {
-      setRequestStatus((draft) => {
-        draft.isSuccess = true;
-      });
-      setAuthToken(createUser.token);
-    }
-  };
-
-  const { mutateAsync } = useMutation(signUpRequest, {
-    retry: 3,
-    onError,
-    onSuccess,
-  });
-
-  const onSubmit: SubmitHandler<SignUpFormType> = () => {
-    try {
-      setRequestStatus((draft) => {
-        draft.isLoading = true;
-      });
-      mutateAsync(getValues);
-    } catch (error) {
-      onError();
-    }
-  };
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
     register,
@@ -108,7 +54,34 @@ const SignUp: NextPageLayoutType = () => {
     setError,
     handleSubmit,
     formState: { errors },
-  } = useForm<SignUpFormType>({ resolver: yupResolver(schema) });
+  } = useForm<FormType>({ resolver: yupResolver(formValidationSchema) });
+
+  const onSubmit: SubmitHandler<FormType> = async () => {
+    try {
+      setIsLoading(true);
+
+      const request = await createUserRequest(getValues);
+      const data = request.createUser;
+
+      if (data.__typename === "Token") {
+        setAuthToken(data.token);
+        return;
+      }
+
+      const title = data.title;
+      const message = data.message;
+
+      if (title === "AUTHENTICATION" && message === "email already exist") {
+        setIsLoading(false);
+        setError("email", { message: message }, { shouldFocus: true });
+        return;
+      }
+
+      throw { message: "Something went wrong" };
+    } catch (error) {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="flex flex-col items-center	justify-center py-20">
@@ -124,14 +97,6 @@ const SignUp: NextPageLayoutType = () => {
             </a>
           </Link>
         </p>
-
-        <Show when={isError}>
-          <p className="pb-4 text-center text-red-500">Something went wrong</p>
-        </Show>
-
-        <Show when={isSuccess}>
-          <p className="pb-4 text-center text-green-500">Login successful</p>
-        </Show>
 
         <form className="w-96" onSubmit={handleSubmit(onSubmit)}>
           <fieldset disabled={isLoading}>
