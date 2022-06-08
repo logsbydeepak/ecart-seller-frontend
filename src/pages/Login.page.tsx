@@ -22,7 +22,8 @@ interface FormType {
   password: string;
 }
 
-const fromValidationSchema = object({ email, password });
+// const fromValidationSchema = object({ email, password });
+const fromValidationSchema = object({});
 
 const errorMessage = {
   message: "email or password is invalid",
@@ -48,6 +49,7 @@ const Login: NextPageLayoutType = () => {
   const onSubmit: SubmitHandler<FormType> = async () => {
     try {
       setIsLoading(true);
+      addNotification("success", "user crated successfully");
 
       const request = await createSessionRequest(getValues);
       const data = request.createSession;

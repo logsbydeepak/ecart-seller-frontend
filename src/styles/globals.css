@@ -18,3 +18,16 @@ input::-ms-reveal,
 input::-ms-clear {
   @apply hidden;
 }
+
+@keyframes notification_in {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
+
+.notification_id {
+  animation: notification_id 0.4s ease-in both;
+}

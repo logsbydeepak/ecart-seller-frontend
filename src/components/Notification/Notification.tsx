@@ -1,6 +1,8 @@
 import { CheckIcon, XIcon } from "@heroicons/react/solid";
 import { ExclamationIcon } from "@heroicons/react/outline";
-import { FC, useEffect, useState } from "react";
+import { FC, Fragment, useEffect, useState } from "react";
+import { Transition } from "@headlessui/react";
+import { motion } from "framer-motion";
 
 export const SuccessIconContainer: FC = () => (
   <div className="rounded-md bg-green-200 p-1.5">
@@ -21,6 +23,7 @@ const Notification: FC<{
   removeNotification: (id: string) => void;
 }> = ({ text, type, id, removeNotification }) => {
   const [timeFrame, setTimeFrame] = useState(0);
+  const [show, setShow] = useState(true);
 
   useEffect(() => {
     const time = setTimeout(() => {
@@ -33,27 +36,42 @@ const Notification: FC<{
 
   useEffect(() => {
     if (timeFrame === 100) {
+      setShow(false);
       removeNotification(id);
     }
-  }, [timeFrame]);
+  }, [id, removeNotification, timeFrame]);
 
   return (
-    <div className="mb-3 w-96 rounded-lg border border-neutral-200 bg-white p-4 px-5 py-5 shadow-sm">
-      <div className="mb-3 flex items-center">
-        {type === "success" ? <SuccessIconContainer /> : <ErrorIconContainer />}
-        <p className="ml-2 text-sm">{text}</p>
-        <button
-          className="ml-auto rounded-md  p-1.5 hover:bg-neutral-100"
-          onClick={() => removeNotification(id)}
-        >
-          <XIcon className="h-5 w-5 text-neutral-500" />
-        </button>
+    <motion.div
+      key={id}
+      animate={{ x: 0 }}
+      initial={{ x: 100 }}
+      exit={{ x: 400 }}
+    >
+      <div className="mx-4 my-2 w-96 rounded-lg border border-neutral-200 bg-white px-5 py-5 shadow-sm">
+        <div className="mb-3 flex items-center">
+          {type === "success" ? (
+            <SuccessIconContainer />
+          ) : (
+            <ErrorIconContainer />
+          )}
+          <p className="ml-2 text-sm">{text}</p>
+          <button
+            className="ml-auto rounded-md  p-1.5 hover:bg-neutral-100"
+            onClick={() => {
+              setShow(false);
+              removeNotification(id);
+            }}
+          >
+            <XIcon className="h-5 w-5 text-neutral-500" />
+          </button>
+        </div>
+        <div
+          className="h-1 rounded-full bg-neutral-500"
+          style={{ width: `${timeFrame}%` }}
+        ></div>
       </div>
-      <div
-        className="h-1 rounded-full bg-neutral-500"
-        style={{ width: `${timeFrame}%` }}
-      ></div>
-    </div>
+    </motion.div>
   );
 };
 

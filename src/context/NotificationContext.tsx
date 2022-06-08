@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import { PropsWithChildrenOnlyType } from "~/types/nextMod";
 import Notification from "~/components/Notification/Notification";
+import { AnimatePresence } from "framer-motion";
 
 type NotificationContextType = null | {
   addNotification: (type: "success" | "error", text: string) => void;
@@ -39,15 +40,17 @@ export const NotificationContextProvider: FC<PropsWithChildrenOnlyType> = ({
   return (
     <NotificationContext.Provider value={{ addNotification }}>
       <div className="fixed bottom-0 right-0 z-20 flex flex-col justify-end">
-        {notification.map(({ type, text, id }) => (
-          <Notification
-            type={type}
-            text={text}
-            id={id}
-            key={id}
-            removeNotification={removeNotification}
-          />
-        ))}
+        <AnimatePresence>
+          {notification.map(({ type, text, id }) => (
+            <Notification
+              type={type}
+              text={text}
+              id={id}
+              key={id}
+              removeNotification={removeNotification}
+            />
+          ))}
+        </AnimatePresence>
       </div>
       {children}
     </NotificationContext.Provider>
