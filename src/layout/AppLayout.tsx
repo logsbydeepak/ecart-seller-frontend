@@ -1,3 +1,4 @@
+import { AnimatePresence } from "framer-motion";
 import { FC, useState } from "react";
 import Navbar from "~/components/Navbar";
 

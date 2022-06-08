@@ -48,7 +48,7 @@ const Notification: FC<{
       initial={{ x: 100 }}
       exit={{ x: 400 }}
     >
-      <div className="mx-4 my-2 w-96 rounded-lg border border-neutral-200 bg-white px-5 py-5 shadow-sm">
+      <div className="mx-4 mb-4 w-96 rounded-lg border border-neutral-200 bg-white px-5 py-5 shadow-sm">
         <div className="mb-3 flex items-center">
           {type === "success" ? (
             <SuccessIconContainer />

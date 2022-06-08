@@ -4,6 +4,7 @@ import AuthNavbarItem from "./AuthNavbarItem";
 import NoAuthNavbarItem from "./NoAuthNavbarItem";
 import { ShoppingCartIcon } from "@heroicons/react/solid";
 import { useAuthContext } from "~/context/AuthContext";
+import { AnimatePresence } from "framer-motion";
 
 const Navbar: FC = () => {
   const { authToken } = useAuthContext();
@@ -20,9 +21,11 @@ const Navbar: FC = () => {
           </Link>
         </div>
         <div className="flex items-center">
-          <div className="text-sm">
-            {authToken ? <AuthNavbarItem /> : <NoAuthNavbarItem />}
-          </div>
+          <AnimatePresence>
+            <div className="text-sm">
+              {authToken ? <AuthNavbarItem /> : <NoAuthNavbarItem />}
+            </div>
+          </AnimatePresence>
         </div>
       </div>
     </nav>

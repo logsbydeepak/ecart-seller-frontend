@@ -48,15 +48,15 @@ const Login: NextPageLayoutType = () => {
 
   const onSubmit: SubmitHandler<FormType> = async () => {
     try {
+      addNotification("error", "Something went wrong!");
       setIsLoading(true);
-      addNotification("success", "user crated successfully");
 
       const request = await createSessionRequest(getValues);
       const data = request.createSession;
 
       if (data.__typename === "Token") {
         setAuthToken(data.token);
-        addNotification("success", "user crated successfully");
+        addNotification("success", "User login successful");
         return;
       }
 

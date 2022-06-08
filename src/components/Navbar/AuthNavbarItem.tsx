@@ -7,6 +7,8 @@ import { CogIcon, LogoutIcon } from "@heroicons/react/outline";
 import ReadUserQuery from "~/utils/gql/User/ReadUser.gql";
 import LogoutModal from "~/components/Modal/LogoutModal";
 import useAuthQueryRequestHook from "~/hooks/useAuthQueryRequest";
+import { motion, AnimatePresence } from "framer-motion";
+import { classNames } from "~/utils/helper/tailwind";
 
 const defaultData = {
   name: "User Name",
@@ -46,42 +48,51 @@ const AuthNavbarItem: FC = () => {
   if (!isSuccess) return null;
 
   return (
-    <Menu as="div" className="relative">
-      <LogoutModal isOpen={isOpen} setIsOpen={setIsOpen} />
-      <Menu.Button className="flex  items-center rounded-md px-4 py-2 hover:bg-neutral-50">
-        <Image
-          src={userInfo.profile}
-          alt="Profile"
-          width="28"
-          height="28"
-          className="rounded-full object-cover"
-        />
-        <h1 className="ml-2 block font-medium">{userName}</h1>
-      </Menu.Button>
+    <div className="relative">
+      <Menu>
+        {({ open }) => (
+          <>
+            <LogoutModal isOpen={isOpen} setIsOpen={setIsOpen} />
 
-      <Transition
-        as={Fragment}
-        enter="transition ease-out duration-100"
-        enterFrom="transform opacity-0 scale-95"
-        enterTo="transform opacity-100 scale-100"
-        leave="transition ease-in duration-75"
-        leaveFrom="transform opacity-100 scale-100"
-        leaveTo="transform opacity-0 scale-95"
-      >
-        <Menu.Items className="absolute right-0 mt-1.5 w-full rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-          <MenuItem
-            text="Account"
-            Icon={<CogIcon />}
-            onClick={() => router.push("/Account")}
-          />
-          <MenuItem
-            text="Logout"
-            Icon={<LogoutIcon />}
-            onClick={() => setIsOpen(true)}
-          />
-        </Menu.Items>
-      </Transition>
-    </Menu>
+            <Menu.Button className="flex  items-center rounded-md px-4 py-2 hover:bg-neutral-50">
+              <Image
+                src={userInfo.profile}
+                alt="Profile"
+                width="28"
+                height="28"
+                className="rounded-full object-cover"
+              />
+              <h1 className="ml-2 block font-medium">{userName}</h1>
+            </Menu.Button>
+
+            <AnimatePresence>
+              {open && (
+                <Menu.Items
+                  static
+                  as={motion.div}
+                  key="menu"
+                  initial={{ y: -40, scale: 0, opacity: 0 }}
+                  animate={{ y: 0, scale: 1, opacity: 1 }}
+                  exit={{ y: -40, scale: 0, opacity: 0 }}
+                  className="absolute right-0 mt-1.5 w-full rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                >
+                  <MenuItem
+                    text="Account"
+                    Icon={<CogIcon />}
+                    onClick={() => router.push("/Account")}
+                  />
+                  <MenuItem
+                    text="Logout"
+                    Icon={<LogoutIcon />}
+                    onClick={() => setIsOpen(true)}
+                  />
+                </Menu.Items>
+              )}
+            </AnimatePresence>
+          </>
+        )}
+      </Menu>
+    </div>
   );
 };
 
@@ -91,15 +102,21 @@ const MenuItem: FC<{ text: string; Icon: ReactNode; onClick: () => void }> = ({
   onClick,
 }) => {
   return (
-    <Menu.Item
-      as="button"
-      className="flex w-full cursor-pointer items-center rounded-md px-4 py-2 hover:bg-neutral-50"
-      onClick={onClick}
-    >
-      <div className="text-black-500 mr-2 flex h-7 w-7 items-center justify-center">
-        <div className="h-5 w-5 text-neutral-600">{Icon}</div>
-      </div>
-      <p>{text}</p>
+    <Menu.Item>
+      {({ active }) => (
+        <button
+          onClick={onClick}
+          className={classNames(
+            active && "bg-neutral-50",
+            "flex w-full cursor-pointer items-center rounded-md px-4 py-2"
+          )}
+        >
+          <div className="text-black-500 mr-2 flex h-7 w-7 items-center justify-center">
+            <div className="h-5 w-5 text-neutral-600">{Icon}</div>
+          </div>
+          <p>{text}</p>
+        </button>
+      )}
     </Menu.Item>
   );
 };

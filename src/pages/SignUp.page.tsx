@@ -1,11 +1,12 @@
 import Link from "next/link";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { object, ref } from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { EmojiHappyIcon, MailIcon } from "@heroicons/react/solid";
 import { useForm, SubmitHandler, UseFormGetValues } from "react-hook-form";
 
 import AuthLayout from "~/layout/AuthLayout";
+import { useNotificationContext } from "~/context/NotificationContext";
 import { gqlRequest } from "~/utils/helper/gql";
 import { NextPageLayoutType } from "~/types/nextMod";
 import ContainerLayout from "~/layout/ContainerLayout";
@@ -47,6 +48,7 @@ const createUserRequest = (getValues: UseFormGetValues<FormType>) =>
 const SignUp: NextPageLayoutType = () => {
   const { setAuthToken } = useAuthContext();
   const [isLoading, setIsLoading] = useState(false);
+  const { addNotification } = useNotificationContext();
 
   const {
     register,
@@ -65,6 +67,7 @@ const SignUp: NextPageLayoutType = () => {
 
       if (data.__typename === "Token") {
         setAuthToken(data.token);
+        addNotification("success", "User crated successfully");
         return;
       }
 
@@ -80,6 +83,7 @@ const SignUp: NextPageLayoutType = () => {
       throw { message: "Something went wrong" };
     } catch (error) {
       setIsLoading(false);
+      addNotification("error", "Something went wrong!");
     }
   };
 
