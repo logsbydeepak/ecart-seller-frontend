@@ -15,6 +15,7 @@ import InputWithLeftIcon from "~/components/Input/InputWithLeftIcon";
 import CreateSessionQuery from "~/utils/gql/Session/CreateSession.gql";
 import ButtonWithTextAndSpinner from "~/components/Button/ButtonWithTextAndSpinner";
 import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftIcon";
+import { useNotificationContext } from "~/context/NotificationContext";
 
 interface FormType {
   email: string;
@@ -34,6 +35,7 @@ const createSessionRequest = (getValues: UseFormGetValues<FormType>) =>
 const Login: NextPageLayoutType = () => {
   const { setAuthToken } = useAuthContext();
   const [isLoading, setIsLoading] = useState(false);
+  const { addNotification } = useNotificationContext();
 
   const {
     register,
@@ -52,6 +54,7 @@ const Login: NextPageLayoutType = () => {
 
       if (data.__typename === "Token") {
         setAuthToken(data.token);
+        addNotification("success", "user crated successfully");
         return;
       }
 
@@ -66,6 +69,7 @@ const Login: NextPageLayoutType = () => {
       throw { message: "Something went wrong" };
     } catch (error) {
       setIsLoading(false);
+      addNotification("error", "Something went wrong!");
     }
   };
 
