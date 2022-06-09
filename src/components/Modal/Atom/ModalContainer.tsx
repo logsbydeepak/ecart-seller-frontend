@@ -1,7 +1,7 @@
 import { Dialog } from "@headlessui/react";
 import { XIcon } from "@heroicons/react/solid";
 import { AnimatePresence, motion } from "framer-motion";
-import { FC, Fragment } from "react";
+import { FC, Fragment, useRef } from "react";
 import Show from "~/components/Show";
 import { PropsWithChildrenOnlyType } from "~/types/nextMod";
 
@@ -23,8 +23,10 @@ const ModalContainer: FC<Props> = ({ children, title, isOpen, exitModal }) => {
         >
           <Dialog.Panel
             as={motion.div}
-            animate={{ y: 0 }}
-            initial={{ y: 100 }}
+            transition={{ type: "none", duration: 0.2 }}
+            initial={{ y: 500, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 500, opacity: 0, transitionDuration: 0.1 }}
             className="rounded-lg border border-neutral-400 bg-white text-center drop-shadow-xl"
           >
             <div className="flex justify-between  border-b border-neutral-200 p-6 pb-4">

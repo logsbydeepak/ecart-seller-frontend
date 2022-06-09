@@ -1,4 +1,5 @@
 import { GraphQLClient, RequestDocument, Variables } from "graphql-request";
+import { useAuthContext } from "~/context/AuthContext";
 
 interface Args {
   query: RequestDocument;
@@ -15,12 +16,12 @@ export const gqlRequest: GqlRequestType = ({
   signal,
   token,
 }) => {
-  const xAccessToken = token ? { headers: { "x-access-token": token } } : {};
+  const headers = token ? { headers: { token: token } } : {};
 
   return new GraphQLClient(process.env.NEXT_PUBLIC_API_BASE_URL as string, {
     signal,
     credentials: "include",
     mode: "cors",
-    ...xAccessToken,
+    ...headers,
   }).request(query, variable);
 };

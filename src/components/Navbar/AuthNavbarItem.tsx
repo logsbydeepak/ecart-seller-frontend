@@ -1,68 +1,109 @@
 import Image from "next/image";
+import { useQuery } from "react-query";
 import { useRouter } from "next/router";
-import { Menu, Transition } from "@headlessui/react";
-import { FC, ReactNode, useState, Fragment } from "react";
+import { Menu } from "@headlessui/react";
+import { FC, ReactNode, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { CogIcon, LogoutIcon } from "@heroicons/react/outline";
 
-import ReadUserQuery from "~/utils/gql/User/ReadUser.gql";
-import LogoutModal from "~/components/Modal/LogoutModal";
-import useAuthQueryRequestHook from "~/hooks/useAuthQueryRequest";
-import { motion, AnimatePresence } from "framer-motion";
+import { gqlRequest } from "~/utils/helper/gql";
 import { classNames } from "~/utils/helper/tailwind";
+import { useAuthContext } from "~/context/AuthContext";
+import LogoutModal from "~/components/Modal/LogoutModal";
+import { useNotificationContext } from "~/context/NotificationContext";
+import ReadUserFirstNameAndPictureQuery from "~/utils/gql/User/ReadUserFirstNameAndPicture.gql";
 
 const defaultData = {
-  name: "User Name",
-  profile:
+  name: "UserName",
+  picture:
     "https://images.unsplash.com/photo-1637633198300-08beaec68c70?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1887&q=80",
 };
 
-const AuthNavbarItem: FC = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [userInfo, setUserInfo] = useState(defaultData);
+const readUserPictureRequest = async (authToken: string) => {
+  try {
+    const request = await gqlRequest({
+      query: ReadUserFirstNameAndPictureQuery,
+      token: authToken,
+    });
 
-  const router = useRouter();
+    const typeName = request.readUser.__typename;
 
-  const onSuccessQuery = (data: any) => {
-    const readUser = data.readUser;
-    const typename = readUser.__typename;
-
-    if (typename === "User") {
-      setUserInfo((preValue) => ({ ...preValue, name: readUser.firstName }));
+    if (typeName === "User") {
+      return request;
     }
+
+    throw { message: "Something went wrong!" };
+  } catch (error) {
+    throw { message: "Something went wrong!" };
+  }
+};
+
+const AuthNavbarItem: FC = () => {
+  const [isOpenLogoutModal, setIsOpenLogoutModal] = useState(false);
+  const [userInfo, setUserInfo] = useState(defaultData);
+  const router = useRouter();
+  const { addNotification } = useNotificationContext();
+
+  const { authToken, setAuthToken } = useAuthContext();
+
+  const onSuccess = (data: any) => {
+    const requestData = data.readUser;
+    setUserInfo({
+      name: requestData.firstName,
+      picture: requestData.picture,
+    });
   };
 
-  const onErrorQuery = () => {};
+  const onError = (data: any) => {
+    const requestData = data.readUser;
 
-  const { isSuccess } = useAuthQueryRequestHook({
-    key: "Navbar User Info",
-    name: "readUser",
-    query: ReadUserQuery,
-    successTitle: "User",
-    onSuccessQuery,
-    onErrorQuery,
-  });
+    if (["TOKEN_PARSE", "AUTHENTICATION"].includes(requestData.title)) {
+      setAuthToken("");
+      return;
+    }
 
-  const name = userInfo.name;
-  const userName = name.length >= 10 ? name.substring(0, 9) + "..." : name;
+    addNotification("error", "Something went wrong!");
+  };
 
-  if (!isSuccess) return null;
+  const { isLoading } = useQuery(
+    "read user name and picture",
+    () => readUserPictureRequest(authToken),
+    {
+      onSuccess,
+      onError,
+    }
+  );
+
+  if (isLoading) {
+    return (
+      <div className="h-9 w-32 animate-pulse rounded-md bg-neutral-100"></div>
+    );
+  }
 
   return (
     <div className="relative">
+      <LogoutModal
+        isOpen={isOpenLogoutModal}
+        setIsOpen={setIsOpenLogoutModal}
+      />
       <Menu>
         {({ open }) => (
           <>
-            <LogoutModal isOpen={isOpen} setIsOpen={setIsOpen} />
-
-            <Menu.Button className="flex  items-center rounded-md px-4 py-2 hover:bg-neutral-50">
+            <Menu.Button className="flex items-center rounded-md px-3 py-2 hover:bg-neutral-100">
               <Image
-                src={userInfo.profile}
-                alt="Profile"
+                src={
+                  userInfo.picture === "default"
+                    ? defaultData.picture
+                    : userInfo.picture
+                }
+                alt="picture"
                 width="28"
                 height="28"
-                className="rounded-full object-cover"
+                className="rounded-full object-cover "
               />
-              <h1 className="ml-2 block font-medium">{userName}</h1>
+              <p className="max-w-[100px] overflow-hidden text-ellipsis pl-2 font-medium">
+                {userInfo.name}
+              </p>
             </Menu.Button>
 
             <AnimatePresence>
@@ -71,10 +112,10 @@ const AuthNavbarItem: FC = () => {
                   static
                   as={motion.div}
                   key="menu"
-                  initial={{ y: -40, scale: 0, opacity: 0 }}
-                  animate={{ y: 0, scale: 1, opacity: 1 }}
-                  exit={{ y: -40, scale: 0, opacity: 0 }}
-                  className="absolute right-0 mt-1.5 w-full rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                  initial={{ x: 150 }}
+                  animate={{ x: 0 }}
+                  exit={{ x: 150 }}
+                  className="absolute right-0 mt-2 w-32 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
                 >
                   <MenuItem
                     text="Account"
@@ -84,7 +125,7 @@ const AuthNavbarItem: FC = () => {
                   <MenuItem
                     text="Logout"
                     Icon={<LogoutIcon />}
-                    onClick={() => setIsOpen(true)}
+                    onClick={() => setIsOpenLogoutModal(true)}
                   />
                 </Menu.Items>
               )}
@@ -107,8 +148,8 @@ const MenuItem: FC<{ text: string; Icon: ReactNode; onClick: () => void }> = ({
         <button
           onClick={onClick}
           className={classNames(
-            active && "bg-neutral-50",
-            "flex w-full cursor-pointer items-center rounded-md px-4 py-2"
+            active && "bg-neutral-100",
+            "flex w-full cursor-pointer items-center px-4 py-2"
           )}
         >
           <div className="text-black-500 mr-2 flex h-7 w-7 items-center justify-center">
