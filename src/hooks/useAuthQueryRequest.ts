@@ -4,6 +4,7 @@ import { useQuery, UseQueryOptions } from "react-query";
 
 import { gqlRequest } from "~/utils/helper/gql";
 import { useAuthContext } from "~/context/AuthContext";
+import { useNotificationContext } from "~/context/NotificationContext";
 
 interface Props {
   query: DocumentNode;
@@ -29,6 +30,7 @@ const useAuthQueryRequestHook = ({
   key,
 }: Props) => {
   const { authToken, setAuthToken } = useAuthContext();
+  const { addNotification } = useNotificationContext();
 
   const request = async () => {
     try {
@@ -62,10 +64,12 @@ const useAuthQueryRequestHook = ({
   };
 
   const onError = () => {
-    console.log("Something went wrong");
+    addNotification("error", "Something went wrong!");
   };
 
-  const useQueryHook = useQuery(key, request, {
+  const useQueryHook = useQuery({
+    queryKey: key,
+    queryFn: request,
     onError,
     onSuccess,
     ...options,

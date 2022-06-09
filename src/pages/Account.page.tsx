@@ -2,7 +2,7 @@ import { useImmer } from "use-immer";
 
 import { NextPageLayoutType } from "~/types/nextMod";
 import AccountSideBarLayout from "~/layout/AccountSideBarLayout";
-import GetUserQuery from "~/utils/gql/User/GetUser.gql";
+import GetUserQuery from "~/utils/gql/User/ReadUser.gql";
 import SideBarContent from "~/components/Sidebar/SideBarContent";
 import { FC, useState } from "react";
 import { classNames } from "~/utils/helper/tailwind";

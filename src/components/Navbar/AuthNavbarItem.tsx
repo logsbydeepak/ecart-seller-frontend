@@ -32,9 +32,13 @@ const readUserPictureRequest = async (authToken: string) => {
       return request;
     }
 
-    throw { message: "Something went wrong!" };
-  } catch (error) {
-    throw { message: "Something went wrong!" };
+    throw { data: request };
+  } catch (error: any) {
+    if (error.data) {
+      throw error.data;
+    }
+
+    throw { data: null };
   }
 };
 
@@ -55,9 +59,11 @@ const AuthNavbarItem: FC = () => {
   };
 
   const onError = (data: any) => {
+    console.log(data);
     const requestData = data.readUser;
 
     if (["TOKEN_PARSE", "AUTHENTICATION"].includes(requestData.title)) {
+      addNotification("error", "User Logout");
       setAuthToken("");
       return;
     }
@@ -65,7 +71,7 @@ const AuthNavbarItem: FC = () => {
     addNotification("error", "Something went wrong!");
   };
 
-  const { isLoading } = useQuery(
+  const { isLoading, isError } = useQuery(
     "read user name and picture",
     () => readUserPictureRequest(authToken),
     {
@@ -74,7 +80,7 @@ const AuthNavbarItem: FC = () => {
     }
   );
 
-  if (isLoading) {
+  if (isLoading || isError) {
     return (
       <div className="h-9 w-32 animate-pulse rounded-md bg-neutral-100"></div>
     );
@@ -91,11 +97,7 @@ const AuthNavbarItem: FC = () => {
           <>
             <Menu.Button className="flex items-center rounded-md px-3 py-2 hover:bg-neutral-100">
               <Image
-                src={
-                  userInfo.picture === "default"
-                    ? defaultData.picture
-                    : userInfo.picture
-                }
+                src={defaultData.picture}
                 alt="picture"
                 width="28"
                 height="28"

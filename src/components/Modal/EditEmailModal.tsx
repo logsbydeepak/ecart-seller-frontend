@@ -9,7 +9,7 @@ import { object, ref } from "yup";
 import useAuthMutationRequestHook from "~/hooks/useAuthMutationRequest";
 import SmallButton from "../Button/SmallButton";
 import InputWithLeftIcon from "../Input/InputWithLeftIcon";
-import EditEmailQuery from "~/utils/gql/User/Edit/EditEmail.gql";
+import EditEmailQuery from "~/utils/gql/User/Update/UpdateEmail.gql";
 import { useQueryClient } from "react-query";
 import { MailIcon } from "@heroicons/react/solid";
 

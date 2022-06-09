@@ -68,6 +68,7 @@ const useAuthMutationRequestHook = ({
   };
 
   const useMutationHook = useMutation(request, {
+    mutationKey: "authMutationRequest",
     retry: 3,
     onSuccess,
     onError,

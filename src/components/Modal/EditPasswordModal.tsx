@@ -8,10 +8,8 @@ import { password } from "~/utils/validation";
 import { object } from "yup";
 import useAuthMutationRequestHook from "~/hooks/useAuthMutationRequest";
 import SmallButton from "../Button/SmallButton";
-import InputWithLeftIcon from "../Input/InputWithLeftIcon";
-import EditPasswordQuery from "~/utils/gql/User/Edit/EditPassword.gql";
+import EditPasswordQuery from "~/utils/gql/User/Update/UpdatePassword.gql";
 import { useQueryClient } from "react-query";
-import { MailIcon } from "@heroicons/react/solid";
 
 interface FormType {
   password: string;

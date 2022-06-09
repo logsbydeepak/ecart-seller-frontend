@@ -6,13 +6,12 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { password, firstName, lastName } from "~/utils/validation";
 import { object } from "yup";
-import LogoutAllSessionQuery from "~/utils/gql/Session/DeleteAllSession.gql";
 import useAuthMutationRequestHook from "~/hooks/useAuthMutationRequest";
 import SmallButton from "../Button/SmallButton";
 import SimpleInput from "../Input/SimpleInput";
 import InputWithLeftIcon from "../Input/InputWithLeftIcon";
 import { EmojiHappyIcon } from "@heroicons/react/outline";
-import EditNameQuery from "~/utils/gql/User/Edit/EditName.gql";
+import EditNameQuery from "~/utils/gql/User/Update/UpdateName.gql";
 import { useQueryClient } from "react-query";
 
 interface FormType {

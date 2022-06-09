@@ -23,10 +23,11 @@ const ModalContainer: FC<Props> = ({ children, title, isOpen, exitModal }) => {
         >
           <Dialog.Panel
             as={motion.div}
-            transition={{ type: "none", duration: 0.2 }}
+            key="modal"
+            transition={{ duration: 0.2 }}
             initial={{ y: 500, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            exit={{ y: 500, opacity: 0, transitionDuration: 0.1 }}
+            exit={{ y: 500, opacity: 0 }}
             className="rounded-lg border border-neutral-400 bg-white text-center drop-shadow-xl"
           >
             <div className="flex justify-between  border-b border-neutral-200 p-6 pb-4">
