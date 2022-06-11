@@ -20,7 +20,7 @@ export const useAuthContext = () => {
 
 const getLocalTokenValue = () => localStorage.getItem("token") || "";
 const setLocalToken = (token: string) => localStorage.setItem("token", token);
-const removeLocalToken = () => localStorage.removeItem("auth");
+const removeLocalToken = () => localStorage.removeItem("token");
 
 export const AuthProvider: FC<PropsWithChildrenOnlyType> = ({ children }) => {
   const queryClient = useQueryClient();
@@ -31,7 +31,9 @@ export const AuthProvider: FC<PropsWithChildrenOnlyType> = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    if (!authToken) queryClient.clear();
+    if (authToken) return;
+    queryClient.clear();
+    setAuthTokenLocalAndState("");
   }, [authToken, queryClient]);
 
   useEffect(() => {
