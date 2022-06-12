@@ -7,7 +7,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { password } from "~/utils/validation";
 import { object } from "yup";
-import LogoutAllSessionQuery from "~/utils/gql/Session/DeleteAllSession.gql";
+import DeleteAllSessionQuery from "~/utils/gql/Session/DeleteAllSession.gql";
 import useAuthMutationRequestHook from "~/hooks/useAuthMutationRequest";
 import SmallButton from "../Button/SmallButton";
 
@@ -23,10 +23,9 @@ const LogoutAllModal: FC<{
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }> = ({ isOpen, setIsOpen }) => {
-  const { setIsAuth } = useAuthContext();
+  const { setAuthToken } = useAuthContext();
 
   const {
-    reset,
     register,
     getValues,
     setError,
@@ -35,7 +34,7 @@ const LogoutAllModal: FC<{
   } = useForm<FormType>({ resolver: yupResolver(schema) });
 
   const onSuccessMutation = () => {
-    setIsAuth(false);
+    setAuthToken("");
   };
 
   const onErrorMutation = () => {
@@ -55,11 +54,11 @@ const LogoutAllModal: FC<{
   };
 
   const { mutateAsync, isLoading } = useAuthMutationRequestHook({
-    query: LogoutAllSessionQuery,
+    query: DeleteAllSessionQuery,
     name: "deleteAllSession",
     ErrorResponse: [{ title: "BODY_PARSE", message: "invalid password" }],
     successTitle: "SuccessResponse",
-    variable: { currentPassword: getValues("password") },
+    variable: () => ({ currentPassword: getValues("password") }),
     onErrorMutation,
     onSuccessMutation,
   });
