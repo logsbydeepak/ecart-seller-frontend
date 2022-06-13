@@ -11,6 +11,7 @@ import SideBarContent from "~/components/Sidebar/SideBarContent";
 import AccountSideBarLayout from "~/layout/AccountSideBarLayout";
 import useAuthQueryRequestHook from "~/hooks/useAuthQueryRequest";
 import EditPasswordModal from "~/components/Modal/EditPasswordModal";
+import DeleteAccountModal from "~/components/Modal/DeleteAccountModal";
 
 const Account: NextPageLayoutType = () => {
   const [userInfo, setUserInfo] = useImmer({
@@ -22,6 +23,7 @@ const Account: NextPageLayoutType = () => {
   const [isOpenEditNameModal, setIsOpenEditNameModal] = useState(false);
   const [isOpenEditEmailModal, setIsOpenEditEmailModal] = useState(false);
   const [isOpenEditPasswordModal, setIsOpenEditPasswordModal] = useState(false);
+  const [isDeleteUserModal, setIsDeleteUserModal] = useState(false);
 
   const onSuccessQuery = (data: any) => {
     const readUser = data.readUser;
@@ -46,12 +48,6 @@ const Account: NextPageLayoutType = () => {
     onSuccessQuery,
     onErrorQuery,
   });
-
-  const handleDeleteAccount = () => {};
-
-  const handleLogoutAll = () => {
-    setIsOpenLogoutAllModal(true);
-  };
 
   return (
     <SideBarContent
@@ -83,6 +79,11 @@ const Account: NextPageLayoutType = () => {
         setIsOpen={setIsOpenEditPasswordModal}
       />
 
+      <DeleteAccountModal
+        isOpen={isDeleteUserModal}
+        setIsOpen={setIsDeleteUserModal}
+      />
+
       <div className="max-w-2xl">
         <div className="rounded-lg border-2 border-neutral-200 p-8">
           <ItemContainer
@@ -107,12 +108,12 @@ const Account: NextPageLayoutType = () => {
         <div className="mt-8 rounded-lg border-2 border-neutral-200 p-8">
           <ItemContainerButton
             fieldName="Logout All"
-            handleOnClick={handleLogoutAll}
+            handleOnClick={() => setIsOpenLogoutAllModal(true)}
           />
           <Divider />
           <ItemContainerButton
             fieldName="Delete Account"
-            handleOnClick={handleDeleteAccount}
+            handleOnClick={() => setIsDeleteUserModal(true)}
           />
         </div>
       </div>

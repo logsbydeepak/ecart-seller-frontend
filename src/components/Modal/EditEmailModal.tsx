@@ -1,17 +1,17 @@
+import { object, ref } from "yup";
+import { useQueryClient } from "react-query";
+import { MailIcon } from "@heroicons/react/solid";
 import { Dispatch, FC, SetStateAction } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 
-import ModalContainer from "./Atom/ModalContainer";
-import PasswordInputWithLeftIcon from "../Input/PasswordInputWithLeftIcon";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { password, email } from "~/utils/validation";
-import { object, ref } from "yup";
-import useAuthMutationRequestHook from "~/hooks/useAuthMutationRequest";
 import SmallButton from "../Button/SmallButton";
+import ModalContainer from "./Atom/ModalContainer";
+import { password, email } from "~/utils/validation";
+import { yupResolver } from "@hookform/resolvers/yup";
 import InputWithLeftIcon from "../Input/InputWithLeftIcon";
 import EditEmailQuery from "~/utils/gql/User/Update/UpdateEmail.gql";
-import { useQueryClient } from "react-query";
-import { MailIcon } from "@heroicons/react/solid";
+import useAuthMutationRequestHook from "~/hooks/useAuthMutationRequest";
+import PasswordInputWithLeftIcon from "../Input/PasswordInputWithLeftIcon";
 
 interface FormType {
   email: string;
