@@ -1,16 +1,15 @@
 import { useImmer } from "use-immer";
+import { FC, useState } from "react";
 
 import { NextPageLayoutType } from "~/types/nextMod";
-import AccountSideBarLayout from "~/layout/AccountSideBarLayout";
-import GetUserQuery from "~/utils/gql/User/ReadUser.gql";
-import SideBarContent from "~/components/Sidebar/SideBarContent";
-import { FC, useState } from "react";
 import { classNames } from "~/utils/helper/tailwind";
-import LogoutAllModal from "~/components/Modal/LogoutAllModal";
-import useAuthQueryRequestHook from "~/hooks/useAuthQueryRequest";
+import GetUserQuery from "~/utils/gql/User/ReadUser.gql";
 import EditNameModal from "~/components/Modal/EditNameModal";
-import Show from "~/components/Show";
+import LogoutAllModal from "~/components/Modal/LogoutAllModal";
 import EditEmailModal from "~/components/Modal/EditEmailModal";
+import SideBarContent from "~/components/Sidebar/SideBarContent";
+import AccountSideBarLayout from "~/layout/AccountSideBarLayout";
+import useAuthQueryRequestHook from "~/hooks/useAuthQueryRequest";
 import EditPasswordModal from "~/components/Modal/EditPasswordModal";
 
 const Account: NextPageLayoutType = () => {
@@ -61,36 +60,28 @@ const Account: NextPageLayoutType = () => {
       isSuccess={isSuccess}
       isError={isError}
     >
-      <Show when={isOpenLogoutAllModal}>
-        <LogoutAllModal
-          isOpen={isOpenLogoutAllModal}
-          setIsOpen={setIsOpenLogoutAllModal}
-        />
-      </Show>
+      <LogoutAllModal
+        isOpen={isOpenLogoutAllModal}
+        setIsOpen={setIsOpenLogoutAllModal}
+      />
 
-      <Show when={isOpenEditNameModal}>
-        <EditNameModal
-          isOpen={isOpenEditNameModal}
-          setIsOpen={setIsOpenEditNameModal}
-          firstName={userInfo.firstName}
-          lastName={userInfo.lastName}
-        />
-      </Show>
+      <EditNameModal
+        isOpen={isOpenEditNameModal}
+        setIsOpen={setIsOpenEditNameModal}
+        firstName={userInfo.firstName}
+        lastName={userInfo.lastName}
+      />
 
-      <Show when={isOpenEditEmailModal}>
-        <EditEmailModal
-          isOpen={isOpenEditEmailModal}
-          setIsOpen={setIsOpenEditEmailModal}
-          email={userInfo.email}
-        />
-      </Show>
+      <EditEmailModal
+        isOpen={isOpenEditEmailModal}
+        setIsOpen={setIsOpenEditEmailModal}
+        email={userInfo.email}
+      />
 
-      <Show when={isOpenEditPasswordModal}>
-        <EditPasswordModal
-          isOpen={isOpenEditPasswordModal}
-          setIsOpen={setIsOpenEditPasswordModal}
-        />
-      </Show>
+      <EditPasswordModal
+        isOpen={isOpenEditPasswordModal}
+        setIsOpen={setIsOpenEditPasswordModal}
+      />
 
       <div className="max-w-2xl">
         <div className="rounded-lg border-2 border-neutral-200 p-8">
