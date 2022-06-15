@@ -1,6 +1,6 @@
 import { FC, ReactNode } from "react";
 import { UseFormRegisterReturn } from "react-hook-form";
-import { classNames } from "~/utils/helper/tailwind";
+import clsx from "clsx";
 import { PropsWithChildrenOnlyType } from "~/types/nextMod";
 
 export interface CommonInputType {
@@ -26,7 +26,7 @@ export const TextInput: FC<{
     id={id}
     type={type}
     {...register}
-    className={classNames(
+    className={clsx(
       className,
       "block w-full rounded-md border-2 border-slate-200 bg-slate-50 text-base ring-0 focus:border-indigo-600 focus:bg-white focus:ring-indigo-400"
     )}

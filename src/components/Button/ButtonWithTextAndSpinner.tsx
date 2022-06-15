@@ -1,6 +1,6 @@
 import { FC } from "react";
 import Spinner from "../Spinner";
-import { classNames } from "~/utils/helper/tailwind";
+import clsx from "clsx";
 
 const ButtonWithTextAndSpinner: FC<{
   text: string;
@@ -11,7 +11,7 @@ const ButtonWithTextAndSpinner: FC<{
     <button
       type="submit"
       disabled={isLoading}
-      className={classNames(
+      className={clsx(
         className,
         "mt-8 flex h-12 w-full justify-center rounded-md bg-indigo-600 py-3 font-medium text-white hover:bg-indigo-500 disabled:bg-neutral-900"
       )}

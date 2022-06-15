@@ -2,7 +2,7 @@ import { useImmer } from "use-immer";
 import { FC, useState } from "react";
 
 import { NextPageLayoutType } from "~/types/nextMod";
-import { classNames } from "~/utils/helper/tailwind";
+import clsx from "clsx";
 import GetUserQuery from "~/utils/gql/User/ReadUser.gql";
 import EditNameModal from "~/components/Modal/EditNameModal";
 import LogoutAllModal from "~/components/Modal/LogoutAllModal";
@@ -128,7 +128,7 @@ const ItemContainer: FC<{
   className?: string;
 }> = ({ fieldValue, value, onClick, className }) => {
   return (
-    <div className={classNames(className, "")}>
+    <div className={clsx(className, "")}>
       <p className="text-base font-semibold">{fieldValue}</p>
       <div className="flex items-center justify-between">
         <p className="text-sm">{value}</p>

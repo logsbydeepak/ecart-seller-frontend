@@ -1,6 +1,6 @@
 import { FC, ReactNode } from "react";
 import { v4 } from "uuid";
-import { classNames } from "~/utils/helper/tailwind";
+import clsx from "clsx";
 
 import {
   CommonInputType,
@@ -28,7 +28,7 @@ const InputWithLeftIcon: FC<PropType> = ({
 }) => {
   const id = v4();
   return (
-    <div className={classNames(className, disabled && "pointer-events-none")}>
+    <div className={clsx(className, disabled && "pointer-events-none")}>
       <Label id={id} label={label} />
       <IconContainer>
         <LeftIconContainer>

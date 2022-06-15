@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { CogIcon, LogoutIcon } from "@heroicons/react/outline";
 
 import { gqlRequest } from "~/utils/helper/gql";
-import { classNames } from "~/utils/helper/tailwind";
+import clsx from "clsx";
 import { useAuthContext } from "~/context/AuthContext";
 import LogoutModal from "~/components/Modal/LogoutModal";
 import { useNotificationContext } from "~/context/NotificationContext";
@@ -149,7 +149,7 @@ const MenuItem: FC<{ text: string; Icon: ReactNode; onClick: () => void }> = ({
       {({ active }) => (
         <button
           onClick={onClick}
-          className={classNames(
+          className={clsx(
             active && "bg-neutral-100",
             "flex w-full cursor-pointer items-center px-4 py-2"
           )}

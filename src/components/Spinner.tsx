@@ -1,10 +1,10 @@
 import { FC } from "react";
-import { classNames } from "~/utils/helper/tailwind";
+import clsx from "clsx";
 
 const Spinner: FC<{ className?: string; size?: string }> = ({ className }) => {
   return (
     <svg
-      className={classNames("animate-spin", className)}
+      className={clsx("animate-spin", className)}
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"

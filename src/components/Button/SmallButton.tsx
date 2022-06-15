@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { classNames } from "~/utils/helper/tailwind";
+import clsx from "clsx";
 import Show from "../Show";
 import Spinner from "../Spinner";
 
@@ -22,7 +22,7 @@ const SmallButton: FC<Props> = ({
     <button
       type={type}
       onClick={onClick}
-      className={classNames(
+      className={clsx(
         className,
         "flex h-10 w-28 items-center  justify-center rounded-md border-2 text-sm font-medium"
       )}
