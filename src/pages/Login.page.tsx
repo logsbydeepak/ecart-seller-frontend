@@ -13,9 +13,9 @@ import { useAuthContext } from "~/context/AuthContext";
 import ContainerLayout from "~/layout/ContainerLayout";
 import InputWithLeftIcon from "~/components/Input/InputWithLeftIcon";
 import CreateSessionQuery from "~/utils/gql/Session/CreateSession.gql";
+import { useNotificationContext } from "~/context/NotificationContext";
 import ButtonWithTextAndSpinner from "~/components/Button/ButtonWithTextAndSpinner";
 import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftIcon";
-import { useNotificationContext } from "~/context/NotificationContext";
 
 interface FormType {
   email: string;
