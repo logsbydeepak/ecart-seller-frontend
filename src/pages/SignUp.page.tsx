@@ -1,12 +1,11 @@
 import Link from "next/link";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { object, ref } from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { EmojiHappyIcon, MailIcon } from "@heroicons/react/solid";
 import { useForm, SubmitHandler, UseFormGetValues } from "react-hook-form";
 
 import AuthLayout from "~/layout/AuthLayout";
-import { useNotificationContext } from "~/context/NotificationContext";
 import { gqlRequest } from "~/utils/helper/gql";
 import { NextPageLayoutType } from "~/types/nextMod";
 import ContainerLayout from "~/layout/ContainerLayout";
@@ -14,6 +13,7 @@ import { useAuthContext } from "~/context/AuthContext";
 import SimpleInput from "~/components/Input/SimpleInput";
 import CreateUserQuery from "~/utils/gql/User/CreateUser.gql";
 import InputWithLeftIcon from "~/components/Input/InputWithLeftIcon";
+import { useNotificationContext } from "~/context/NotificationContext";
 import { firstName, lastName, email, password } from "~/utils/validation";
 import ButtonWithTextAndSpinner from "~/components/Button/ButtonWithTextAndSpinner";
 import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftIcon";
@@ -45,10 +45,14 @@ const createUserRequest = (getValues: UseFormGetValues<FormType>) =>
     },
   });
 
+const useFormDate = () =>
+  useForm<FormType>({ resolver: yupResolver(formValidationSchema) });
+
 const SignUp: NextPageLayoutType = () => {
   const { setAuthToken } = useAuthContext();
-  const [isLoading, setIsLoading] = useState(false);
   const { addNotification } = useNotificationContext();
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
     register,
@@ -56,7 +60,7 @@ const SignUp: NextPageLayoutType = () => {
     setError,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormType>({ resolver: yupResolver(formValidationSchema) });
+  } = useFormDate();
 
   const onSubmit: SubmitHandler<FormType> = async () => {
     try {

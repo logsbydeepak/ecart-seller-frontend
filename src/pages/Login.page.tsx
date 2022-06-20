@@ -32,10 +32,14 @@ const errorMessage = {
 const createSessionRequest = (getValues: UseFormGetValues<FormType>) =>
   gqlRequest({ query: CreateSessionQuery, variable: getValues() });
 
+const useFormDate = () =>
+  useForm<FormType>({ resolver: yupResolver(fromValidationSchema) });
+
 const Login: NextPageLayoutType = () => {
   const { setAuthToken } = useAuthContext();
-  const [isLoading, setIsLoading] = useState(false);
   const { addNotification } = useNotificationContext();
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
     register,
@@ -43,7 +47,7 @@ const Login: NextPageLayoutType = () => {
     setError,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormType>({ resolver: yupResolver(fromValidationSchema) });
+  } = useFormDate();
 
   const onSubmit: SubmitHandler<FormType> = async () => {
     try {
