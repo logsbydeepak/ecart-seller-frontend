@@ -1,4 +1,4 @@
-query Query {
+query ReadUserFirstNameAndPicture {
   readUser {
     ... on User {
       __typename

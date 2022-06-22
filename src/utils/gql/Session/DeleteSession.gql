@@ -1,4 +1,4 @@
-mutation Mutation {
+mutation DeleteSession {
   deleteSession {
     ... on SuccessResponse {
       __typename

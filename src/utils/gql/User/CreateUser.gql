@@ -14,9 +14,8 @@ mutation CreateUser(
       __typename
       token
     }
-    ... on ErrorResponse {
+    ... on Error {
       __typename
-      title
       message
     }
   }

@@ -1,4 +1,4 @@
-mutation UpdateUser(
+mutation UpdateUserEmail(
   $toUpdate: String!
   $currentPassword: String!
   $email: String

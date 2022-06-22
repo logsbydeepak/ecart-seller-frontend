@@ -1,13 +1,12 @@
-mutation Mutation {
+mutation UpdateSession {
   updateSession {
     ... on ErrorResponse {
       __typename
       title
       message
     }
-    ... on AccessToken {
+    ... on Response {
       __typename
-      token
     }
   }
 }

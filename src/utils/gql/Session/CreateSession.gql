@@ -1,4 +1,4 @@
-mutation Mutation($email: String!, $password: String!) {
+mutation CreateSession($email: String!, $password: String!) {
   createSession(email: $email, password: $password) {
     ... on Token {
       __typename
