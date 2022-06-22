@@ -14,7 +14,12 @@ mutation CreateUser(
       __typename
       token
     }
-    ... on Error {
+    ... on CreateUserCredentialError {
+      __typename
+      message
+      field
+    }
+    ... on UserAlreadyExistError {
       __typename
       message
     }

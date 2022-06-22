@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { useState } from "react";
 import { object, ref } from "yup";
+import { useMutation } from "react-query";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { EmojiHappyIcon, MailIcon } from "@heroicons/react/solid";
 import { useForm, SubmitHandler, UseFormGetValues } from "react-hook-form";
@@ -8,6 +8,7 @@ import { useForm, SubmitHandler, UseFormGetValues } from "react-hook-form";
 import AuthLayout from "~/layout/AuthLayout";
 import { gqlRequest } from "~/utils/helper/gql";
 import { NextPageLayoutType } from "~/types/nextMod";
+import { CreateUserMutation } from "~/types/graphql";
 import ContainerLayout from "~/layout/ContainerLayout";
 import { useAuthContext } from "~/context/AuthContext";
 import SimpleInput from "~/components/Input/SimpleInput";
@@ -34,16 +35,21 @@ const formValidationSchema = object({
   confirmPassword: password.oneOf([ref("password")], "Password does not match"),
 });
 
-const createUserRequest = (getValues: UseFormGetValues<FormType>) =>
-  gqlRequest({
-    query: CreateUserQuery,
-    variable: {
-      firstName: getValues("firstName"),
-      lastName: getValues("lastName"),
-      email: getValues("email"),
-      password: getValues("password"),
-    },
-  });
+const createUserRequest = async (getValues: UseFormGetValues<FormType>) => {
+  try {
+    return (await gqlRequest({
+      query: CreateUserQuery,
+      variable: {
+        firstName: getValues("firstName"),
+        lastName: getValues("lastName"),
+        email: getValues("email"),
+        password: getValues("password"),
+      },
+    })) as CreateUserMutation;
+  } catch (error) {
+    throw { message: "Something went wrong" };
+  }
+};
 
 const useFormDate = () =>
   useForm<FormType>({ resolver: yupResolver(formValidationSchema) });
@@ -51,8 +57,6 @@ const useFormDate = () =>
 const SignUp: NextPageLayoutType = () => {
   const { setAuthToken } = useAuthContext();
   const { addNotification } = useNotificationContext();
-
-  const [isLoading, setIsLoading] = useState(false);
 
   const {
     register,
@@ -62,33 +66,38 @@ const SignUp: NextPageLayoutType = () => {
     formState: { errors },
   } = useFormDate();
 
-  const onSubmit: SubmitHandler<FormType> = async () => {
-    try {
-      setIsLoading(true);
+  const errorNotification = () =>
+    addNotification("error", "Something went wrong");
 
-      const request = await createUserRequest(getValues);
-      const data = request.createUser;
+  const { isLoading, mutate } = useMutation(createUserRequest, {
+    mutationKey: "createUser",
+    retry: 3,
+    onError: () => errorNotification(),
+    onSuccess: (data) => {
+      if (!data) return errorNotification();
 
-      if (data.__typename === "Token") {
-        setAuthToken(data.token);
-        addNotification("success", "User crated successfully");
-        return;
+      const responseData = data.createUser;
+      switch (responseData.__typename) {
+        case "Token":
+          setAuthToken(responseData.token);
+          addNotification("success", "User login successful");
+          break;
+
+        case "UserAlreadyExistError":
+          setError(
+            "email",
+            { message: "email already exist" },
+            { shouldFocus: true }
+          );
+          break;
+        default:
+          errorNotification();
       }
+    },
+  });
 
-      const title = data.title;
-      const message = data.message;
-
-      if (title === "AUTHENTICATION" && message === "email already exist") {
-        setIsLoading(false);
-        setError("email", { message: message }, { shouldFocus: true });
-        return;
-      }
-
-      throw { message: "Something went wrong" };
-    } catch (error) {
-      setIsLoading(false);
-      addNotification("error", "Something went wrong!");
-    }
+  const onSubmit: SubmitHandler<FormType> = () => {
+    mutate(getValues);
   };
 
   return (
