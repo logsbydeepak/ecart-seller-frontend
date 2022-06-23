@@ -3,19 +3,23 @@ import { object, ref } from "yup";
 import { useMutation } from "react-query";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { EmojiHappyIcon, MailIcon } from "@heroicons/react/solid";
-import { useForm, SubmitHandler, UseFormGetValues } from "react-hook-form";
+import { SubmitHandler, useForm, UseFormGetValues } from "react-hook-form";
 
 import AuthLayout from "~/layout/AuthLayout";
-import { gqlRequest } from "~/utils/helper/gql";
-import { NextPageLayoutType } from "~/types/nextMod";
-import { CreateUserMutation } from "~/types/graphql";
 import ContainerLayout from "~/layout/ContainerLayout";
+
+import { CreateUserMutation } from "~/types/graphql";
+import { NextPageLayoutType } from "~/types/nextMod";
+
 import { useAuthContext } from "~/context/AuthContext";
-import SimpleInput from "~/components/Input/SimpleInput";
-import CreateUserQuery from "~/utils/gql/User/CreateUser.gql";
-import InputWithLeftIcon from "~/components/Input/InputWithLeftIcon";
 import { useNotificationContext } from "~/context/NotificationContext";
-import { firstName, lastName, email, password } from "~/utils/validation";
+
+import { gqlRequest } from "~/utils/helper/gql";
+import CreateUserQuery from "~/utils/gql/User/CreateUser.gql";
+import { email, firstName, lastName, password } from "~/utils/validation";
+
+import SimpleInput from "~/components/Input/SimpleInput";
+import InputWithLeftIcon from "~/components/Input/InputWithLeftIcon";
 import ButtonWithTextAndSpinner from "~/components/Button/ButtonWithTextAndSpinner";
 import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftIcon";
 
@@ -80,7 +84,7 @@ const SignUp: NextPageLayoutType = () => {
       switch (responseData.__typename) {
         case "Token":
           setAuthToken(responseData.token);
-          addNotification("success", "User login successful");
+          addNotification("success", "User created successful");
           break;
 
         case "UserAlreadyExistError":

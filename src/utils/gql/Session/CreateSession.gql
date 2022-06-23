@@ -4,9 +4,8 @@ mutation CreateSession($email: String!, $password: String!) {
       __typename
       token
     }
-    ... on ErrorResponse {
+    ... on CreateSessionCredentialError {
       __typename
-      title
       message
     }
   }

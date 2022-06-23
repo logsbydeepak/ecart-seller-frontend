@@ -1,19 +1,24 @@
 import { object } from "yup";
 import Link from "next/link";
-import { useState } from "react";
+import { useMutation } from "react-query";
 import { MailIcon } from "@heroicons/react/solid";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, SubmitHandler, UseFormGetValues } from "react-hook-form";
 
 import AuthLayout from "~/layout/AuthLayout";
-import { gqlRequest } from "~/utils/helper/gql";
-import { NextPageLayoutType } from "~/types/nextMod";
-import { email, password } from "~/utils/validation";
-import { useAuthContext } from "~/context/AuthContext";
 import ContainerLayout from "~/layout/ContainerLayout";
-import InputWithLeftIcon from "~/components/Input/InputWithLeftIcon";
+
+import { NextPageLayoutType } from "~/types/nextMod";
+import { CreateSessionMutation } from "~/types/graphql";
+
+import { gqlRequest } from "~/utils/helper/gql";
+import { email, password } from "~/utils/validation";
 import CreateSessionQuery from "~/utils/gql/Session/CreateSession.gql";
+
+import { useAuthContext } from "~/context/AuthContext";
 import { useNotificationContext } from "~/context/NotificationContext";
+
+import InputWithLeftIcon from "~/components/Input/InputWithLeftIcon";
 import ButtonWithTextAndSpinner from "~/components/Button/ButtonWithTextAndSpinner";
 import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftIcon";
 
@@ -24,22 +29,28 @@ interface FormType {
 
 const fromValidationSchema = object({ email, password });
 
+const createSessionRequest = async (getValues: UseFormGetValues<FormType>) => {
+  try {
+    return (await gqlRequest({
+      query: CreateSessionQuery,
+      variable: getValues(),
+    })) as CreateSessionMutation;
+  } catch (error) {
+    throw { message: "Something went wrong" };
+  }
+};
+
+const useFormDate = () =>
+  useForm<FormType>({ resolver: yupResolver(fromValidationSchema) });
+
 const errorMessage = {
   message: "email or password is invalid",
   shouldFocus: true,
 };
 
-const createSessionRequest = (getValues: UseFormGetValues<FormType>) =>
-  gqlRequest({ query: CreateSessionQuery, variable: getValues() });
-
-const useFormDate = () =>
-  useForm<FormType>({ resolver: yupResolver(fromValidationSchema) });
-
 const Login: NextPageLayoutType = () => {
   const { setAuthToken } = useAuthContext();
   const { addNotification } = useNotificationContext();
-
-  const [isLoading, setIsLoading] = useState(false);
 
   const {
     register,
@@ -49,32 +60,37 @@ const Login: NextPageLayoutType = () => {
     formState: { errors },
   } = useFormDate();
 
+  const errorNotification = () =>
+    addNotification("error", "Something went wrong");
+
+  const { isLoading, mutate } = useMutation(createSessionRequest, {
+    mutationKey: "createUser",
+    retry: 3,
+    onError: () => errorNotification(),
+    onSuccess: (data) => {
+      if (!data) return errorNotification();
+
+      const responseData = data.createSession;
+
+      switch (responseData.__typename) {
+        case "Token":
+          setAuthToken(responseData.token);
+          addNotification("success", "User login successful");
+          break;
+
+        case "CreateSessionCredentialError":
+          setError("email", errorMessage);
+          setError("password", errorMessage);
+          break;
+
+        default:
+          errorNotification();
+      }
+    },
+  });
+
   const onSubmit: SubmitHandler<FormType> = async () => {
-    try {
-      setIsLoading(true);
-
-      const request = await createSessionRequest(getValues);
-      const data = request.createSession;
-
-      if (data.__typename === "Token") {
-        setAuthToken(data.token);
-        addNotification("success", "User login successful");
-        return;
-      }
-
-      const title = data.title;
-
-      if (["BODY_PARSE", "AUTHENTICATION"].includes(title)) {
-        setIsLoading(false);
-        setError("email", errorMessage);
-        setError("password", errorMessage);
-        return;
-      }
-      throw { message: "Something went wrong" };
-    } catch (error) {
-      setIsLoading(false);
-      addNotification("error", "Something went wrong!");
-    }
+    mutate(getValues);
   };
 
   return (
