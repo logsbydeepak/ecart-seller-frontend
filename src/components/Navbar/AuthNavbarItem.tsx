@@ -1,46 +1,38 @@
+import clsx from "clsx";
 import Image from "next/image";
+import { motion } from "framer-motion";
 import { useQuery } from "react-query";
 import { useRouter } from "next/router";
 import { Menu } from "@headlessui/react";
 import { FC, ReactNode, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { CogIcon, LogoutIcon } from "@heroicons/react/outline";
 
-import { gqlRequest } from "~/utils/helper/gql";
-import clsx from "clsx";
-import { useAuthContext } from "~/context/AuthContext";
+import Show from "~/components/Show";
 import LogoutModal from "~/components/Modal/LogoutModal";
-import { useNotificationContext } from "~/context/NotificationContext";
-import ReadUserFirstNameAndPictureQuery from "~/utils/gql/User/ReadUserFirstNameAndPicture.gql";
-import Show from "../Show";
 
-const defaultData = {
-  name: "UserName",
-  picture:
-    "https://images.unsplash.com/photo-1637633198300-08beaec68c70?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1887&q=80",
+import { gqlRequest } from "~/utils/helper/gql";
+import ReadUserFirstNameAndPictureQuery from "~/utils/gql/User/ReadUserFirstNameAndPicture.gql";
+
+import { useAuthContext } from "~/context/AuthContext";
+import { useNotificationContext } from "~/context/NotificationContext";
+
+import { ReadUserFirstNameAndPictureQuery as ReadUserFirstNameAndPictureQueryType } from "~/types/graphql";
+
+const readUserFirstNameAndPictureRequest = async (token: string) => {
+  try {
+    return (await gqlRequest({
+      query: ReadUserFirstNameAndPictureQuery,
+      token,
+    })) as ReadUserFirstNameAndPictureQueryType;
+  } catch (error) {
+    throw { message: "Something went wrong" };
+  }
 };
 
-const readUserPictureRequest = async (authToken: string) => {
-  try {
-    const request = await gqlRequest({
-      query: ReadUserFirstNameAndPictureQuery,
-      token: authToken,
-    });
-
-    const typeName = request.readUser.__typename;
-
-    if (typeName === "User") {
-      return request;
-    }
-
-    throw { data: request };
-  } catch (error: any) {
-    if (error.data) {
-      throw error.data;
-    }
-
-    throw { data: null };
-  }
+const defaultData = {
+  firstName: "UserName",
+  picture:
+    "https://images.unsplash.com/photo-1637633198300-08beaec68c70?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1887&q=80",
 };
 
 const AuthNavbarItem: FC = () => {
@@ -50,33 +42,35 @@ const AuthNavbarItem: FC = () => {
 
   const { authToken, setAuthToken } = useAuthContext();
 
-  const onSuccess = (data: any) => {
-    const requestData = data.readUser;
-    setUserInfo({
-      name: requestData.firstName,
-      picture: requestData.picture,
-    });
-  };
-
-  const onError = (data: any) => {
-    console.log(data);
-    const requestData = data.readUser;
-
-    if (["TOKEN_PARSE", "AUTHENTICATION"].includes(requestData.title)) {
-      addNotification("error", "User Logout");
-      setAuthToken("");
-      return;
-    }
-
-    addNotification("error", "Something went wrong!");
-  };
+  const errorNotification = () =>
+    addNotification("error", "Something went wrong");
 
   const { isLoading, isError } = useQuery(
     "read user name and picture",
-    () => readUserPictureRequest(authToken),
+    () => readUserFirstNameAndPictureRequest(authToken),
     {
-      onSuccess,
-      onError,
+      onError: () => errorNotification(),
+      onSuccess: (data) => {
+        if (!data) return errorNotification();
+
+        const responseData = data.readUser;
+
+        switch (responseData.__typename) {
+          case "User":
+            setUserInfo({
+              firstName: responseData.firstName,
+              picture: responseData.picture,
+            });
+            break;
+
+          case "TokenError":
+            setAuthToken("");
+            break;
+
+          default:
+            errorNotification();
+        }
+      },
     }
   );
 
@@ -95,7 +89,7 @@ const AuthNavbarItem: FC = () => {
       <Menu>
         {({ open }) => (
           <>
-            <MenuButton name={userInfo.name} />
+            <MenuButton name={userInfo.firstName} />
 
             <Show when={open} isAnimation={true}>
               <MenuItems handleLogout={() => setIsOpenLogoutModal(true)} />

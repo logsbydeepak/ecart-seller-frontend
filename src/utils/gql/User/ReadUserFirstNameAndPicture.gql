@@ -5,9 +5,9 @@ query ReadUserFirstNameAndPicture {
       firstName
       picture
     }
-    ... on ErrorResponse {
+    ... on TokenError {
       __typename
-      title
+      type
       message
     }
   }

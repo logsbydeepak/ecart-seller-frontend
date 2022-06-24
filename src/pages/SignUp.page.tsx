@@ -94,6 +94,7 @@ const SignUp: NextPageLayoutType = () => {
             { shouldFocus: true }
           );
           break;
+
         default:
           errorNotification();
       }

@@ -6,9 +6,9 @@ query ReadUser {
       lastName
       email
     }
-    ... on ErrorResponse {
+    ... on TokenError {
       __typename
-      title
+      type
       message
     }
   }
