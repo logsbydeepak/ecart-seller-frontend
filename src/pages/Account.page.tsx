@@ -1,53 +1,87 @@
-import { useImmer } from "use-immer";
+import clsx from "clsx";
 import { FC, useState } from "react";
+import { useQuery } from "react-query";
 
 import { NextPageLayoutType } from "~/types/nextMod";
-import clsx from "clsx";
-import GetUserQuery from "~/utils/gql/User/ReadUser.gql";
+import { ReadUserQuery as ReadUserQueryType } from "~/types/graphql";
+
+import { gqlRequest } from "~/utils/helper/gql";
+import ReadUserQuery from "~/utils/gql/User/ReadUser.gql";
+
 import EditNameModal from "~/components/Modal/EditNameModal";
 import LogoutAllModal from "~/components/Modal/LogoutAllModal";
 import EditEmailModal from "~/components/Modal/EditEmailModal";
 import SideBarContent from "~/components/Sidebar/SideBarContent";
-import AccountSideBarLayout from "~/layout/AccountSideBarLayout";
-import useAuthQueryRequestHook from "~/hooks/useAuthQueryRequest";
 import EditPasswordModal from "~/components/Modal/EditPasswordModal";
 import DeleteAccountModal from "~/components/Modal/DeleteAccountModal";
 
+import { useAuthContext } from "~/context/AuthContext";
+import { useNotificationContext } from "~/context/NotificationContext";
+
+import AccountSideBarLayout from "~/layout/AccountSideBarLayout";
+
+const readUserRequest = async (token: string) => {
+  try {
+    return (await gqlRequest({
+      query: ReadUserQuery,
+      token,
+    })) as ReadUserQueryType;
+  } catch (error) {
+    throw { message: "Something went wrong" };
+  }
+};
+
+const defaultUserInfoData = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  picture: "",
+};
+
 const Account: NextPageLayoutType = () => {
-  const [userInfo, setUserInfo] = useImmer({
-    firstName: "",
-    lastName: "",
-    email: "",
-  });
-  const [isOpenLogoutAllModal, setIsOpenLogoutAllModal] = useState(false);
+  const { authToken, setAuthFalse } = useAuthContext();
+  const { addNotification } = useNotificationContext();
+
+  const [userInfo, setUserInfo] = useState(defaultUserInfoData);
+  const [isDeleteUserModal, setIsDeleteUserModal] = useState(false);
   const [isOpenEditNameModal, setIsOpenEditNameModal] = useState(false);
   const [isOpenEditEmailModal, setIsOpenEditEmailModal] = useState(false);
+  const [isOpenLogoutAllModal, setIsOpenLogoutAllModal] = useState(false);
   const [isOpenEditPasswordModal, setIsOpenEditPasswordModal] = useState(false);
-  const [isDeleteUserModal, setIsDeleteUserModal] = useState(false);
 
-  const onSuccessQuery = (data: any) => {
-    const readUser = data.readUser;
-    const typename = readUser.__typename;
+  const errorNotification = () =>
+    addNotification("error", "Something went wrong");
 
-    if (typename === "User") {
-      setUserInfo((draft) => {
-        draft.firstName = readUser.firstName;
-        draft.lastName = readUser.lastName;
-        draft.email = readUser.email;
-      });
+  const { isLoading, isError, isSuccess } = useQuery(
+    "read user data",
+    () => readUserRequest(authToken),
+    {
+      onError: () => errorNotification(),
+      onSuccess: (data) => {
+        if (!data) return errorNotification();
+
+        const responseData = data.readUser;
+
+        switch (responseData.__typename) {
+          case "User":
+            setUserInfo({
+              firstName: responseData.firstName,
+              lastName: responseData.lastName,
+              email: responseData.email,
+              picture: responseData.picture,
+            });
+            break;
+
+          case "TokenError":
+            setAuthFalse();
+            break;
+
+          default:
+            errorNotification();
+        }
+      },
     }
-  };
-
-  const onErrorQuery = () => {};
-
-  const { isLoading, isError, isSuccess } = useAuthQueryRequestHook({
-    key: "User info",
-    name: "readUser",
-    query: GetUserQuery,
-    successTitle: "User",
-    onSuccessQuery,
-    onErrorQuery,
-  });
+  );
 
   return (
     <SideBarContent

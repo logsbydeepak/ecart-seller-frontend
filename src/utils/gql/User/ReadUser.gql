@@ -5,6 +5,7 @@ query ReadUser {
       firstName
       lastName
       email
+      picture
     }
     ... on TokenError {
       __typename
