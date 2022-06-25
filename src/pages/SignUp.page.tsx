@@ -59,7 +59,7 @@ const useFormDate = () =>
   useForm<FormType>({ resolver: yupResolver(formValidationSchema) });
 
 const SignUp: NextPageLayoutType = () => {
-  const { setAuthToken } = useAuthContext();
+  const { setAuthTrue } = useAuthContext();
   const { addNotification } = useNotificationContext();
 
   const {
@@ -83,7 +83,7 @@ const SignUp: NextPageLayoutType = () => {
       const responseData = data.createUser;
       switch (responseData.__typename) {
         case "Token":
-          setAuthToken(responseData.token);
+          setAuthTrue(responseData.token);
           addNotification("success", "User created successful");
           break;
 

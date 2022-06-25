@@ -49,7 +49,7 @@ const errorMessage = {
 };
 
 const Login: NextPageLayoutType = () => {
-  const { setAuthToken } = useAuthContext();
+  const { setAuthTrue } = useAuthContext();
   const { addNotification } = useNotificationContext();
 
   const {
@@ -74,7 +74,7 @@ const Login: NextPageLayoutType = () => {
 
       switch (responseData.__typename) {
         case "Token":
-          setAuthToken(responseData.token);
+          setAuthTrue(responseData.token);
           addNotification("success", "User login successful");
           break;
 

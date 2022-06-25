@@ -8,11 +8,11 @@ interface Props {
   page: ReactElement;
 }
 
-const AuthLayout: FC<Props> = ({ isAuth, redirect, page }) => {
-  const { authToken } = useAuthContext();
+const AuthLayout: FC<Props> = ({ isAuth: pageIsAuth, redirect, page }) => {
+  const { isAuth } = useAuthContext();
   const router = useRouter();
 
-  if (!!authToken !== isAuth) {
+  if (isAuth !== pageIsAuth) {
     router.push(redirect);
     return null;
   }

@@ -1,11 +1,21 @@
+import {
+  createContext,
+  FC,
+  useContext,
+  useState,
+  useEffect,
+  useMemo,
+} from "react";
+
 import { useQueryClient } from "react-query";
+
 import { PropsWithChildrenOnlyType } from "~/types/nextMod";
-import { customUseLayoutEffect } from "~/utils/helper/nextMod";
-import { createContext, FC, useContext, useState, useEffect } from "react";
 
 type AuthContextType = null | {
   authToken: string;
-  setAuthToken: (authValue: string) => string;
+  isAuth: boolean | null;
+  setAuthTrue: (token: string) => void;
+  setAuthFalse: () => void;
 };
 
 const AuthContext = createContext<AuthContextType>(null);
@@ -23,42 +33,49 @@ const setLocalToken = (token: string) => localStorage.setItem("token", token);
 const removeLocalToken = () => localStorage.removeItem("token");
 
 export const AuthProvider: FC<PropsWithChildrenOnlyType> = ({ children }) => {
-  const queryClient = useQueryClient();
+  const [isAuth, setIsAuth] = useState<boolean | null>(null);
   const [authToken, setAuthToken] = useState("");
 
-  customUseLayoutEffect(() => {
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
     setAuthToken(getLocalTokenValue());
   }, []);
 
   useEffect(() => {
-    if (authToken) return;
-    queryClient.clear();
-    setAuthTokenLocalAndState("");
-  }, [authToken, queryClient]);
+    setIsAuth(!!authToken);
+  }, [authToken]);
+
+  useEffect(() => {
+    if (!isAuth) queryClient.clear();
+  }, [isAuth, queryClient]);
 
   useEffect(() => {
     window.onstorage = (event: StorageEvent) => {
       if (event.key !== "token") return;
-      const currentAuthToken = event.newValue || "";
-      setAuthToken(() => {
-        return currentAuthToken;
-      });
+      setAuthToken(() => event.newValue || "");
     };
   }, []);
 
-  const setAuthTokenLocalAndState = (token: string) => {
-    setAuthToken(() => {
-      token ? setLocalToken(token) : removeLocalToken();
-      return token;
-    });
-
-    return token;
+  const setAuthTrue = (token: string) => {
+    setLocalToken(token);
+    setAuthToken(token);
+    setIsAuth(true);
   };
 
+  const setAuthFalse = () => {
+    removeLocalToken();
+    setAuthToken("");
+    setIsAuth(false);
+  };
+
+  const authContextProviderValue = useMemo(
+    () => ({ authToken, isAuth, setAuthTrue, setAuthFalse }),
+    [isAuth, authToken]
+  );
+
   return (
-    <AuthContext.Provider
-      value={{ authToken, setAuthToken: setAuthTokenLocalAndState }}
-    >
+    <AuthContext.Provider value={authContextProviderValue}>
       {children}
     </AuthContext.Provider>
   );

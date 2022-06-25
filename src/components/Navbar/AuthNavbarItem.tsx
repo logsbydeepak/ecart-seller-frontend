@@ -40,7 +40,7 @@ const AuthNavbarItem: FC = () => {
   const [userInfo, setUserInfo] = useState(defaultData);
   const { addNotification } = useNotificationContext();
 
-  const { authToken, setAuthToken } = useAuthContext();
+  const { authToken, setAuthFalse } = useAuthContext();
 
   const errorNotification = () =>
     addNotification("error", "Something went wrong");
@@ -64,7 +64,7 @@ const AuthNavbarItem: FC = () => {
             break;
 
           case "TokenError":
-            setAuthToken("");
+            setAuthFalse();
             break;
 
           default:
