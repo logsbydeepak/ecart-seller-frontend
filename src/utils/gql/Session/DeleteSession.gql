@@ -1,12 +1,12 @@
 mutation DeleteSession {
   deleteSession {
-    ... on SuccessResponse {
+    ... on LogoutSuccess {
       __typename
       message
     }
-    ... on ErrorResponse {
+    ... on TokenError {
       __typename
-      title
+      type
       message
     }
   }

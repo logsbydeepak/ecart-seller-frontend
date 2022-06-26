@@ -1,39 +1,68 @@
+import { useMutation } from "react-query";
 import { Dispatch, FC, SetStateAction } from "react";
 
 import { useAuthContext } from "~/context/AuthContext";
-import useAuthMutationRequestHook from "~/hooks/useAuthMutationRequest";
-import useAuthQueryRequestHook from "~/hooks/useAuthQueryRequest";
+import { useNotificationContext } from "~/context/NotificationContext";
+
+import { gqlRequest } from "~/utils/helper/gql";
 import DeleteSessionQuery from "~/utils/gql/Session/DeleteSession.gql";
-import SmallButton from "../Button/SmallButton";
-import ModalContainer from "./Atom/ModalContainer";
+
+import SmallButton from "~/components/Button/SmallButton";
+import ModalContainer from "~/components/Modal/Atom/ModalContainer";
+
+import { DeleteSessionMutation } from "~/types/graphql";
+
+const LogoutUserRequest = async (token: string) => {
+  try {
+    return (await gqlRequest({
+      query: DeleteSessionQuery,
+      token,
+    })) as DeleteSessionMutation;
+  } catch (error) {
+    throw { message: "Something went wrong" };
+  }
+};
 
 const LogoutModal: FC<{
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }> = ({ isOpen, setIsOpen }) => {
-  const { setAuthToken } = useAuthContext();
+  const { authToken, setAuthFalse } = useAuthContext();
 
-  const onSuccessMutation = () => {
-    setIsOpen(false);
-    setAuthToken("");
-  };
+  const { addNotification } = useNotificationContext();
 
-  const onErrorMutation = () => {
-    setIsOpen(false);
-  };
+  const errorNotification = () =>
+    addNotification("error", "Something went wrong");
 
-  const { mutateAsync, isLoading } = useAuthMutationRequestHook({
-    query: DeleteSessionQuery,
-    name: "deleteSession",
-    successTitle: "SuccessResponse",
-    variable: () => ({}),
-    onSuccessMutation,
-    onErrorMutation,
-  });
+  const { mutate, isLoading } = useMutation(
+    () => LogoutUserRequest(authToken),
+    {
+      mutationKey: "logoutUser",
+      onError: () => errorNotification(),
+      onSuccess: (data) => {
+        if (!data) return errorNotification();
+        const responseData = data.deleteSession;
+
+        switch (responseData.__typename) {
+          case "LogoutSuccess":
+            setAuthFalse();
+            addNotification("success", "User Logout Successfully");
+            break;
+
+          case "TokenError":
+            setAuthFalse();
+            break;
+
+          default:
+            errorNotification();
+        }
+      },
+    }
+  );
 
   const handleLogout = async () => {
     setIsOpen(true);
-    mutateAsync();
+    mutate();
   };
 
   const exitModal = () => {
