@@ -44,7 +44,7 @@ const LogoutModal: FC<{
         const responseData = data.deleteSession;
 
         switch (responseData.__typename) {
-          case "LogoutSuccess":
+          case "SuccessResponse":
             setAuthFalse();
             addNotification("success", "User Logout Successfully");
             break;

@@ -1,19 +1,40 @@
-import { Dispatch, FC, SetStateAction } from "react";
-
-import ModalContainer from "./Atom/ModalContainer";
-import { useAuthContext } from "~/context/AuthContext";
-import PasswordInputWithLeftIcon from "../Input/PasswordInputWithLeftIcon";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { password } from "~/utils/validation";
 import { object } from "yup";
+import { useMutation } from "react-query";
+import { Dispatch, FC, SetStateAction } from "react";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm, SubmitHandler, UseFormGetValues } from "react-hook-form";
+
+import SmallButton from "~/components/Button/SmallButton";
+import ModalContainer from "~/components/Modal/Atom/ModalContainer";
+import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftIcon";
+
+import { useAuthContext } from "~/context/AuthContext";
+import { useNotificationContext } from "~/context/NotificationContext";
+
+import { password } from "~/utils/validation";
+import { gqlRequest } from "~/utils/helper/gql";
 import DeleteAllSessionQuery from "~/utils/gql/Session/DeleteAllSession.gql";
-import useAuthMutationRequestHook from "~/hooks/useAuthMutationRequest";
-import SmallButton from "../Button/SmallButton";
+
+import { DeleteAllSessionMutation } from "~/types/graphql";
 
 interface FormType {
   password: string;
 }
+
+const LogoutAllUserRequest = async (
+  token: string,
+  getValues: UseFormGetValues<FormType>
+) => {
+  try {
+    return (await gqlRequest({
+      query: DeleteAllSessionQuery,
+      token,
+      variable: { currentPassword: getValues("password") },
+    })) as DeleteAllSessionMutation;
+  } catch (error) {
+    throw { message: "Something went wrong" };
+  }
+};
 
 const schema = object({
   password: password,
@@ -23,7 +44,9 @@ const LogoutAllModal: FC<{
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }> = ({ isOpen, setIsOpen }) => {
-  const { setAuthToken } = useAuthContext();
+  const { setAuthFalse, setAuthTrue, authToken } = useAuthContext();
+
+  const { addNotification } = useNotificationContext();
 
   const {
     register,
@@ -33,35 +56,54 @@ const LogoutAllModal: FC<{
     formState: { errors },
   } = useForm<FormType>({ resolver: yupResolver(schema) });
 
-  const onSuccessMutation = () => {
-    setAuthToken("");
-  };
+  const errorNotification = () =>
+    addNotification("error", "Something went wrong");
 
-  const onErrorMutation = () => {
-    setError(
-      "password",
-      { message: "invalid password" },
-      { shouldFocus: true }
-    );
-  };
+  const { mutate, isLoading } = useMutation(
+    () => LogoutAllUserRequest(authToken, getValues),
+    {
+      mutationKey: "logoutUser",
+      onError: () => errorNotification(),
+      onSuccess: (data) => {
+        if (!data) return errorNotification();
+        const responseData = data.deleteAllSession;
+
+        switch (responseData.__typename) {
+          case "SuccessResponse":
+            setAuthFalse();
+            addNotification(
+              "success",
+              "User Logout from all device successfully"
+            );
+            break;
+
+          case "DeleteAllSessionCredentialError":
+            setError(
+              "password",
+              { message: "invalid password" },
+              { shouldFocus: true }
+            );
+
+            break;
+
+          case "TokenError":
+            setAuthFalse();
+            break;
+
+          default:
+            errorNotification();
+        }
+      },
+    }
+  );
 
   const exitModal = () => {
     if (!isLoading) setIsOpen(false);
   };
 
   const onSubmit: SubmitHandler<FormType> = async () => {
-    mutateAsync();
+    mutate();
   };
-
-  const { mutateAsync, isLoading } = useAuthMutationRequestHook({
-    query: DeleteAllSessionQuery,
-    name: "deleteAllSession",
-    ErrorResponse: [{ title: "BODY_PARSE", message: "invalid password" }],
-    successTitle: "SuccessResponse",
-    variable: () => ({ currentPassword: getValues("password") }),
-    onErrorMutation,
-    onSuccessMutation,
-  });
 
   return (
     <ModalContainer title="Logout All" isOpen={isOpen} exitModal={exitModal}>

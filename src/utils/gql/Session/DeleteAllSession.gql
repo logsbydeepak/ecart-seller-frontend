@@ -4,9 +4,15 @@ mutation DeleteAllSession($currentPassword: String!) {
       __typename
       message
     }
-    ... on ErrorResponse {
+
+    ... on DeleteAllSessionCredentialError {
       __typename
-      title
+      message
+    }
+
+    ... on TokenError {
+      __typename
+      type
       message
     }
   }

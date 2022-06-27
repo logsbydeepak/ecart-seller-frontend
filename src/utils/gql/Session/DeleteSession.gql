@@ -1,6 +1,6 @@
 mutation DeleteSession {
   deleteSession {
-    ... on LogoutSuccess {
+    ... on SuccessResponse {
       __typename
       message
     }
