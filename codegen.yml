@@ -1,6 +1,8 @@
 overwrite: true
 schema: ${SCHEMA_PATH}
 documents: "src/utils/gql/**/*.gql"
+config:
+  allowEnumStringTypes: true
 generates:
   src/types/graphql.tsx:
     plugins:
