@@ -1,27 +1,13 @@
-import { GraphQLClient, RequestDocument, Variables } from "graphql-request";
-import { useAuthContext } from "~/context/AuthContext";
+import { GraphQLClient, RequestDocument } from "graphql-request";
 
-interface Args {
-  query: RequestDocument;
-  variable?: Variables;
-  signal?: AbortSignal;
-  token?: string;
-}
-
-type GqlRequestType = (args: Args) => Promise<any>;
-
-export const gqlRequest: GqlRequestType = ({
-  query,
-  variable = {},
-  signal,
-  token,
-}) => {
-  const headers = token ? { headers: { token: token } } : {};
-
+export const gqlRequest = <RequestResponse, RequestVariable>(
+  operation: RequestDocument,
+  variable: RequestVariable,
+  token?: string
+): Promise<RequestResponse> => {
   return new GraphQLClient(process.env.NEXT_PUBLIC_API_BASE_URL as string, {
-    signal,
     credentials: "include",
     mode: "cors",
-    ...headers,
-  }).request(query, variable);
+    headers: token ? { token } : {},
+  }).request(operation, variable);
 };

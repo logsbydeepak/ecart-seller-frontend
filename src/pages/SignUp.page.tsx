@@ -8,14 +8,17 @@ import { SubmitHandler, useForm, UseFormGetValues } from "react-hook-form";
 import AuthLayout from "~/layout/AuthLayout";
 import ContainerLayout from "~/layout/ContainerLayout";
 
-import { CreateUserMutation } from "~/types/graphql";
+import {
+  CreateUserMutation,
+  CreateUserMutationVariables,
+} from "~/types/graphql";
 import { NextPageLayoutType } from "~/types/nextMod";
 
 import { useAuthContext } from "~/context/AuthContext";
 import { useNotificationContext } from "~/context/NotificationContext";
 
 import { gqlRequest } from "~/utils/helper/gql";
-import CreateUserQuery from "~/utils/gql/User/CreateUser.gql";
+import CreateUserOperation from "~/utils/gql/User/CreateUser.gql";
 import { email, firstName, lastName, password } from "~/utils/validation";
 
 import SimpleInput from "~/components/Input/SimpleInput";
@@ -41,15 +44,15 @@ const formValidationSchema = object({
 
 const createUserRequest = async (getValues: UseFormGetValues<FormType>) => {
   try {
-    return (await gqlRequest({
-      query: CreateUserQuery,
-      variable: {
+    return await gqlRequest<CreateUserMutation, CreateUserMutationVariables>(
+      CreateUserOperation,
+      {
         firstName: getValues("firstName"),
         lastName: getValues("lastName"),
         email: getValues("email"),
         password: getValues("password"),
-      },
-    })) as CreateUserMutation;
+      }
+    );
   } catch (error) {
     throw { message: "Something went wrong" };
   }

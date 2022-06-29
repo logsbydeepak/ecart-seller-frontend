@@ -9,11 +9,14 @@ import AuthLayout from "~/layout/AuthLayout";
 import ContainerLayout from "~/layout/ContainerLayout";
 
 import { NextPageLayoutType } from "~/types/nextMod";
-import { CreateSessionMutation } from "~/types/graphql";
+import {
+  CreateSessionMutation,
+  CreateSessionMutationVariables,
+} from "~/types/graphql";
 
 import { gqlRequest } from "~/utils/helper/gql";
 import { email, password } from "~/utils/validation";
-import CreateSessionQuery from "~/utils/gql/Session/CreateSession.gql";
+import CreateSessionOperation from "~/utils/gql/Session/CreateSession.gql";
 
 import { useAuthContext } from "~/context/AuthContext";
 import { useNotificationContext } from "~/context/NotificationContext";
@@ -31,10 +34,10 @@ const fromValidationSchema = object({ email, password });
 
 const createSessionRequest = async (getValues: UseFormGetValues<FormType>) => {
   try {
-    return (await gqlRequest({
-      query: CreateSessionQuery,
-      variable: getValues(),
-    })) as CreateSessionMutation;
+    return await gqlRequest<
+      CreateSessionMutation,
+      CreateSessionMutationVariables
+    >(CreateSessionOperation, getValues());
   } catch (error) {
     throw { message: "Something went wrong" };
   }
