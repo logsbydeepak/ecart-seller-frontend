@@ -1,0 +1,21 @@
+mutation UpdateUserEmail($email: String!, $currentPassword: String!) {
+  updateUserEmail(email: $email, currentPassword: $currentPassword) {
+    ... on TokenError {
+      type
+      message
+    }
+    ... on UpdateUserEmailCredentialError {
+      field
+      message
+    }
+    ... on UpdateUserEmailSuccessResponse {
+      email
+    }
+    ... on UserAlreadyExistError {
+      message
+    }
+    ... on UpdateUserInvalidUserCredentialError {
+      message
+    }
+  }
+}

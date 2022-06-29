@@ -11,7 +11,7 @@ import SmallButton from "../Button/SmallButton";
 import SimpleInput from "../Input/SimpleInput";
 import InputWithLeftIcon from "../Input/InputWithLeftIcon";
 import { EmojiHappyIcon } from "@heroicons/react/outline";
-import EditNameQuery from "~/utils/gql/User/Update/UpdateName.gql";
+import EditNameQuery from "~/utils/gql/User/UpdateUserName.gql";
 import { useQueryClient } from "react-query";
 
 interface FormType {

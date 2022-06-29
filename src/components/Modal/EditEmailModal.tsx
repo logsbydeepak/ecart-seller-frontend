@@ -9,7 +9,7 @@ import ModalContainer from "./Atom/ModalContainer";
 import { password, email } from "~/utils/validation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import InputWithLeftIcon from "../Input/InputWithLeftIcon";
-import EditEmailQuery from "~/utils/gql/User/Update/UpdateEmail.gql";
+import EditEmailQuery from "~/utils/gql/User/UpdateUserEmail.gql";
 import useAuthMutationRequestHook from "~/hooks/useAuthMutationRequest";
 import PasswordInputWithLeftIcon from "../Input/PasswordInputWithLeftIcon";
 

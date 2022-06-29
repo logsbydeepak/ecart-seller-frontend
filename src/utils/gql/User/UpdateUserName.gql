@@ -1,0 +1,27 @@
+mutation UpdateUserName(
+  $firstName: String!
+  $lastName: String!
+  $currentPassword: String!
+) {
+  updateUserName(
+    firstName: $firstName
+    lastName: $lastName
+    currentPassword: $currentPassword
+  ) {
+    ... on TokenError {
+      type
+      message
+    }
+    ... on UpdateUserNameCredentialError {
+      field
+      message
+    }
+    ... on UpdateUserNameSuccessResponse {
+      firstName
+      lastName
+    }
+    ... on UpdateUserInvalidUserCredentialError {
+      message
+    }
+  }
+}
