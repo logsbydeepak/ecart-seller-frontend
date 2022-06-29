@@ -10,7 +10,7 @@ import { password, email } from "~/utils/validation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import InputWithLeftIcon from "../Input/InputWithLeftIcon";
 import EditEmailQuery from "~/utils/gql/User/UpdateUserEmail.gql";
-import useAuthMutationRequestHook from "~/hooks/useAuthMutationRequest";
+import useAuthMutationRequestHook from "~/hooks/useAuthMutationHook";
 import PasswordInputWithLeftIcon from "../Input/PasswordInputWithLeftIcon";
 
 interface FormType {

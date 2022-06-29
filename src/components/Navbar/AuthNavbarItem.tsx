@@ -1,7 +1,6 @@
 import clsx from "clsx";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { useQuery } from "react-query";
 import { useRouter } from "next/router";
 import { Menu } from "@headlessui/react";
 import { FC, ReactNode, useState } from "react";
@@ -10,24 +9,16 @@ import { CogIcon, LogoutIcon } from "@heroicons/react/outline";
 import Show from "~/components/Show";
 import LogoutModal from "~/components/Modal/LogoutModal";
 
-import { gqlRequest } from "~/utils/helper/gql";
-import ReadUserFirstNameAndPictureQuery from "~/utils/gql/User/ReadUserFirstNameAndPicture.gql";
-
 import { useAuthContext } from "~/context/AuthContext";
 import { useNotificationContext } from "~/context/NotificationContext";
 
-import { ReadUserFirstNameAndPictureQuery as ReadUserFirstNameAndPictureQueryType } from "~/types/graphql";
+import {
+  ReadUserFirstNameAndPictureQuery,
+  ReadUserFirstNameAndPictureQueryVariables,
+} from "~/types/graphql";
 
-const readUserFirstNameAndPictureRequest = async (token: string) => {
-  try {
-    return (await gqlRequest({
-      query: ReadUserFirstNameAndPictureQuery,
-      token,
-    })) as ReadUserFirstNameAndPictureQueryType;
-  } catch (error) {
-    throw { message: "Something went wrong" };
-  }
-};
+import useAuthQueryHook from "~/hooks/useAuthQueryHook";
+import ReadUserFirstNameAndPictureOperation from "~/utils/gql/User/ReadUserFirstNameAndPicture.gql";
 
 const defaultData = {
   firstName: "UserName",
@@ -40,14 +31,18 @@ const AuthNavbarItem: FC = () => {
   const [userInfo, setUserInfo] = useState(defaultData);
   const { addNotification } = useNotificationContext();
 
-  const { authToken, setAuthFalse } = useAuthContext();
+  const { setAuthFalse } = useAuthContext();
 
   const errorNotification = () =>
     addNotification("error", "Something went wrong");
 
-  const { isLoading, isError } = useQuery(
-    "read user name and picture",
-    () => readUserFirstNameAndPictureRequest(authToken),
+  const { isError, isLoading } = useAuthQueryHook<
+    ReadUserFirstNameAndPictureQuery,
+    ReadUserFirstNameAndPictureQueryVariables
+  >(
+    "ReadUserFirstNameAndPictureOperation",
+    ReadUserFirstNameAndPictureOperation,
+    {},
     {
       onError: () => errorNotification(),
       onSuccess: (data) => {

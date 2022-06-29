@@ -1,12 +1,5 @@
 import clsx from "clsx";
 import { FC, useState } from "react";
-import { useQuery } from "react-query";
-
-import { NextPageLayoutType } from "~/types/nextMod";
-import { ReadUserQuery as ReadUserQueryType } from "~/types/graphql";
-
-import { gqlRequest } from "~/utils/helper/gql";
-import ReadUserQuery from "~/utils/gql/User/ReadUser.gql";
 
 import EditNameModal from "~/components/Modal/EditNameModal";
 import LogoutAllModal from "~/components/Modal/LogoutAllModal";
@@ -19,17 +12,12 @@ import { useAuthContext } from "~/context/AuthContext";
 import { useNotificationContext } from "~/context/NotificationContext";
 
 import AccountSideBarLayout from "~/layout/AccountSideBarLayout";
+import useAuthQueryHook from "~/hooks/useAuthQueryHook";
 
-const readUserRequest = async (token: string) => {
-  try {
-    return (await gqlRequest({
-      query: ReadUserQuery,
-      token,
-    })) as ReadUserQueryType;
-  } catch (error) {
-    throw { message: "Something went wrong" };
-  }
-};
+import { NextPageLayoutType } from "~/types/nextMod";
+import { ReadUserQuery, ReadUserQueryVariables } from "~/types/graphql";
+
+import ReadUserOperation from "~/utils/gql/User/ReadUser.gql";
 
 const defaultUserInfoData = {
   firstName: "",
@@ -39,7 +27,7 @@ const defaultUserInfoData = {
 };
 
 const Account: NextPageLayoutType = () => {
-  const { authToken, setAuthFalse } = useAuthContext();
+  const { setAuthFalse } = useAuthContext();
   const { addNotification } = useNotificationContext();
 
   const [userInfo, setUserInfo] = useState(defaultUserInfoData);
@@ -52,9 +40,13 @@ const Account: NextPageLayoutType = () => {
   const errorNotification = () =>
     addNotification("error", "Something went wrong");
 
-  const { isLoading, isError, isSuccess } = useQuery(
-    "read user data",
-    () => readUserRequest(authToken),
+  const { isError, isLoading, isSuccess } = useAuthQueryHook<
+    ReadUserQuery,
+    ReadUserQueryVariables
+  >(
+    "ReadUserOperation",
+    ReadUserOperation,
+    {},
     {
       onError: () => errorNotification(),
       onSuccess: (data) => {

@@ -6,7 +6,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { password, firstName, lastName } from "~/utils/validation";
 import { object } from "yup";
-import useAuthMutationRequestHook from "~/hooks/useAuthMutationRequest";
+import useAuthMutationRequestHook from "~/hooks/useAuthMutationHook";
 import SmallButton from "../Button/SmallButton";
 import SimpleInput from "../Input/SimpleInput";
 import InputWithLeftIcon from "../Input/InputWithLeftIcon";
