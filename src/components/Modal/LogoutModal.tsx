@@ -1,43 +1,38 @@
-import { useMutation } from "react-query";
 import { Dispatch, FC, SetStateAction } from "react";
 
 import { useAuthContext } from "~/context/AuthContext";
 import { useNotificationContext } from "~/context/NotificationContext";
 
-import { gqlRequest } from "~/utils/helper/gql";
-import DeleteSessionQuery from "~/utils/gql/Session/DeleteSession.gql";
-
 import SmallButton from "~/components/Button/SmallButton";
 import ModalContainer from "~/components/Modal/Atom/ModalContainer";
 
-import { DeleteSessionMutation } from "~/types/graphql";
+import {
+  DeleteSessionMutation,
+  DeleteSessionMutationVariables,
+} from "~/types/graphql";
 
-const LogoutUserRequest = async (token: string) => {
-  try {
-    return (await gqlRequest({
-      query: DeleteSessionQuery,
-      token,
-    })) as DeleteSessionMutation;
-  } catch (error) {
-    throw { message: "Something went wrong" };
-  }
-};
+import useAuthMutationHook from "~/hooks/useAuthMutationHook";
+import DeleteSessionOperation from "~/utils/gql/Session/DeleteSession.gql";
 
 const LogoutModal: FC<{
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }> = ({ isOpen, setIsOpen }) => {
-  const { authToken, setAuthFalse } = useAuthContext();
+  const { setAuthFalse } = useAuthContext();
 
   const { addNotification } = useNotificationContext();
 
   const errorNotification = () =>
     addNotification("error", "Something went wrong");
 
-  const { mutate, isLoading } = useMutation(
-    () => LogoutUserRequest(authToken),
+  const { isLoading, mutate } = useAuthMutationHook<
+    DeleteSessionMutation,
+    DeleteSessionMutationVariables
+  >(
+    "DeleteSessionOperation",
+    DeleteSessionOperation,
+    {},
     {
-      mutationKey: "logoutUser",
       onError: () => errorNotification(),
       onSuccess: (data) => {
         if (!data) return errorNotification();

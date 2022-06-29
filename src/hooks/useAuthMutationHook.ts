@@ -6,13 +6,13 @@ import { gqlRequest } from "~/utils/helper/gql";
 import { useAuthContext } from "~/context/AuthContext";
 
 const useAuthMutationHook = <RequestResponse, RequestVariable>(
-  queryKey: string,
+  mutationKey: string,
   operation: RequestDocument,
   variable: RequestVariable,
-  queryOption: UseMutationOptions<
+  mutationOption: UseMutationOptions<
     RequestResponse,
     GraphQLError,
-    RequestResponse,
+    RequestVariable | void,
     string
   >
 ) => {
@@ -30,7 +30,7 @@ const useAuthMutationHook = <RequestResponse, RequestVariable>(
     }
   };
 
-  return useMutation(queryKey, request, queryOption);
+  return useMutation(mutationKey, request, mutationOption);
 };
 
 export default useAuthMutationHook;

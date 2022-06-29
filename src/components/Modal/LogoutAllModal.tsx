@@ -1,8 +1,7 @@
 import { object } from "yup";
-import { useMutation } from "react-query";
 import { Dispatch, FC, SetStateAction } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm, SubmitHandler, UseFormGetValues } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 
 import SmallButton from "~/components/Button/SmallButton";
 import ModalContainer from "~/components/Modal/Atom/ModalContainer";
@@ -12,29 +11,18 @@ import { useAuthContext } from "~/context/AuthContext";
 import { useNotificationContext } from "~/context/NotificationContext";
 
 import { password } from "~/utils/validation";
-import { gqlRequest } from "~/utils/helper/gql";
-import DeleteAllSessionQuery from "~/utils/gql/Session/DeleteAllSession.gql";
+import DeleteAllSessionOperation from "~/utils/gql/Session/DeleteAllSession.gql";
 
-import { DeleteAllSessionMutation } from "~/types/graphql";
+import {
+  DeleteAllSessionMutation,
+  DeleteAllSessionMutationVariables,
+} from "~/types/graphql";
+
+import useAuthMutationHook from "~/hooks/useAuthMutationHook";
 
 interface FormType {
   password: string;
 }
-
-const LogoutAllUserRequest = async (
-  token: string,
-  getValues: UseFormGetValues<FormType>
-) => {
-  try {
-    return (await gqlRequest({
-      query: DeleteAllSessionQuery,
-      token,
-      variable: { currentPassword: getValues("password") },
-    })) as DeleteAllSessionMutation;
-  } catch (error) {
-    throw { message: "Something went wrong" };
-  }
-};
 
 const schema = object({
   password: password,
@@ -59,10 +47,14 @@ const LogoutAllModal: FC<{
   const errorNotification = () =>
     addNotification("error", "Something went wrong");
 
-  const { mutate, isLoading } = useMutation(
-    () => LogoutAllUserRequest(authToken, getValues),
+  const { mutate, isLoading } = useAuthMutationHook<
+    DeleteAllSessionMutation,
+    DeleteAllSessionMutationVariables
+  >(
+    "DeleteAllSessionOperation",
+    DeleteAllSessionOperation,
+    { currentPassword: getValues("password") },
     {
-      mutationKey: "logoutUser",
       onError: () => errorNotification(),
       onSuccess: (data) => {
         if (!data) return errorNotification();
@@ -101,7 +93,7 @@ const LogoutAllModal: FC<{
     if (!isLoading) setIsOpen(false);
   };
 
-  const onSubmit: SubmitHandler<FormType> = async () => {
+  const onSubmit: SubmitHandler<FormType> = () => {
     mutate();
   };
 
