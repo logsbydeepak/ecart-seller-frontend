@@ -1,15 +1,24 @@
+import { object } from "yup";
 import { Dispatch, FC, SetStateAction } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-
-import ModalContainer from "./Atom/ModalContainer";
-import PasswordInputWithLeftIcon from "../Input/PasswordInputWithLeftIcon";
 import { yupResolver } from "@hookform/resolvers/yup";
+
+import SmallButton from "~/components/Button/SmallButton";
+import ModalContainer from "~/components/Modal/Atom/ModalContainer";
+import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftIcon";
+
 import { password } from "~/utils/validation";
-import { object } from "yup";
-import useAuthMutationRequestHook from "~/hooks/useAuthMutationHook";
-import SmallButton from "../Button/SmallButton";
-import EditPasswordQuery from "~/utils/gql/User/UpdateUserPassword.gql";
-import { useQueryClient } from "react-query";
+import UpdateUserPasswordOperation from "~/utils/gql/User/UpdateUserPassword.gql";
+
+import { useAuthContext } from "~/context/AuthContext";
+import { useNotificationContext } from "~/context/NotificationContext";
+
+import useAuthMutationHook from "~/hooks/useAuthMutationHook";
+
+import {
+  UpdateUserPasswordMutation,
+  UpdateUserPasswordMutationVariables,
+} from "~/types/graphql";
 
 interface FormType {
   password: string;
@@ -21,11 +30,17 @@ const schema = object({
   currentPassword: password,
 });
 
-const EditPasswordModal: FC<{
+const useFormData = () =>
+  useForm<FormType>({
+    resolver: yupResolver(schema),
+  });
+
+const UpdateUserPasswordModal: FC<{
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }> = ({ isOpen, setIsOpen }) => {
-  const queryClient = useQueryClient();
+  const { setAuthFalse } = useAuthContext();
+  const { addNotification } = useNotificationContext();
 
   const {
     register,
@@ -33,46 +48,50 @@ const EditPasswordModal: FC<{
     setError,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormType>({
-    resolver: yupResolver(schema),
-  });
-
-  const onSuccessMutation = () => {
-    queryClient.invalidateQueries("User info");
-    exitModal();
-  };
-
-  const onErrorMutation = () => {
-    setError(
-      "currentPassword",
-      { message: "invalid password" },
-      { shouldFocus: true }
-    );
-  };
+  } = useFormData();
 
   const exitModal = () => {
     if (!isLoading) setIsOpen(false);
   };
 
+  const errorNotification = () =>
+    addNotification("error", "Something went wrong");
+
+  const { mutate, isLoading } = useAuthMutationHook<
+    UpdateUserPasswordMutation,
+    UpdateUserPasswordMutationVariables
+  >("UpdateUserPasswordOperation", UpdateUserPasswordOperation, getValues(), {
+    onSuccess: (data) => {
+      if (!data) return errorNotification();
+
+      const responseData = data.updateUserPassword;
+      switch (responseData.__typename) {
+        case "UpdateUserPasswordSuccessResponse":
+          exitModal();
+          break;
+
+        case "TokenError":
+          setAuthFalse();
+          break;
+
+        case "UpdateUserInvalidUserCredentialError":
+          setError(
+            "currentPassword",
+            { message: "invalid password" },
+            { shouldFocus: true }
+          );
+          break;
+
+        default:
+          errorNotification();
+          break;
+      }
+    },
+  });
+
   const onSubmit: SubmitHandler<FormType> = async () => {
-    mutateAsync();
+    mutate();
   };
-
-  const variable = () => ({
-    toUpdate: "name",
-    currentPassword: getValues("currentPassword"),
-    password: getValues("password"),
-  });
-
-  const { mutateAsync, isLoading } = useAuthMutationRequestHook({
-    query: EditPasswordQuery,
-    name: "updateUser",
-    ErrorResponse: [{ title: "BODY_PARSE", message: "invalid password" }],
-    successTitle: "User",
-    variable,
-    onErrorMutation,
-    onSuccessMutation,
-  });
 
   return (
     <ModalContainer title="Edit Name" isOpen={isOpen} exitModal={exitModal}>
@@ -117,4 +136,4 @@ const EditPasswordModal: FC<{
   );
 };
 
-export default EditPasswordModal;
+export default UpdateUserPasswordModal;

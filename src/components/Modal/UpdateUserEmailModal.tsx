@@ -82,6 +82,14 @@ const UpdateUserEmailModal: FC<{
           setAuthFalse();
           break;
 
+        case "UserAlreadyExistError":
+          setError(
+            "email",
+            { message: "email already exist" },
+            { shouldFocus: true }
+          );
+          break;
+
         case "UpdateUserInvalidUserCredentialError":
           setError(
             "currentPassword",

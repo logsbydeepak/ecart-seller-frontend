@@ -1,23 +1,22 @@
 import clsx from "clsx";
 import { FC, useState } from "react";
 
-import UpdateUserNameModal from "~/components/Modal/UpdateUserNameModal";
 import LogoutAllModal from "~/components/Modal/LogoutAllModal";
-import UpdateUserEmailModal from "~/components/Modal/UpdateUserEmailModal";
 import SideBarContent from "~/components/Sidebar/SideBarContent";
-import EditPasswordModal from "~/components/Modal/EditPasswordModal";
 import DeleteAccountModal from "~/components/Modal/DeleteAccountModal";
+import UpdateUserNameModal from "~/components/Modal/UpdateUserNameModal";
+import UpdateUserEmailModal from "~/components/Modal/UpdateUserEmailModal";
+import UpdateUserPasswordModal from "~/components/Modal/UpdateUserPasswordModal";
 
 import { useAuthContext } from "~/context/AuthContext";
 import { useNotificationContext } from "~/context/NotificationContext";
 
-import AccountSideBarLayout from "~/layout/AccountSideBarLayout";
-import useAuthQueryHook from "~/hooks/useAuthQueryHook";
-
 import { NextPageLayoutType } from "~/types/nextMod";
 import { ReadUserQuery, ReadUserQueryVariables } from "~/types/graphql";
 
+import useAuthQueryHook from "~/hooks/useAuthQueryHook";
 import ReadUserOperation from "~/utils/gql/User/ReadUser.gql";
+import AccountSideBarLayout from "~/layout/AccountSideBarLayout";
 
 const defaultUserInfoData = {
   firstName: "",
@@ -100,7 +99,7 @@ const Account: NextPageLayoutType = () => {
         email={userInfo.email}
       />
 
-      <EditPasswordModal
+      <UpdateUserPasswordModal
         isOpen={isOpenEditPasswordModal}
         setIsOpen={setIsOpenEditPasswordModal}
       />
