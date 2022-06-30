@@ -3,7 +3,7 @@ import { FC, useState } from "react";
 
 import UpdateUserNameModal from "~/components/Modal/UpdateUserNameModal";
 import LogoutAllModal from "~/components/Modal/LogoutAllModal";
-import EditEmailModal from "~/components/Modal/EditEmailModal";
+import UpdateUserEmailModal from "~/components/Modal/UpdateUserEmailModal";
 import SideBarContent from "~/components/Sidebar/SideBarContent";
 import EditPasswordModal from "~/components/Modal/EditPasswordModal";
 import DeleteAccountModal from "~/components/Modal/DeleteAccountModal";
@@ -94,7 +94,7 @@ const Account: NextPageLayoutType = () => {
         lastName={userInfo.lastName}
       />
 
-      <EditEmailModal
+      <UpdateUserEmailModal
         isOpen={isOpenEditEmailModal}
         setIsOpen={setIsOpenEditEmailModal}
         email={userInfo.email}

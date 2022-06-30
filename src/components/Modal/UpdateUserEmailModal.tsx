@@ -2,16 +2,26 @@ import { object, ref } from "yup";
 import { useQueryClient } from "react-query";
 import { MailIcon } from "@heroicons/react/solid";
 import { Dispatch, FC, SetStateAction } from "react";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, SubmitHandler } from "react-hook-form";
 
-import SmallButton from "../Button/SmallButton";
-import ModalContainer from "./Atom/ModalContainer";
+import SmallButton from "~/components/Button/SmallButton";
+import ModalContainer from "~/components/Modal/Atom/ModalContainer";
+import InputWithLeftIcon from "~/components/Input/InputWithLeftIcon";
+import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftIcon";
+
 import { password, email } from "~/utils/validation";
-import { yupResolver } from "@hookform/resolvers/yup";
-import InputWithLeftIcon from "../Input/InputWithLeftIcon";
-import EditEmailQuery from "~/utils/gql/User/UpdateUserEmail.gql";
-import useAuthMutationRequestHook from "~/hooks/useAuthMutationHook";
-import PasswordInputWithLeftIcon from "../Input/PasswordInputWithLeftIcon";
+import UpdateUserEmailOperation from "~/utils/gql/User/UpdateUserEmail.gql";
+
+import { useAuthContext } from "~/context/AuthContext";
+import { useNotificationContext } from "~/context/NotificationContext";
+
+import useAuthMutationHook from "~/hooks/useAuthMutationHook";
+
+import {
+  UpdateUserEmailMutation,
+  UpdateUserEmailMutationVariables,
+} from "~/types/graphql";
 
 interface FormType {
   email: string;
@@ -23,12 +33,21 @@ const schema = object({
   currentPassword: password,
 });
 
-const EditEmailModal: FC<{
+const useFormData = (email: string) =>
+  useForm<FormType>({
+    resolver: yupResolver(schema),
+    defaultValues: { email },
+  });
+
+const UpdateUserEmailModal: FC<{
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   email: string;
 }> = ({ isOpen, setIsOpen, email }) => {
   const queryClient = useQueryClient();
+
+  const { setAuthFalse } = useAuthContext();
+  const { addNotification } = useNotificationContext();
 
   const {
     register,
@@ -36,47 +55,51 @@ const EditEmailModal: FC<{
     setError,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormType>({
-    resolver: yupResolver(schema),
-    defaultValues: { email, currentPassword: "" },
-  });
-
-  const onSuccessMutation = () => {
-    queryClient.invalidateQueries("User info");
-    exitModal();
-  };
-
-  const onErrorMutation = () => {
-    setError(
-      "currentPassword",
-      { message: "invalid password" },
-      { shouldFocus: true }
-    );
-  };
+  } = useFormData(email);
 
   const exitModal = () => {
     if (!isLoading) setIsOpen(false);
   };
 
+  const errorNotification = () =>
+    addNotification("error", "Something went wrong");
+
+  const { mutate, isLoading } = useAuthMutationHook<
+    UpdateUserEmailMutation,
+    UpdateUserEmailMutationVariables
+  >("UpdateUserEmailOperation", UpdateUserEmailOperation, getValues(), {
+    onSuccess: (data) => {
+      if (!data) return errorNotification();
+
+      const responseData = data.updateUserEmail;
+      switch (responseData.__typename) {
+        case "UpdateUserEmailSuccessResponse":
+          queryClient.invalidateQueries("ReadUserOperation");
+          exitModal();
+          break;
+
+        case "TokenError":
+          setAuthFalse();
+          break;
+
+        case "UpdateUserInvalidUserCredentialError":
+          setError(
+            "currentPassword",
+            { message: "invalid password" },
+            { shouldFocus: true }
+          );
+          break;
+
+        default:
+          errorNotification();
+          break;
+      }
+    },
+  });
+
   const onSubmit: SubmitHandler<FormType> = async () => {
-    mutateAsync();
+    mutate();
   };
-
-  const variable = () => ({
-    toUpdate: "name",
-    currentPassword: getValues("currentPassword"),
-    email: getValues("email"),
-  });
-
-  const { mutateAsync, isLoading } = useAuthMutationRequestHook({
-    query: EditEmailQuery,
-    name: "updateUser",
-    ErrorResponse: [{ title: "BODY_PARSE", message: "invalid password" }],
-    successTitle: "User",
-    variable,
-    onErrorMutation,
-    onSuccessMutation,
-  });
 
   return (
     <ModalContainer title="Edit Name" isOpen={isOpen} exitModal={exitModal}>
@@ -121,4 +144,4 @@ const EditEmailModal: FC<{
   );
 };
 
-export default EditEmailModal;
+export default UpdateUserEmailModal;
