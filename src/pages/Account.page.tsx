@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { FC, useState } from "react";
 
-import EditNameModal from "~/components/Modal/EditNameModal";
+import UpdateUserNameModal from "~/components/Modal/UpdateUserNameModal";
 import LogoutAllModal from "~/components/Modal/LogoutAllModal";
 import EditEmailModal from "~/components/Modal/EditEmailModal";
 import SideBarContent from "~/components/Sidebar/SideBarContent";
@@ -87,7 +87,7 @@ const Account: NextPageLayoutType = () => {
         setIsOpen={setIsOpenLogoutAllModal}
       />
 
-      <EditNameModal
+      <UpdateUserNameModal
         isOpen={isOpenEditNameModal}
         setIsOpen={setIsOpenEditNameModal}
         firstName={userInfo.firstName}
