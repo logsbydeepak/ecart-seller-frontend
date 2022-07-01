@@ -95,37 +95,44 @@ const Account: NextPageLayoutType = () => {
       isSuccess={isSuccess}
       isError={isError}
     >
-      <LogoutAllModal
-        key={uuidv4()}
-        isOpen={isOpenLogoutAllModal}
-        setIsOpen={setIsOpenLogoutAllModal}
-      />
+      <Show when={isOpenLogoutAllModal} isAnimation={true}>
+        <LogoutAllModal
+          key={uuidv4()}
+          isOpen={isOpenLogoutAllModal}
+          setIsOpen={setIsOpenLogoutAllModal}
+        />
+      </Show>
 
-      <UpdateUserNameModal
-        isOpen={isOpenEditNameModal}
-        setIsOpen={setIsOpenEditNameModal}
-        firstName={userInfo.firstName}
-        lastName={userInfo.lastName}
-      />
+      <Show when={isOpenEditNameModal} isAnimation={true}>
+        <UpdateUserNameModal
+          isOpen={isOpenEditNameModal}
+          setIsOpen={setIsOpenEditNameModal}
+          firstName={userInfo.firstName}
+          lastName={userInfo.lastName}
+        />
+      </Show>
 
-      <UpdateUserEmailModal
-        key={uuidv4()}
-        isOpen={isOpenEditEmailModal}
-        setIsOpen={setIsOpenEditEmailModal}
-        email={userInfo.email}
-      />
+      <Show when={isOpenEditEmailModal} isAnimation={true}>
+        <UpdateUserEmailModal
+          isOpen={isOpenEditEmailModal}
+          setIsOpen={setIsOpenEditEmailModal}
+          email={userInfo.email}
+        />
+      </Show>
 
-      <UpdateUserPasswordModal
-        key={uuidv4()}
-        isOpen={isOpenEditPasswordModal}
-        setIsOpen={setIsOpenEditPasswordModal}
-      />
+      <Show when={isOpenEditPasswordModal} isAnimation={true}>
+        <UpdateUserPasswordModal
+          isOpen={isOpenEditPasswordModal}
+          setIsOpen={setIsOpenEditPasswordModal}
+        />
+      </Show>
 
-      <DeleteAccountModal
-        key={uuidv4()}
-        isOpen={isDeleteUserModal}
-        setIsOpen={setIsDeleteUserModal}
-      />
+      <Show when={isDeleteUserModal} isAnimation={true}>
+        <DeleteAccountModal
+          isOpen={isDeleteUserModal}
+          setIsOpen={setIsDeleteUserModal}
+        />
+      </Show>
 
       <div className="max-w-2xl">
         <div className="rounded-lg border-2 border-neutral-200 p-8">

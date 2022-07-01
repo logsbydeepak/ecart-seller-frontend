@@ -77,10 +77,12 @@ const AuthNavbarItem: FC = () => {
 
   return (
     <div className="relative">
-      <LogoutModal
-        isOpen={isOpenLogoutModal}
-        setIsOpen={setIsOpenLogoutModal}
-      />
+      <Show when={isOpenLogoutModal}>
+        <LogoutModal
+          isOpen={isOpenLogoutModal}
+          setIsOpen={setIsOpenLogoutModal}
+        />
+      </Show>
       <Menu>
         {({ open }) => (
           <>
