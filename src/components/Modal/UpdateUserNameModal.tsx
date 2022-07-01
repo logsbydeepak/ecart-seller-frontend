@@ -23,6 +23,7 @@ import {
   UpdateUserNameMutation,
   UpdateUserNameMutationVariables,
 } from "~/types/graphql";
+import Show from "../Show";
 
 interface FormType {
   firstName: string;
@@ -71,7 +72,7 @@ const UpdateUserNameModal: FC<{
   const { mutate, isLoading } = useAuthMutationHook<
     UpdateUserNameMutation,
     UpdateUserNameMutationVariables
-  >("UpdateUserNameOperation", UpdateUserNameOperation, getValues(), {
+  >("UpdateUserNameOperation", UpdateUserNameOperation, () => getValues(), {
     onError: () => errorNotification(),
     onSuccess: (data) => {
       if (!data) return errorNotification();
@@ -108,7 +109,7 @@ const UpdateUserNameModal: FC<{
   };
 
   return (
-    <ModalContainer title="Edit Name" isOpen={isOpen} exitModal={exitModal}>
+    <ModalContainer title="Update name" isOpen={isOpen} exitModal={exitModal}>
       <form onSubmit={handleSubmit(onSubmit)} className="w-96">
         <div className="mb-4 flex text-left">
           <InputWithLeftIcon

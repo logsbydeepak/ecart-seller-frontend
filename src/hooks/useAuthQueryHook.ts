@@ -30,7 +30,10 @@ const useAuthQueryHook = <RequestResponse, RequestVariable>(
     }
   };
 
-  return useQuery(queryKey, request, queryOption);
+  return useQuery(queryKey, request, {
+    refetchOnWindowFocus: false,
+    ...queryOption,
+  });
 };
 
 export default useAuthQueryHook;

@@ -5,6 +5,7 @@ import LogoutAllModal from "~/components/Modal/LogoutAllModal";
 import SideBarContent from "~/components/Sidebar/SideBarContent";
 import DeleteAccountModal from "~/components/Modal/DeleteAccountModal";
 import UpdateUserNameModal from "~/components/Modal/UpdateUserNameModal";
+import { v4 as uuidv4 } from "uuid";
 import UpdateUserEmailModal from "~/components/Modal/UpdateUserEmailModal";
 import UpdateUserPasswordModal from "~/components/Modal/UpdateUserPasswordModal";
 
@@ -17,6 +18,7 @@ import { ReadUserQuery, ReadUserQueryVariables } from "~/types/graphql";
 import useAuthQueryHook from "~/hooks/useAuthQueryHook";
 import ReadUserOperation from "~/utils/gql/User/ReadUser.gql";
 import AccountSideBarLayout from "~/layout/AccountSideBarLayout";
+import Show from "~/components/Show";
 
 const defaultUserInfoData = {
   firstName: "",
@@ -38,6 +40,16 @@ const Account: NextPageLayoutType = () => {
 
   const errorNotification = () =>
     addNotification("error", "Something went wrong");
+
+  const key = {
+    key1: uuidv4(),
+    key2: uuidv4(),
+    key3: uuidv4(),
+    key4: uuidv4(),
+    key5: uuidv4(),
+    key6: uuidv4(),
+    key7: uuidv4(),
+  };
 
   const { isError, isLoading, isSuccess } = useAuthQueryHook<
     ReadUserQuery,
@@ -74,6 +86,8 @@ const Account: NextPageLayoutType = () => {
     }
   );
 
+  // const id = uuidv4();
+
   return (
     <SideBarContent
       title="Account"
@@ -82,6 +96,7 @@ const Account: NextPageLayoutType = () => {
       isError={isError}
     >
       <LogoutAllModal
+        key={uuidv4()}
         isOpen={isOpenLogoutAllModal}
         setIsOpen={setIsOpenLogoutAllModal}
       />
@@ -94,17 +109,20 @@ const Account: NextPageLayoutType = () => {
       />
 
       <UpdateUserEmailModal
+        key={uuidv4()}
         isOpen={isOpenEditEmailModal}
         setIsOpen={setIsOpenEditEmailModal}
         email={userInfo.email}
       />
 
       <UpdateUserPasswordModal
+        key={uuidv4()}
         isOpen={isOpenEditPasswordModal}
         setIsOpen={setIsOpenEditPasswordModal}
       />
 
       <DeleteAccountModal
+        key={uuidv4()}
         isOpen={isDeleteUserModal}
         setIsOpen={setIsDeleteUserModal}
       />

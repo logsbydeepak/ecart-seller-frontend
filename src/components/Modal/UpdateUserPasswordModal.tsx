@@ -60,41 +60,50 @@ const UpdateUserPasswordModal: FC<{
   const { mutate, isLoading } = useAuthMutationHook<
     UpdateUserPasswordMutation,
     UpdateUserPasswordMutationVariables
-  >("UpdateUserPasswordOperation", UpdateUserPasswordOperation, getValues(), {
-    onSuccess: (data) => {
-      if (!data) return errorNotification();
+  >(
+    "UpdateUserPasswordOperation",
+    UpdateUserPasswordOperation,
+    () => getValues(),
+    {
+      onSuccess: (data) => {
+        if (!data) return errorNotification();
 
-      const responseData = data.updateUserPassword;
-      switch (responseData.__typename) {
-        case "UpdateUserPasswordSuccessResponse":
-          exitModal();
-          break;
+        const responseData = data.updateUserPassword;
+        switch (responseData.__typename) {
+          case "UpdateUserPasswordSuccessResponse":
+            exitModal();
+            break;
 
-        case "TokenError":
-          setAuthFalse();
-          break;
+          case "TokenError":
+            setAuthFalse();
+            break;
 
-        case "UpdateUserInvalidUserCredentialError":
-          setError(
-            "currentPassword",
-            { message: "invalid password" },
-            { shouldFocus: true }
-          );
-          break;
+          case "UpdateUserInvalidUserCredentialError":
+            setError(
+              "currentPassword",
+              { message: "invalid password" },
+              { shouldFocus: true }
+            );
+            break;
 
-        default:
-          errorNotification();
-          break;
-      }
-    },
-  });
+          default:
+            errorNotification();
+            break;
+        }
+      },
+    }
+  );
 
   const onSubmit: SubmitHandler<FormType> = async () => {
-    mutate();
+    mutate(getValues());
   };
 
   return (
-    <ModalContainer title="Edit Name" isOpen={isOpen} exitModal={exitModal}>
+    <ModalContainer
+      title="Update password"
+      isOpen={isOpen}
+      exitModal={exitModal}
+    >
       <form onSubmit={handleSubmit(onSubmit)} className="w-96">
         <PasswordInputWithLeftIcon
           register={register("password")}

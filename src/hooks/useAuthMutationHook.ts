@@ -8,7 +8,7 @@ import { useAuthContext } from "~/context/AuthContext";
 const useAuthMutationHook = <RequestResponse, RequestVariable>(
   mutationKey: string,
   operation: RequestDocument,
-  variable: RequestVariable,
+  variable: () => RequestVariable,
   mutationOption: UseMutationOptions<
     RequestResponse,
     GraphQLError,
@@ -22,7 +22,7 @@ const useAuthMutationHook = <RequestResponse, RequestVariable>(
     try {
       return await gqlRequest<RequestResponse, RequestVariable>(
         operation,
-        variable,
+        variable(),
         authToken
       );
     } catch (error) {

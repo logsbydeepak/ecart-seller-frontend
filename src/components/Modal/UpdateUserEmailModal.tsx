@@ -67,7 +67,7 @@ const UpdateUserEmailModal: FC<{
   const { mutate, isLoading } = useAuthMutationHook<
     UpdateUserEmailMutation,
     UpdateUserEmailMutationVariables
-  >("UpdateUserEmailOperation", UpdateUserEmailOperation, getValues(), {
+  >("UpdateUserEmailOperation", UpdateUserEmailOperation, () => getValues(), {
     onSuccess: (data) => {
       if (!data) return errorNotification();
 
@@ -110,7 +110,7 @@ const UpdateUserEmailModal: FC<{
   };
 
   return (
-    <ModalContainer title="Edit Name" isOpen={isOpen} exitModal={exitModal}>
+    <ModalContainer title="Update email" isOpen={isOpen} exitModal={exitModal}>
       <form onSubmit={handleSubmit(onSubmit)} className="w-96">
         <InputWithLeftIcon
           disabled={isLoading}

@@ -1,8 +1,8 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { AnimationProps, motion } from "framer-motion";
 import { Dialog } from "@headlessui/react";
 import { XIcon } from "@heroicons/react/solid";
+import { AnimationProps, motion } from "framer-motion";
 
 import Show from "~/components/Show";
 import { PropsWithChildrenOnlyType } from "~/types/nextMod";
@@ -13,8 +13,6 @@ interface Props extends PropsWithChildrenOnlyType {
   exitModal: () => void;
 }
 
-const id = uuidv4();
-
 const animation: AnimationProps = {
   transition: { duration: 0.2 },
   initial: { y: 500, opacity: 0 },
@@ -22,6 +20,7 @@ const animation: AnimationProps = {
   exit: { y: 500, opacity: 0 },
 };
 
+const key = uuidv4();
 const ModalContainer: FC<Props> = ({ children, title, isOpen, exitModal }) => {
   return (
     <Show when={isOpen} isAnimation={true}>
@@ -33,7 +32,7 @@ const ModalContainer: FC<Props> = ({ children, title, isOpen, exitModal }) => {
       >
         <Dialog.Panel
           as={motion.div}
-          key={id}
+          key={key}
           {...animation}
           className="rounded-lg border border-neutral-400 bg-white text-center drop-shadow-xl"
         >

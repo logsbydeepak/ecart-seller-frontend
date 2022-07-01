@@ -9,18 +9,22 @@ mutation UpdateUserName(
     currentPassword: $currentPassword
   ) {
     ... on TokenError {
+      __typename
       type
       message
     }
     ... on UpdateUserNameCredentialError {
+      __typename
       field
       message
     }
     ... on UpdateUserNameSuccessResponse {
+      __typename
       firstName
       lastName
     }
     ... on UpdateUserInvalidUserCredentialError {
+      __typename
       message
     }
   }

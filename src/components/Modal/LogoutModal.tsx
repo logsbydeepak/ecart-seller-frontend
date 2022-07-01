@@ -28,32 +28,27 @@ const LogoutModal: FC<{
   const { isLoading, mutate } = useAuthMutationHook<
     DeleteSessionMutation,
     DeleteSessionMutationVariables
-  >(
-    "DeleteSessionOperation",
-    DeleteSessionOperation,
-    {},
-    {
-      onError: () => errorNotification(),
-      onSuccess: (data) => {
-        if (!data) return errorNotification();
-        const responseData = data.deleteSession;
+  >("DeleteSessionOperation", DeleteSessionOperation, () => ({}), {
+    onError: () => errorNotification(),
+    onSuccess: (data) => {
+      if (!data) return errorNotification();
+      const responseData = data.deleteSession;
 
-        switch (responseData.__typename) {
-          case "SuccessResponse":
-            setAuthFalse();
-            addNotification("success", "User Logout Successfully");
-            break;
+      switch (responseData.__typename) {
+        case "SuccessResponse":
+          setAuthFalse();
+          addNotification("success", "User Logout Successfully");
+          break;
 
-          case "TokenError":
-            setAuthFalse();
-            break;
+        case "TokenError":
+          setAuthFalse();
+          break;
 
-          default:
-            errorNotification();
-        }
-      },
-    }
-  );
+        default:
+          errorNotification();
+      }
+    },
+  });
 
   const handleLogout = async () => {
     setIsOpen(true);

@@ -7,9 +7,14 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { password } from "~/utils/validation";
 import { object } from "yup";
-import DeleteUserQuery from "~/utils/gql/User/DeleteUser.gql";
+import DeleteUserOperation from "~/utils/gql/User/DeleteUser.gql";
 import useAuthMutationRequestHook from "~/hooks/useAuthMutationHook";
 import SmallButton from "../Button/SmallButton";
+import {
+  DeleteUserMutation,
+  DeleteUserMutationVariables,
+} from "~/types/graphql";
+import { useNotificationContext } from "~/context/NotificationContext";
 
 interface FormType {
   password: string;
@@ -19,11 +24,14 @@ const schema = object({
   password: password,
 });
 
+const useFormData = () => useForm<FormType>({ resolver: yupResolver(schema) });
+
 const DeleteAccountModal: FC<{
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }> = ({ isOpen, setIsOpen }) => {
-  const { setAuthToken } = useAuthContext();
+  const { setAuthFalse } = useAuthContext();
+  const { addNotification } = useNotificationContext();
 
   const {
     register,
@@ -31,37 +39,60 @@ const DeleteAccountModal: FC<{
     setError,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormType>({ resolver: yupResolver(schema) });
+  } = useFormData();
 
-  const onSuccessMutation = () => {
-    setAuthToken("");
-  };
+  const errorNotification = () =>
+    addNotification("error", "Something went wrong");
 
-  const onErrorMutation = () => {
-    setError(
-      "password",
-      { message: "invalid password" },
-      { shouldFocus: true }
-    );
+  const { mutate, isLoading } = useAuthMutationRequestHook<
+    DeleteUserMutation,
+    DeleteUserMutationVariables
+  >(
+    "DeleteUserOperation",
+    DeleteUserOperation,
+    () => ({ currentPassword: getValues("password") }),
+    {
+      onError: () => errorNotification(),
+      onSuccess: (data) => {
+        if (!data) return errorNotification();
+        const responseData = data.deleteUser;
+
+        switch (responseData.__typename) {
+          case "SuccessResponse":
+            setAuthFalse();
+            addNotification(
+              "success",
+              "User Logout from all device successfully"
+            );
+            break;
+
+          case "DeleteUserCredentialError":
+            setError(
+              "password",
+              { message: "invalid password" },
+              { shouldFocus: true }
+            );
+
+            break;
+
+          case "TokenError":
+            setAuthFalse();
+            break;
+
+          default:
+            errorNotification();
+        }
+      },
+    }
+  );
+
+  const onSubmit: SubmitHandler<FormType> = async () => {
+    mutate();
   };
 
   const exitModal = () => {
     if (!isLoading) setIsOpen(false);
   };
-
-  const onSubmit: SubmitHandler<FormType> = async () => {
-    mutateAsync();
-  };
-
-  const { mutateAsync, isLoading } = useAuthMutationRequestHook({
-    query: DeleteUserQuery,
-    name: "deleteAllSession",
-    ErrorResponse: [{ title: "BODY_PARSE", message: "invalid password" }],
-    successTitle: "SuccessResponse",
-    variable: () => ({ currentPassword: getValues("password") }),
-    onErrorMutation,
-    onSuccessMutation,
-  });
 
   return (
     <ModalContainer

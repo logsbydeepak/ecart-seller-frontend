@@ -32,7 +32,7 @@ const LogoutAllModal: FC<{
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }> = ({ isOpen, setIsOpen }) => {
-  const { setAuthFalse, setAuthTrue, authToken } = useAuthContext();
+  const { setAuthFalse } = useAuthContext();
 
   const { addNotification } = useNotificationContext();
 
@@ -53,7 +53,7 @@ const LogoutAllModal: FC<{
   >(
     "DeleteAllSessionOperation",
     DeleteAllSessionOperation,
-    { currentPassword: getValues("password") },
+    () => ({ currentPassword: getValues("password") }),
     {
       onError: () => errorNotification(),
       onSuccess: (data) => {
