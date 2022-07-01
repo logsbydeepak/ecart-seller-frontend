@@ -39,7 +39,7 @@ export const NotificationContextProvider: FC<PropsWithChildrenOnlyType> = ({
 
   return (
     <NotificationContext.Provider value={{ addNotification }}>
-      <div className="fixed bottom-0 right-0 z-20 flex flex-col justify-end">
+      <div className="fixed bottom-0 right-0 z-30 flex flex-col justify-end">
         <AnimatePresence>
           {notification.map(({ type, text, id }) => (
             <Notification

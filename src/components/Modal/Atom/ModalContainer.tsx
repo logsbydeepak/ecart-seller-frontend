@@ -28,7 +28,7 @@ const ModalContainer: FC<Props> = ({ children, title, isOpen, exitModal }) => {
         open={isOpen}
         onClose={exitModal}
         as="div"
-        className="fixed top-0 z-50 flex h-full w-full items-center justify-center bg-neutral-900/80"
+        className="fixed top-0 z-20 flex h-full w-full items-center justify-center bg-neutral-900/80"
       >
         <Dialog.Panel
           as={motion.div}

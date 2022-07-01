@@ -1,7 +1,6 @@
 import { CheckIcon, XIcon } from "@heroicons/react/solid";
 import { ExclamationIcon } from "@heroicons/react/outline";
-import { FC, Fragment, useEffect, useState } from "react";
-import { Transition } from "@headlessui/react";
+import { FC, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
 export const SuccessIconContainer: FC = () => (
@@ -46,7 +45,7 @@ const Notification: FC<{
       key={id}
       animate={{ x: 0 }}
       initial={{ x: 100 }}
-      exit={{ x: 400 }}
+      exit={{ x: 450 }}
     >
       <div className="mx-4 mb-4 w-96 rounded-lg border border-neutral-200 bg-white px-5 py-5 shadow-sm">
         <div className="mb-3 flex items-center">
