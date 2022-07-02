@@ -1,0 +1,13 @@
+mutation RemoveUserPicture {
+  removeUserPicture {
+    ... on SuccessResponse {
+      __typename
+      message
+    }
+    ... on TokenError {
+      __typename
+      type
+      message
+    }
+  }
+}
