@@ -7,6 +7,7 @@ import SideBarContent from "~/components/Sidebar/SideBarContent";
 import DeleteAccountModal from "~/components/Modal/DeleteAccountModal";
 import UpdateUserNameModal from "~/components/Modal/UpdateUserNameModal";
 import UpdateUserEmailModal from "~/components/Modal/UpdateUserEmailModal";
+import RemoveUserPictureModal from "~/components/Modal/RemoveUserPictureModal";
 import UpdateUserPasswordModal from "~/components/Modal/UpdateUserPasswordModal";
 
 import { useAuthContext } from "~/context/AuthContext";
@@ -20,7 +21,6 @@ import ReadUserOperation from "~/utils/gql/User/ReadUser.gql";
 import AccountSideBarLayout from "~/layout/AccountSideBarLayout";
 import { PencilIcon } from "@heroicons/react/outline";
 import Image from "next/image";
-import UpdateUserPictureModal from "~/components/Modal/UpdateUserPictureModal";
 
 const defaultUserInfoData = {
   firstName: "",
@@ -43,6 +43,9 @@ const Account: NextPageLayoutType = () => {
   const [isOpenLogoutAllModal, setIsOpenLogoutAllModal] = useState(false);
   const [isOpenEditPasswordModal, setIsOpenEditPasswordModal] = useState(false);
   const [isOpenUpdatePictureModal, setIsOpenUpdatePictureModal] =
+    useState(true);
+
+  const [isOpenRemovePictureModal, setIsOpenRevemoPictureModal] =
     useState(true);
 
   const errorNotification = () =>
@@ -98,7 +101,7 @@ const Account: NextPageLayoutType = () => {
       </Show>
 
       <Show when={isOpenUpdatePictureModal} isAnimation={true}>
-        <UpdateUserPictureModal
+        <RemoveUserPictureModal
           isOpen={isOpenUpdatePictureModal}
           setIsOpen={setIsOpenUpdatePictureModal}
           picture={picture}

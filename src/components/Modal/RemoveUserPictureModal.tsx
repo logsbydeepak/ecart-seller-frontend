@@ -16,7 +16,7 @@ import {
   RemoveUserPictureMutationVariables,
 } from "~/types/graphql";
 
-const UpdateUserPictureModal: FC<{
+const RemoveUserPictureModal: FC<{
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   picture: string;
@@ -96,7 +96,6 @@ const UpdateUserPictureModal: FC<{
                 text="Change"
                 type="button"
                 className="mt-4 border-indigo-600 bg-indigo-600 text-white hover:border-indigo-700 hover:bg-indigo-700 disabled:border-black disabled:bg-black"
-                isLoading={isLoading}
                 onClick={exitModal}
               />
             </fieldset>
@@ -116,4 +115,4 @@ const UpdateUserPictureModal: FC<{
   );
 };
 
-export default UpdateUserPictureModal;
+export default RemoveUserPictureModal;
