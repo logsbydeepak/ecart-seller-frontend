@@ -21,6 +21,7 @@ import ReadUserOperation from "~/utils/gql/User/ReadUser.gql";
 import AccountSideBarLayout from "~/layout/AccountSideBarLayout";
 import { PencilIcon } from "@heroicons/react/outline";
 import Image from "next/image";
+import UpdateUserPictureModal from "~/components/Modal/UpdateUserPictureModal";
 
 const defaultUserInfoData = {
   firstName: "",
@@ -45,7 +46,7 @@ const Account: NextPageLayoutType = () => {
   const [isOpenUpdatePictureModal, setIsOpenUpdatePictureModal] =
     useState(true);
 
-  const [isOpenRemovePictureModal, setIsOpenRevemoPictureModal] =
+  const [isOpenRemovePictureModal, setIsOpenRemovePictureModal] =
     useState(true);
 
   const errorNotification = () =>
@@ -100,11 +101,19 @@ const Account: NextPageLayoutType = () => {
         />
       </Show>
 
-      <Show when={isOpenUpdatePictureModal} isAnimation={true}>
+      <Show when={isOpenRemovePictureModal} isAnimation={true}>
         <RemoveUserPictureModal
+          isOpen={isOpenRemovePictureModal}
+          setIsOpen={setIsOpenRemovePictureModal}
+          setIsOpenUpdateUserPicture={setIsOpenUpdatePictureModal}
+          picture={picture}
+        />
+      </Show>
+
+      <Show when={isOpenUpdatePictureModal} isAnimation={true}>
+        <UpdateUserPictureModal
           isOpen={isOpenUpdatePictureModal}
           setIsOpen={setIsOpenUpdatePictureModal}
-          picture={picture}
         />
       </Show>
 
@@ -143,7 +152,7 @@ const Account: NextPageLayoutType = () => {
         <div className="rounded-lg border-2 border-neutral-200 p-8">
           <ItemContainerImage
             picture={picture}
-            onClick={() => setIsOpenUpdatePictureModal(true)}
+            onClick={() => setIsOpenRemovePictureModal(true)}
           />
         </div>
       </div>

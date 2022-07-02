@@ -16,12 +16,10 @@ import {
   RemoveUserPictureMutationVariables,
 } from "~/types/graphql";
 
-const RemoveUserPictureModal: FC<{
+const UpdateUserPictureModal: FC<{
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
-  picture: string;
-  setIsOpenUpdateUserPicture: Dispatch<SetStateAction<boolean>>;
-}> = ({ isOpen, setIsOpen, picture, setIsOpenUpdateUserPicture }) => {
+}> = ({ isOpen, setIsOpen }) => {
   const queryClient = useQueryClient();
 
   const { setAuthFalse } = useAuthContext();
@@ -67,27 +65,15 @@ const RemoveUserPictureModal: FC<{
     mutate();
   };
 
-  const handleOpenUpdateUserPictureModal = () => {
-    exitModal();
-    setIsOpenUpdateUserPicture(true);
-  };
-
   return (
     <ModalContainer
-      title="Remove picture"
+      title="Update picture"
       isOpen={isOpen}
       exitModal={exitModal}
     >
       <div className="w-96">
         <div className="flex items-center justify-center">
-          <div className="relative h-28 w-28">
-            <Image
-              src={picture}
-              alt="profile picture"
-              layout="fill"
-              className="rounded-full"
-            />
-          </div>
+          <div className="relative h-28 w-28"></div>
           <div className="ml-8">
             <fieldset disabled={isLoading}>
               <SmallButton
@@ -102,7 +88,7 @@ const RemoveUserPictureModal: FC<{
                 text="Change"
                 type="button"
                 className="mt-4 border-indigo-600 bg-indigo-600 text-white hover:border-indigo-700 hover:bg-indigo-700 disabled:border-black disabled:bg-black"
-                onClick={handleOpenUpdateUserPictureModal}
+                onClick={exitModal}
               />
             </fieldset>
           </div>
@@ -121,4 +107,4 @@ const RemoveUserPictureModal: FC<{
   );
 };
 
-export default RemoveUserPictureModal;
+export default UpdateUserPictureModal;
