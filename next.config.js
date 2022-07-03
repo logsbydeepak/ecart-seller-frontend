@@ -3,7 +3,7 @@ const nextConfig = {
   pageExtensions: ["page.tsx"],
   reactStrictMode: true,
   images: {
-    domains: ["images.unsplash.com"],
+    domains: ["images.unsplash.com", "res.cloudinary.com"],
   },
 
   webpack: (config) => {

@@ -22,6 +22,7 @@ import AccountSideBarLayout from "~/layout/AccountSideBarLayout";
 import { PencilIcon } from "@heroicons/react/outline";
 import Image from "next/image";
 import UpdateUserPictureModal from "~/components/Modal/UpdateUserPictureModal";
+import showPicture from "~/utils/helper/showPicture";
 
 const defaultUserInfoData = {
   firstName: "",
@@ -29,9 +30,6 @@ const defaultUserInfoData = {
   email: "",
   picture: "",
 };
-
-const picture =
-  "https://images.unsplash.com/photo-1637633198300-08beaec68c70?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1887&q=80";
 
 const Account: NextPageLayoutType = () => {
   const { setAuthFalse } = useAuthContext();
@@ -72,7 +70,7 @@ const Account: NextPageLayoutType = () => {
               firstName: responseData.firstName,
               lastName: responseData.lastName,
               email: responseData.email,
-              picture: responseData.picture,
+              picture: showPicture(responseData.picture),
             });
             break;
 
@@ -106,7 +104,7 @@ const Account: NextPageLayoutType = () => {
           isOpen={isOpenRemovePictureModal}
           setIsOpen={setIsOpenRemovePictureModal}
           setIsOpenUpdateUserPicture={setIsOpenUpdatePictureModal}
-          picture={picture}
+          picture={userInfo.picture}
         />
       </Show>
 
@@ -151,7 +149,7 @@ const Account: NextPageLayoutType = () => {
       <div className="max-w-2xl">
         <div className="rounded-lg border-2 border-neutral-200 p-8">
           <ItemContainerImage
-            picture={picture}
+            picture={userInfo.picture}
             onClick={() => setIsOpenRemovePictureModal(true)}
           />
         </div>

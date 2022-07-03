@@ -1,0 +1,17 @@
+mutation UpdateUserPicture($file: String!) {
+  updateUserPicture(file: $file) {
+    ... on UpdateUserPictureSuccessResponse {
+      __typename
+      picture
+    }
+    ... on UpdateUserPictureCredentialError {
+      __typename
+      message
+    }
+    ... on TokenError {
+      __typename
+      type
+      message
+    }
+  }
+}

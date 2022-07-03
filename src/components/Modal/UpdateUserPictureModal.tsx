@@ -13,11 +13,13 @@ import { useAuthContext } from "~/context/AuthContext";
 import { useNotificationContext } from "~/context/NotificationContext";
 
 import useAuthMutationHook from "~/hooks/useAuthMutationHook";
-import RemoveUserPictureOperation from "~/utils/gql/User/RemoveUserPicture.gql";
+import UpdateUserPictureOperation from "~/utils/gql/User/UpdateUserPicture.gql";
 
 import {
   RemoveUserPictureMutation,
   RemoveUserPictureMutationVariables,
+  UpdateUserPictureMutation,
+  UpdateUserPictureMutationVariables,
 } from "~/types/graphql";
 
 const UpdateUserPictureModal: FC<{
@@ -33,32 +35,39 @@ const UpdateUserPictureModal: FC<{
     addNotification("error", "Something went wrong");
 
   const { isLoading, mutate } = useAuthMutationHook<
-    RemoveUserPictureMutation,
-    RemoveUserPictureMutationVariables
-  >("RemoveUserPictureOperation", RemoveUserPictureOperation, () => ({}), {
-    onError: () => errorNotification(),
-    onSuccess: (data) => {
-      if (!data) return errorNotification();
+    UpdateUserPictureMutation,
+    UpdateUserPictureMutationVariables
+  >(
+    "UpdateUserPictureOperation",
+    UpdateUserPictureOperation,
+    () => ({ file: handleImageCreation() }),
+    {
+      onError: () => errorNotification(),
+      onSuccess: (data) => {
+        if (!data) return errorNotification();
 
-      const responseData = data.removeUserPicture;
+        const responseData = data.updateUserPicture;
 
-      switch (responseData.__typename) {
-        case "SuccessResponse":
-          queryClient.invalidateQueries("ReadUserFirstNameAndPictureOperation");
-          queryClient.invalidateQueries("ReadUserOperation");
-          exitModal();
-          break;
+        switch (responseData.__typename) {
+          case "UpdateUserPictureSuccessResponse":
+            queryClient.invalidateQueries(
+              "ReadUserFirstNameAndPictureOperation"
+            );
+            queryClient.invalidateQueries("ReadUserOperation");
+            exitModal();
+            break;
 
-        case "TokenError":
-          setAuthFalse();
-          break;
+          case "TokenError":
+            setAuthFalse();
+            break;
 
-        default:
-          errorNotification();
-          break;
-      }
-    },
-  });
+          default:
+            errorNotification();
+            break;
+        }
+      },
+    }
+  );
 
   const exitModal = () => {
     if (isLoading) return;
@@ -78,7 +87,6 @@ const UpdateUserPictureModal: FC<{
   const [image, setImage] = useState(
     null as unknown as EventTarget & HTMLImageElement
   );
-  const [finalImage, setFinalImage] = useState(null as unknown as string);
 
   const handleImageCreation = () => {
     const canvas = document.createElement("canvas");
@@ -98,12 +106,11 @@ const UpdateUserPictureModal: FC<{
       crop.width,
       crop.height
     );
-    const base64Image = canvas.toDataURL("image/jpeg", 1);
-    setFinalImage(base64Image);
+    return canvas.toDataURL("image/jpeg", 1);
   };
 
   const handleUpload = () => {
-    handleImageCreation();
+    mutate();
   };
 
   return (

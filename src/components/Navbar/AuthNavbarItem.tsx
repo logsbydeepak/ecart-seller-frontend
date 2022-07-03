@@ -17,13 +17,14 @@ import {
   ReadUserFirstNameAndPictureQueryVariables,
 } from "~/types/graphql";
 
-import useAuthQueryHook from "~/hooks/useAuthQueryHook";
+import showPicture from "~/utils/helper/showPicture";
 import ReadUserFirstNameAndPictureOperation from "~/utils/gql/User/ReadUserFirstNameAndPicture.gql";
+
+import useAuthQueryHook from "~/hooks/useAuthQueryHook";
 
 const defaultData = {
   firstName: "UserName",
-  picture:
-    "https://images.unsplash.com/photo-1637633198300-08beaec68c70?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1887&q=80",
+  picture: "",
 };
 
 const AuthNavbarItem: FC = () => {
@@ -54,7 +55,7 @@ const AuthNavbarItem: FC = () => {
           case "User":
             setUserInfo({
               firstName: responseData.firstName,
-              picture: responseData.picture,
+              picture: showPicture(responseData.picture),
             });
             break;
 
@@ -86,7 +87,7 @@ const AuthNavbarItem: FC = () => {
       <Menu>
         {({ open }) => (
           <>
-            <MenuButton name={userInfo.firstName} />
+            <MenuButton name={userInfo.firstName} picture={userInfo.picture} />
 
             <Show when={open} isAnimation={true}>
               <MenuItems handleLogout={() => setIsOpenLogoutModal(true)} />
@@ -98,11 +99,14 @@ const AuthNavbarItem: FC = () => {
   );
 };
 
-const MenuButton: FC<{ name: string }> = ({ name }) => {
+const MenuButton: FC<{ name: string; picture: string }> = ({
+  name,
+  picture,
+}) => {
   return (
     <Menu.Button className="flex items-center rounded-md px-3 py-2 hover:bg-neutral-100">
       <Image
-        src={defaultData.picture}
+        src={picture}
         alt="picture"
         width="28"
         height="28"
