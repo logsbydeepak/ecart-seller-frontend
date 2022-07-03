@@ -43,11 +43,11 @@ const Account: NextPageLayoutType = () => {
   const [isOpenEditEmailModal, setIsOpenEditEmailModal] = useState(false);
   const [isOpenLogoutAllModal, setIsOpenLogoutAllModal] = useState(false);
   const [isOpenEditPasswordModal, setIsOpenEditPasswordModal] = useState(false);
-  const [isOpenUpdatePictureModal, setIsOpenUpdatePictureModal] =
-    useState(true);
 
+  const [isOpenUpdatePictureModal, setIsOpenUpdatePictureModal] =
+    useState(false);
   const [isOpenRemovePictureModal, setIsOpenRemovePictureModal] =
-    useState(true);
+    useState(false);
 
   const errorNotification = () =>
     addNotification("error", "Something went wrong");
