@@ -1,0 +1,14 @@
+query ReadUserFirstNameAndPicture {
+  readUser {
+    ... on User {
+      __typename
+      firstName
+      picture
+    }
+    ... on TokenError {
+      __typename
+      type
+      message
+    }
+  }
+}

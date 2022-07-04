@@ -1,38 +1,22 @@
 import Link from "next/link";
 import { object, ref } from "yup";
-import { useMutation } from "react-query";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { EmojiHappyIcon, MailIcon } from "@heroicons/react/solid";
-import { SubmitHandler, useForm, UseFormGetValues } from "react-hook-form";
+import { useForm } from "react-hook-form";
 
 import AuthLayout from "~/layout/AuthLayout";
 import ContainerLayout from "~/layout/ContainerLayout";
-
-import {
-  CreateUserMutation,
-  CreateUserMutationVariables,
-} from "~/types/graphql";
-import { NextPageLayoutType } from "~/types/nextMod";
-
-import { useAuthContext } from "~/context/AuthContext";
-import { useNotificationContext } from "~/context/NotificationContext";
-
-import { gqlRequest } from "~/utils/helper/gql";
-import CreateUserOperation from "~/utils/gql/User/CreateUser.gql";
-import { email, firstName, lastName, password } from "~/utils/validation";
 
 import SimpleInput from "~/components/Input/SimpleInput";
 import InputWithLeftIcon from "~/components/Input/InputWithLeftIcon";
 import ButtonWithTextAndSpinner from "~/components/Button/ButtonWithTextAndSpinner";
 import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftIcon";
 
-interface FormType {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
+import { NextPageLayoutType } from "~/types/nextMod";
+
+import { CreateUserFormDataType } from "~/pages/SignUp/type";
+import { email, firstName, lastName, password } from "~/utils/validation";
+import useCreateUserMutation from "./hooks/useCreateUserMutation";
 
 const formValidationSchema = object({
   firstName,
@@ -42,29 +26,12 @@ const formValidationSchema = object({
   confirmPassword: password.oneOf([ref("password")], "Password does not match"),
 });
 
-const createUserRequest = async (getValues: UseFormGetValues<FormType>) => {
-  try {
-    return await gqlRequest<CreateUserMutation, CreateUserMutationVariables>(
-      CreateUserOperation,
-      {
-        firstName: getValues("firstName"),
-        lastName: getValues("lastName"),
-        email: getValues("email"),
-        password: getValues("password"),
-      }
-    );
-  } catch (error) {
-    throw { message: "Something went wrong" };
-  }
-};
-
 const useFormDate = () =>
-  useForm<FormType>({ resolver: yupResolver(formValidationSchema) });
+  useForm<CreateUserFormDataType>({
+    resolver: yupResolver(formValidationSchema),
+  });
 
 const SignUp: NextPageLayoutType = () => {
-  const { setAuthTrue } = useAuthContext();
-  const { addNotification } = useNotificationContext();
-
   const {
     register,
     getValues,
@@ -73,39 +40,10 @@ const SignUp: NextPageLayoutType = () => {
     formState: { errors },
   } = useFormDate();
 
-  const errorNotification = () =>
-    addNotification("error", "Something went wrong");
+  const { isLoading, mutate } = useCreateUserMutation(setError, getValues);
 
-  const { isLoading, mutate } = useMutation(createUserRequest, {
-    mutationKey: "createUser",
-    retry: 3,
-    onError: () => errorNotification(),
-    onSuccess: (data) => {
-      if (!data) return errorNotification();
-
-      const responseData = data.createUser;
-      switch (responseData.__typename) {
-        case "Token":
-          setAuthTrue(responseData.token);
-          addNotification("success", "User created successful");
-          break;
-
-        case "UserAlreadyExistError":
-          setError(
-            "email",
-            { message: "email already exist" },
-            { shouldFocus: true }
-          );
-          break;
-
-        default:
-          errorNotification();
-      }
-    },
-  });
-
-  const onSubmit: SubmitHandler<FormType> = () => {
-    mutate(getValues);
+  const onSubmit = () => {
+    mutate();
   };
 
   return (

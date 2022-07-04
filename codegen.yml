@@ -1,6 +1,6 @@
 overwrite: true
 schema: ${SCHEMA_PATH}
-documents: "src/utils/gql/**/*.gql"
+documents: "src/**/*.gql"
 config:
   allowEnumStringTypes: true
 generates:

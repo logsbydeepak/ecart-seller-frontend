@@ -1,10 +1,12 @@
-import Link from "next/link";
 import { FC } from "react";
+import Link from "next/link";
+import { AnimatePresence } from "framer-motion";
+import { ShoppingCartIcon } from "@heroicons/react/solid";
+
+import { useAuthContext } from "~/context/AuthContext";
+
 import AuthNavbarItem from "./AuthNavbarItem";
 import NoAuthNavbarItem from "./NoAuthNavbarItem";
-import { ShoppingCartIcon } from "@heroicons/react/solid";
-import { useAuthContext } from "~/context/AuthContext";
-import { AnimatePresence } from "framer-motion";
 
 const Navbar: FC = () => {
   const { authToken } = useAuthContext();
@@ -30,10 +32,6 @@ const Navbar: FC = () => {
       </div>
     </nav>
   );
-};
-
-Navbar.defaultProps = {
-  auth: false,
 };
 
 export default Navbar;

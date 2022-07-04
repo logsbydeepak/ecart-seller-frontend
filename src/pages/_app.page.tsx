@@ -1,13 +1,14 @@
 import Head from "next/head";
 import type { AppProps } from "next/app";
+import NextNProgress from "nextjs-progressbar";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { QueryClient, QueryClientProvider } from "react-query";
 
 import "~/styles/globals.css";
-import AppLayout from "~/layout/AppLayout";
 import { AuthProvider } from "~/context/AuthContext";
 import { NextPageLayoutType } from "~/types/nextMod";
-import NextNProgress from "nextjs-progressbar";
+
+import AppLayout from "~/pages/App/Layout/AppLayout";
 
 type AppPropsWithLayout = AppProps & {
   Component: NextPageLayoutType;

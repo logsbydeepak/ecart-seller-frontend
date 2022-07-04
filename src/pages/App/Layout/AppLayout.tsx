@@ -1,9 +1,10 @@
 import { FC, useEffect, useState } from "react";
-import Navbar from "~/components/Navbar";
 
 import { useAuthContext } from "~/context/AuthContext";
 import { PropsWithChildrenOnlyType } from "~/types/nextMod";
 import { NotificationContextProvider } from "~/context/NotificationContext";
+
+import Navbar from "~/pages/App/components/Navbar";
 
 const AppLayout: FC<PropsWithChildrenOnlyType> = ({ children }) => {
   const [isAppReady, setIsAppReady] = useState(false);

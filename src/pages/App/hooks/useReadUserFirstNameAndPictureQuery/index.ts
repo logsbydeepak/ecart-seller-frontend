@@ -1,0 +1,2 @@
+import useReadUserFirstNameAndPictureQuery from "./useReadUserFirstNameAndPictureQuery";
+export default useReadUserFirstNameAndPictureQuery;

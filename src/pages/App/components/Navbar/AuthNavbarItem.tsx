@@ -9,66 +9,16 @@ import { CogIcon, LogoutIcon } from "@heroicons/react/outline";
 import Show from "~/components/Show";
 import LogoutModal from "~/components/Modal/LogoutModal";
 
-import { useAuthContext } from "~/context/AuthContext";
-import { useNotificationContext } from "~/context/NotificationContext";
-
-import {
-  ReadUserFirstNameAndPictureQuery,
-  ReadUserFirstNameAndPictureQueryVariables,
-} from "~/types/graphql";
-
-import showPicture from "~/utils/helper/showPicture";
-import ReadUserFirstNameAndPictureOperation from "~/utils/gql/User/ReadUserFirstNameAndPicture.gql";
-
-import useAuthQueryHook from "~/hooks/useAuthQueryHook";
-
-const defaultData = {
-  firstName: "UserName",
-  picture: "",
-};
+import useReadUserFirstNameAndPictureQuery from "~/pages/App/hooks/useReadUserFirstNameAndPictureQuery";
 
 const AuthNavbarItem: FC = () => {
   const [isOpenLogoutModal, setIsOpenLogoutModal] = useState(false);
-  const [userInfo, setUserInfo] = useState(defaultData);
-  const { addNotification } = useNotificationContext();
-
-  const { setAuthFalse } = useAuthContext();
-
-  const errorNotification = () =>
-    addNotification("error", "Something went wrong");
-
-  const { isError, isLoading } = useAuthQueryHook<
-    ReadUserFirstNameAndPictureQuery,
-    ReadUserFirstNameAndPictureQueryVariables
-  >(
-    "ReadUserFirstNameAndPictureOperation",
-    ReadUserFirstNameAndPictureOperation,
-    {},
-    {
-      onError: () => errorNotification(),
-      onSuccess: (data) => {
-        if (!data) return errorNotification();
-
-        const responseData = data.readUser;
-
-        switch (responseData.__typename) {
-          case "User":
-            setUserInfo({
-              firstName: responseData.firstName,
-              picture: showPicture(responseData.picture),
-            });
-            break;
-
-          case "TokenError":
-            setAuthFalse();
-            break;
-
-          default:
-            errorNotification();
-        }
-      },
-    }
+  const [userInfo, setUserInfo] = useState(
+    null as unknown as { firstName: string; picture: string }
   );
+
+  const { isLoading, isError } =
+    useReadUserFirstNameAndPictureQuery(setUserInfo);
 
   if (isLoading || isError) {
     return (
