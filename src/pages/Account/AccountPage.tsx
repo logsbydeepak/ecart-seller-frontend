@@ -5,7 +5,7 @@ import Show from "~/components/Show";
 import LogoutAllModal from "~/components/Modal/LogoutAllModal";
 import SideBarContent from "~/components/Sidebar/SideBarContent";
 import DeleteAccountModal from "~/components/Modal/DeleteAccountModal";
-import UpdateUserNameModal from "~/components/Modal/UpdateUserNameModal";
+import UpdateUserNameModal from "./components/UpdateUserNameModal";
 import UpdateUserEmailModal from "~/components/Modal/UpdateUserEmailModal";
 import RemoveUserPictureModal from "~/components/Modal/RemoveUserPictureModal";
 import UpdateUserPasswordModal from "~/components/Modal/UpdateUserPasswordModal";
