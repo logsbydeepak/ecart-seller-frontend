@@ -2,73 +2,18 @@ import { Dispatch, FC, SetStateAction, SyntheticEvent, useState } from "react";
 
 import "react-image-crop/dist/ReactCrop.css";
 import { useDropzone } from "react-dropzone";
-import { useQueryClient } from "react-query";
 import ReactCrop, { Crop } from "react-image-crop";
 
 import Show from "~/components/Show";
 import SmallButton from "~/components/Button/SmallButton";
 import ModalContainer from "~/components/Modal/Atom/ModalContainer";
 
-import { useAuthContext } from "~/context/AuthContext";
-import { useNotificationContext } from "~/context/NotificationContext";
-
-import useAuthMutationHook from "~/hooks/useAuthMutationHook";
-import UpdateUserPictureOperation from "~/utils/gql/User/UpdateUserPicture.gql";
-
-import {
-  RemoveUserPictureMutation,
-  RemoveUserPictureMutationVariables,
-  UpdateUserPictureMutation,
-  UpdateUserPictureMutationVariables,
-} from "~/types/graphql";
+import useMutationUpdateUserPicture from "./useMutationUpdatePictureModal";
 
 const UpdateUserPictureModal: FC<{
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }> = ({ isOpen, setIsOpen }) => {
-  const queryClient = useQueryClient();
-
-  const { setAuthFalse } = useAuthContext();
-  const { addNotification } = useNotificationContext();
-
-  const errorNotification = () =>
-    addNotification("error", "Something went wrong");
-
-  const { isLoading, mutate } = useAuthMutationHook<
-    UpdateUserPictureMutation,
-    UpdateUserPictureMutationVariables
-  >(
-    "UpdateUserPictureOperation",
-    UpdateUserPictureOperation,
-    () => ({ file: handleImageCreation() }),
-    {
-      onError: () => errorNotification(),
-      onSuccess: (data) => {
-        if (!data) return errorNotification();
-
-        const responseData = data.updateUserPicture;
-
-        switch (responseData.__typename) {
-          case "UpdateUserPictureSuccessResponse":
-            queryClient.invalidateQueries(
-              "ReadUserFirstNameAndPictureOperation"
-            );
-            queryClient.invalidateQueries("ReadUserOperation");
-            exitModal();
-            break;
-
-          case "TokenError":
-            setAuthFalse();
-            break;
-
-          default:
-            errorNotification();
-            break;
-        }
-      },
-    }
-  );
-
   const exitModal = () => {
     if (isLoading) return;
     setIsOpen(false);
@@ -108,6 +53,11 @@ const UpdateUserPictureModal: FC<{
     );
     return canvas.toDataURL("image/jpeg", 1);
   };
+
+  const { isLoading, mutate } = useMutationUpdateUserPicture(
+    handleImageCreation,
+    exitModal
+  );
 
   const handleUpload = () => {
     mutate();
