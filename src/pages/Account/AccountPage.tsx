@@ -16,7 +16,7 @@ import AccountSideBarLayout from "~/layout/AccountSideBarLayout";
 import { PencilIcon } from "@heroicons/react/outline";
 import Image from "next/image";
 import UpdateUserPictureModal from "~/components/Modal/UpdateUserPictureModal";
-import useReadUserQuery from "./hooks/useReadUserQuery";
+import useReadUserQuery from "./useReadUserQuery";
 
 const defaultUserInfoData = {
   firstName: "",

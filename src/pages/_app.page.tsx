@@ -8,7 +8,7 @@ import "~/styles/globals.css";
 import { AuthProvider } from "~/context/AuthContext";
 import { NextPageLayoutType } from "~/types/nextMod";
 
-import AppLayout from "~/pages/App/Layout/AppLayout";
+import AppLayout from "~/pages/App/AppLayout";
 
 type AppPropsWithLayout = AppProps & {
   Component: NextPageLayoutType;

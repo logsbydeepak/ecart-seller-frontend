@@ -3,7 +3,7 @@ import { Dispatch, FC, SetStateAction } from "react";
 import SmallButton from "~/components/Button/SmallButton";
 import ModalContainer from "~/components/Modal/Atom/ModalContainer";
 
-import useDeleteSessionMutation from "~/pages/App/hooks/useDeleteSessionMutation";
+import useDeleteSessionMutation from "~/pages/App/components/LogoutModal/useDeleteSessionMutation";
 
 const LogoutModal: FC<{
   isOpen: boolean;
