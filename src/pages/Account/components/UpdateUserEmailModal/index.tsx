@@ -14,29 +14,30 @@ interface FormType {
   currentPassword: string;
 }
 
-
 const UpdateUserEmailModal: FC<{
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   email: string;
 }> = ({ isOpen, setIsOpen, email }) => {
-
   const {
     register,
     getValues,
     setError,
     handleSubmit,
     formState: { errors },
-  } = useFormData(email)
+  } = useFormData(email);
 
   const exitModal = () => {
     if (!isLoading) setIsOpen(false);
   };
 
+  const { mutate, isLoading } = useMutationUpdateUserEmail(
+    getValues,
+    setError,
+    exitModal
+  );
 
-  const { mutate, isLoading } = useMutationUpdateUserEmail(getValues, setError, exitModal)
-
-  const onSubmit  = () => {
+  const onSubmit = () => {
     mutate();
   };
 

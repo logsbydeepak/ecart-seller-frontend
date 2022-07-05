@@ -11,7 +11,6 @@ const UpdateUserPasswordModal: FC<{
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }> = ({ isOpen, setIsOpen }) => {
-
   const {
     register,
     getValues,
@@ -24,8 +23,11 @@ const UpdateUserPasswordModal: FC<{
     if (!isLoading) setIsOpen(false);
   };
 
-
-  const { mutate, isLoading } = useMutationUpdateUserPassword(getValues, setError, exitModal)
+  const { mutate, isLoading } = useMutationUpdateUserPassword(
+    getValues,
+    setError,
+    exitModal
+  );
 
   const onSubmit = () => {
     mutate(getValues());
