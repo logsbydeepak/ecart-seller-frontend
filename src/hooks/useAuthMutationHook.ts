@@ -22,7 +22,7 @@ const useAuthMutationHook = <RequestResponse, RequestVariable>(
     try {
       return await gqlRequest<RequestResponse, RequestVariable>(
         operation,
-        variable(),
+        variable,
         authToken
       );
     } catch (error) {

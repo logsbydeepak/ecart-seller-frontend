@@ -1,37 +1,29 @@
 import { Dispatch, SetStateAction } from "react";
-
 import { useAuthContext } from "~/context/AuthContext";
-import useAuthQueryHook from "~/hooks/useAuthQueryHook";
 import { useNotificationContext } from "~/context/NotificationContext";
-
-import ReadUserFirstNameAndPictureOperation from "./ReadUserFirstNameAndPicture.gql";
-
-import {
-  ReadUserFirstNameAndPictureQuery,
-  ReadUserFirstNameAndPictureQueryVariables,
-} from "~/types/graphql";
+import useAuthQueryHook from "~/hooks/useAuthQueryHook";
+import { ReadUserQuery, ReadUserQueryVariables } from "~/types/graphql";
 import showPicture from "~/utils/helper/showPicture";
+import ReadUserOperation from "./ReadUser.gql";
 
-const useReadUserFirstNameAndPictureQuery = (
+const useReadUserQuery = (
   setUserInfo: Dispatch<
     SetStateAction<{
       firstName: string;
+      lastName: string;
+      email: string;
       picture: string;
     }>
   >
 ) => {
-  const { setAuthFalse } = useAuthContext();
   const { addNotification } = useNotificationContext();
+  const { setAuthFalse } = useAuthContext();
 
   const errorNotification = () =>
     addNotification("error", "Something went wrong");
-
-  return useAuthQueryHook<
-    ReadUserFirstNameAndPictureQuery,
-    ReadUserFirstNameAndPictureQueryVariables
-  >(
-    "ReadUserFirstNameAndPictureOperation",
-    ReadUserFirstNameAndPictureOperation,
+  return useAuthQueryHook<ReadUserQuery, ReadUserQueryVariables>(
+    "ReadUserOperation",
+    ReadUserOperation,
     () => ({}),
     {
       onError: () => errorNotification(),
@@ -44,6 +36,8 @@ const useReadUserFirstNameAndPictureQuery = (
           case "User":
             setUserInfo({
               firstName: responseData.firstName,
+              lastName: responseData.lastName,
+              email: responseData.email,
               picture: showPicture(responseData.picture),
             });
             break;
@@ -60,4 +54,4 @@ const useReadUserFirstNameAndPictureQuery = (
   );
 };
 
-export default useReadUserFirstNameAndPictureQuery;
+export default useReadUserQuery;

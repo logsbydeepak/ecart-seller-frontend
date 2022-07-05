@@ -36,3 +36,4 @@ yarn-error.log*
 
 # codegen
 src/types/graphql.tsx
+.swc

@@ -10,19 +10,13 @@ import UpdateUserEmailModal from "~/components/Modal/UpdateUserEmailModal";
 import RemoveUserPictureModal from "~/components/Modal/RemoveUserPictureModal";
 import UpdateUserPasswordModal from "~/components/Modal/UpdateUserPasswordModal";
 
-import { useAuthContext } from "~/context/AuthContext";
-import { useNotificationContext } from "~/context/NotificationContext";
-
 import { NextPageLayoutType } from "~/types/nextMod";
-import { ReadUserQuery, ReadUserQueryVariables } from "~/types/graphql";
 
-import useAuthQueryHook from "~/hooks/useAuthQueryHook";
-import ReadUserOperation from "~/utils/gql/User/ReadUser.gql";
 import AccountSideBarLayout from "~/layout/AccountSideBarLayout";
 import { PencilIcon } from "@heroicons/react/outline";
 import Image from "next/image";
 import UpdateUserPictureModal from "~/components/Modal/UpdateUserPictureModal";
-import showPicture from "~/utils/helper/showPicture";
+import useReadUserQuery from "./hooks/useReadUserQuery";
 
 const defaultUserInfoData = {
   firstName: "",
@@ -31,60 +25,20 @@ const defaultUserInfoData = {
   picture: "",
 };
 
-const Account: NextPageLayoutType = () => {
-  const { setAuthFalse } = useAuthContext();
-  const { addNotification } = useNotificationContext();
-
+const AccountPage: NextPageLayoutType = () => {
   const [userInfo, setUserInfo] = useState(defaultUserInfoData);
+
   const [isDeleteUserModal, setIsDeleteUserModal] = useState(false);
   const [isOpenEditNameModal, setIsOpenEditNameModal] = useState(false);
   const [isOpenEditEmailModal, setIsOpenEditEmailModal] = useState(false);
   const [isOpenLogoutAllModal, setIsOpenLogoutAllModal] = useState(false);
   const [isOpenEditPasswordModal, setIsOpenEditPasswordModal] = useState(false);
-
   const [isOpenUpdatePictureModal, setIsOpenUpdatePictureModal] =
     useState(false);
   const [isOpenRemovePictureModal, setIsOpenRemovePictureModal] =
     useState(false);
 
-  const errorNotification = () =>
-    addNotification("error", "Something went wrong");
-
-  const { isError, isLoading, isSuccess } = useAuthQueryHook<
-    ReadUserQuery,
-    ReadUserQueryVariables
-  >(
-    "ReadUserOperation",
-    ReadUserOperation,
-    {},
-    {
-      onError: () => errorNotification(),
-      onSuccess: (data) => {
-        if (!data) return errorNotification();
-
-        const responseData = data.readUser;
-
-        switch (responseData.__typename) {
-          case "User":
-            setUserInfo({
-              firstName: responseData.firstName,
-              lastName: responseData.lastName,
-              email: responseData.email,
-              picture: showPicture(responseData.picture),
-            });
-            break;
-
-          case "TokenError":
-            setAuthFalse();
-            break;
-
-          default:
-            errorNotification();
-        }
-      },
-    }
-  );
-
+  const { isError, isLoading, isSuccess } = useReadUserQuery(setUserInfo);
   return (
     <SideBarContent
       title="Account"
@@ -259,6 +213,6 @@ const Divider: FC = () => (
   <div className="my-5 h-0.5 rounded-full bg-neutral-200"></div>
 );
 
-Account.getLayout = AccountSideBarLayout;
+AccountPage.getLayout = AccountSideBarLayout;
 
-export default Account;
+export default AccountPage;

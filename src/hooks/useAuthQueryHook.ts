@@ -8,7 +8,7 @@ import { useAuthContext } from "~/context/AuthContext";
 const useAuthQueryHook = <RequestResponse, RequestVariable>(
   queryKey: string,
   operation: RequestDocument,
-  variable: RequestVariable,
+  variable: () => RequestVariable,
   queryOption: UseQueryOptions<
     RequestResponse,
     GraphQLError,

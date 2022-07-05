@@ -9,5 +9,5 @@ export const gqlRequest = <RequestResponse, RequestVariable>(
     credentials: "include",
     mode: "cors",
     headers: token ? { token } : {},
-  }).request(operation, variable);
+  }).request(operation, variable());
 };

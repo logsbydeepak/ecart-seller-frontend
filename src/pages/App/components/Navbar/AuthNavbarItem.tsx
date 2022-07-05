@@ -7,7 +7,7 @@ import { FC, ReactNode, useState } from "react";
 import { CogIcon, LogoutIcon } from "@heroicons/react/outline";
 
 import Show from "~/components/Show";
-import LogoutModal from "~/components/Modal/LogoutModal";
+import LogoutModal from "~/pages/App/components/Modal/LogoutModal";
 
 import useReadUserFirstNameAndPictureQuery from "~/pages/App/hooks/useReadUserFirstNameAndPictureQuery";
 
