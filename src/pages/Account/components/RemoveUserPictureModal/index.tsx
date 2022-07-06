@@ -4,7 +4,7 @@ import { Dispatch, FC, SetStateAction } from "react";
 import SmallButton from "~/components/Button/SmallButton";
 import ModalContainer from "~/components/Modal/Atom/ModalContainer";
 
-import useMutationRemoveUserPicture from "./useMutationRemoveUserPicture";
+import useMutation from "./useMutation";
 
 const RemoveUserPictureModal: FC<{
   isOpen: boolean;
@@ -17,7 +17,7 @@ const RemoveUserPictureModal: FC<{
     setIsOpen(false);
   };
 
-  const { isLoading, mutate } = useMutationRemoveUserPicture(exitModal);
+  const { isLoading, mutate } = useMutation(exitModal);
 
   const handleRemovePicture = () => {
     mutate();

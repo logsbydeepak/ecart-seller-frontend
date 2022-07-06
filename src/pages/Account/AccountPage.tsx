@@ -1,22 +1,23 @@
 import clsx from "clsx";
+import Image from "next/image";
 import { FC, useState } from "react";
+import { PencilIcon } from "@heroicons/react/outline";
 
 import Show from "~/components/Show";
-import LogoutAllModal from "~/components/Modal/LogoutAllModal";
 import SideBarContent from "~/components/Sidebar/SideBarContent";
-import DeleteAccountModal from "~/components/Modal/DeleteAccountModal";
-import UpdateUserNameModal from "./components/UpdateUserNameModal";
-import UpdateUserEmailModal from "~/components/Modal/UpdateUserEmailModal";
-import RemoveUserPictureModal from "~/components/Modal/RemoveUserPictureModal";
-import UpdateUserPasswordModal from "~/components/Modal/UpdateUserPasswordModal";
 
 import { NextPageLayoutType } from "~/types/nextMod";
-
 import AccountSideBarLayout from "~/layout/AccountSideBarLayout";
-import { PencilIcon } from "@heroicons/react/outline";
-import Image from "next/image";
-import UpdateUserPictureModal from "~/components/Modal/UpdateUserPictureModal";
+
 import useReadUserQuery from "./useReadUserQuery";
+
+import LogoutAllModal from "./components/LogoutAllModal";
+import DeleteAccountModal from "./components/DeleteAccountModal";
+import UpdateUserNameModal from "./components/UpdateUserNameModal";
+import UpdateUserEmailModal from "./components/UpdateUserEmailModal";
+import RemoveUserPictureModal from "./components/RemoveUserPictureModal";
+import UpdateUserPictureModal from "./components/UpdateUserPictureModal";
+import UpdateUserPasswordModal from "./components/UpdateUserPasswordModal";
 
 const defaultUserInfoData = {
   firstName: "",

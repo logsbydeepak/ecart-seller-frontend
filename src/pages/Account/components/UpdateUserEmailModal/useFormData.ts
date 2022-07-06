@@ -1,7 +1,9 @@
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm } from "react-hook-form";
 import { object, ref } from "yup";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+
 import { email, password } from "~/utils/validation";
+
 import { FormDataType } from "./types";
 
 const validatorSchema = object({

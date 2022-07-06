@@ -1,60 +1,49 @@
 import { UseFormGetValues, UseFormSetError } from "react-hook-form";
-import { useQueryClient } from "react-query";
 
 import { useAuthContext } from "~/context/AuthContext";
 import useAuthMutationHook from "~/hooks/useAuthMutationHook";
 import { useNotificationContext } from "~/context/NotificationContext";
 
 import {
-  UpdateUserEmailMutation,
-  UpdateUserEmailMutationVariables,
+  UpdateUserPasswordMutation,
+  UpdateUserPasswordMutationVariables,
 } from "~/types/graphql";
 
 import { FormDataType } from "./types";
-import UpdateUserEmailOperation from "./UpdateUserEmail.gql";
+import UpdateUserPasswordOperation from "./UpdateUserPassword.gql";
 
-const useMutationUpdateUserEmail = (
+const useMutation = (
   getValues: UseFormGetValues<FormDataType>,
   setError: UseFormSetError<FormDataType>,
   exitModal: () => void
 ) => {
-  const queryClient = useQueryClient();
-
   const { setAuthFalse } = useAuthContext();
   const { addNotification } = useNotificationContext();
 
   const errorNotification = () =>
     addNotification("error", "Something went wrong");
 
-  const variable = (): UpdateUserEmailMutationVariables => ({
-    email: getValues("email"),
+  const variable = (): UpdateUserPasswordMutationVariables => ({
+    password: getValues("password"),
     currentPassword: getValues("currentPassword"),
   });
 
   return useAuthMutationHook<
-    UpdateUserEmailMutation,
-    UpdateUserEmailMutationVariables
-  >("UpdateUserEmailOperation", UpdateUserEmailOperation, () => getValues(), {
+    UpdateUserPasswordMutation,
+    UpdateUserPasswordMutationVariables
+  >("UpdateUserPasswordOperation", UpdateUserPasswordOperation, variable, {
+    onError: () => errorNotification(),
     onSuccess: (data) => {
       if (!data) return errorNotification();
 
-      const responseData = data.updateUserEmail;
+      const responseData = data.updateUserPassword;
       switch (responseData.__typename) {
-        case "UpdateUserEmailSuccessResponse":
-          queryClient.invalidateQueries("ReadUserOperation");
+        case "UpdateUserPasswordSuccessResponse":
           exitModal();
           break;
 
         case "TokenError":
           setAuthFalse();
-          break;
-
-        case "UserAlreadyExistError":
-          setError(
-            "email",
-            { message: "email already exist" },
-            { shouldFocus: true }
-          );
           break;
 
         case "UpdateUserInvalidUserCredentialError":
@@ -73,4 +62,4 @@ const useMutationUpdateUserEmail = (
   });
 };
 
-export default useMutationUpdateUserEmail;
+export default useMutation;

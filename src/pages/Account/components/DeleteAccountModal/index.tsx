@@ -7,7 +7,7 @@ import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftI
 import useMutation from "./useMutation";
 import useFormData from "./useFormData";
 
-const UpdateUserPasswordModal: FC<{
+const DeleteAccountModal: FC<{
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }> = ({ isOpen, setIsOpen }) => {
@@ -19,19 +19,19 @@ const UpdateUserPasswordModal: FC<{
     formState: { errors },
   } = useFormData();
 
+  const { mutate, isLoading } = useMutation(getValues, setError);
+
+  const onSubmit = () => {
+    mutate();
+  };
+
   const exitModal = () => {
     if (!isLoading) setIsOpen(false);
   };
 
-  const { mutate, isLoading } = useMutation(getValues, setError, exitModal);
-
-  const onSubmit = () => {
-    mutate(getValues());
-  };
-
   return (
     <ModalContainer
-      title="Update password"
+      title="Delete Account"
       isOpen={isOpen}
       exitModal={exitModal}
     >
@@ -39,16 +39,6 @@ const UpdateUserPasswordModal: FC<{
         <PasswordInputWithLeftIcon
           register={register("password")}
           errorMessage={errors.password?.message}
-          disabled={isLoading}
-          className="mb-4 text-left"
-          label="New Password"
-          type="password"
-          placeholder="********"
-        />
-
-        <PasswordInputWithLeftIcon
-          register={register("currentPassword")}
-          errorMessage={errors.currentPassword?.message}
           disabled={isLoading}
           className="mb-6 text-left"
           label="Current Password"
@@ -60,14 +50,14 @@ const UpdateUserPasswordModal: FC<{
           <SmallButton
             text="Cancel"
             type="button"
-            className=" mr-5 text-black hover:text-indigo-600"
+            className="bg-red-white mr-5 text-black hover:text-indigo-600"
             onClick={exitModal}
           />
 
           <SmallButton
-            text="Save"
+            text="Delete"
             type="submit"
-            className="border-indigo-600 bg-indigo-600 text-white hover:border-indigo-700 hover:bg-indigo-700 disabled:border-black disabled:bg-black"
+            className="border-red-600 bg-red-600 text-white hover:border-red-700 hover:bg-red-700 disabled:border-black disabled:bg-black"
             isLoading={isLoading}
           />
         </fieldset>
@@ -76,4 +66,4 @@ const UpdateUserPasswordModal: FC<{
   );
 };
 
-export default UpdateUserPasswordModal;
+export default DeleteAccountModal;

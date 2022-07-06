@@ -1,54 +1,60 @@
-import { useQueryClient } from "react-query";
 import { UseFormGetValues, UseFormSetError } from "react-hook-form";
+import { useQueryClient } from "react-query";
 
 import { useAuthContext } from "~/context/AuthContext";
 import useAuthMutationHook from "~/hooks/useAuthMutationHook";
 import { useNotificationContext } from "~/context/NotificationContext";
 
 import {
-  UpdateUserNameMutation,
-  UpdateUserNameMutationVariables,
+  UpdateUserEmailMutation,
+  UpdateUserEmailMutationVariables,
 } from "~/types/graphql";
 
+import UpdateUserEmailOperation from "./UpdateUserEmail.gql";
 import { FormDataType } from "./types";
-import UpdateUserNameOperation from "./UpdateUserName.gql";
 
-const useMutationUpdateUserName = (
+const useMutation = (
   getValues: UseFormGetValues<FormDataType>,
   setError: UseFormSetError<FormDataType>,
   exitModal: () => void
 ) => {
   const queryClient = useQueryClient();
+
   const { setAuthFalse } = useAuthContext();
   const { addNotification } = useNotificationContext();
 
   const errorNotification = () =>
     addNotification("error", "Something went wrong");
 
-  const variable = (): UpdateUserNameMutationVariables => ({
-    firstName: getValues("firstName"),
-    lastName: getValues("lastName"),
+  const variable = (): UpdateUserEmailMutationVariables => ({
+    email: getValues("email"),
     currentPassword: getValues("currentPassword"),
   });
 
   return useAuthMutationHook<
-    UpdateUserNameMutation,
-    UpdateUserNameMutationVariables
-  >("UpdateUserNameOperation", UpdateUserNameOperation, variable, {
-    onError: () => errorNotification(),
+    UpdateUserEmailMutation,
+    UpdateUserEmailMutationVariables
+  >("UpdateUserEmailOperation", UpdateUserEmailOperation, () => getValues(), {
     onSuccess: (data) => {
       if (!data) return errorNotification();
 
-      const responseData = data.updateUserName;
+      const responseData = data.updateUserEmail;
       switch (responseData.__typename) {
-        case "UpdateUserNameSuccessResponse":
-          queryClient.invalidateQueries("ReadUserFirstNameAndPictureOperation");
+        case "UpdateUserEmailSuccessResponse":
           queryClient.invalidateQueries("ReadUserOperation");
           exitModal();
           break;
 
         case "TokenError":
           setAuthFalse();
+          break;
+
+        case "UserAlreadyExistError":
+          setError(
+            "email",
+            { message: "email already exist" },
+            { shouldFocus: true }
+          );
           break;
 
         case "UpdateUserInvalidUserCredentialError":
@@ -67,4 +73,4 @@ const useMutationUpdateUserName = (
   });
 };
 
-export default useMutationUpdateUserName;
+export default useMutation;

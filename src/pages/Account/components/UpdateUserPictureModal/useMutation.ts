@@ -1,4 +1,5 @@
 import { useQueryClient } from "react-query";
+
 import { useAuthContext } from "~/context/AuthContext";
 import useAuthMutationHook from "~/hooks/useAuthMutationHook";
 import { useNotificationContext } from "~/context/NotificationContext";
@@ -10,7 +11,7 @@ import {
 
 import UpdateUserPictureOperation from "./UpdateUserPicture.gql";
 
-const useMutationUpdateUserPicture = (
+const useMutation = (
   handleImageCreation: () => string,
   exitModal: () => void
 ) => {
@@ -57,4 +58,4 @@ const useMutationUpdateUserPicture = (
   );
 };
 
-export default useMutationUpdateUserPicture;
+export default useMutation;

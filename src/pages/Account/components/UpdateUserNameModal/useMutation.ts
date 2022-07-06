@@ -1,3 +1,4 @@
+import { useQueryClient } from "react-query";
 import { UseFormGetValues, UseFormSetError } from "react-hook-form";
 
 import { useAuthContext } from "~/context/AuthContext";
@@ -5,40 +6,44 @@ import useAuthMutationHook from "~/hooks/useAuthMutationHook";
 import { useNotificationContext } from "~/context/NotificationContext";
 
 import {
-  UpdateUserPasswordMutation,
-  UpdateUserPasswordMutationVariables,
+  UpdateUserNameMutation,
+  UpdateUserNameMutationVariables,
 } from "~/types/graphql";
 
 import { FormDataType } from "./types";
-import UpdateUserEmailOperation from "./UpdateUserEmail.gql";
+import UpdateUserNameOperation from "./UpdateUserName.gql";
 
-const useMutationUpdateUserPassword = (
+const useMutation = (
   getValues: UseFormGetValues<FormDataType>,
   setError: UseFormSetError<FormDataType>,
   exitModal: () => void
 ) => {
+  const queryClient = useQueryClient();
   const { setAuthFalse } = useAuthContext();
   const { addNotification } = useNotificationContext();
 
   const errorNotification = () =>
     addNotification("error", "Something went wrong");
 
-  const variable = (): UpdateUserPasswordMutationVariables => ({
-    password: getValues("password"),
+  const variable = (): UpdateUserNameMutationVariables => ({
+    firstName: getValues("firstName"),
+    lastName: getValues("lastName"),
     currentPassword: getValues("currentPassword"),
   });
 
   return useAuthMutationHook<
-    UpdateUserPasswordMutation,
-    UpdateUserPasswordMutationVariables
-  >("UpdateUserNameOperation", UpdateUserEmailOperation, variable, {
+    UpdateUserNameMutation,
+    UpdateUserNameMutationVariables
+  >("UpdateUserNameOperation", UpdateUserNameOperation, variable, {
     onError: () => errorNotification(),
     onSuccess: (data) => {
       if (!data) return errorNotification();
 
-      const responseData = data.updateUserPassword;
+      const responseData = data.updateUserName;
       switch (responseData.__typename) {
-        case "UpdateUserPasswordSuccessResponse":
+        case "UpdateUserNameSuccessResponse":
+          queryClient.invalidateQueries("ReadUserFirstNameAndPictureOperation");
+          queryClient.invalidateQueries("ReadUserOperation");
           exitModal();
           break;
 
@@ -62,4 +67,4 @@ const useMutationUpdateUserPassword = (
   });
 };
 
-export default useMutationUpdateUserPassword;
+export default useMutation;

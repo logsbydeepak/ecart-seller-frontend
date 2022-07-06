@@ -7,8 +7,8 @@ import ModalContainer from "~/components/Modal/Atom/ModalContainer";
 import InputWithLeftIcon from "~/components/Input/InputWithLeftIcon";
 import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftIcon";
 
+import useMutation from "./useMutation";
 import useFormData from "./useFormData";
-import useMutationUpdateUserName from "./useMutationUpdateUserName";
 
 const UpdateUserNameModal: FC<{
   isOpen: boolean;
@@ -28,11 +28,7 @@ const UpdateUserNameModal: FC<{
     if (!isLoading) setIsOpen(false);
   };
 
-  const { mutate, isLoading } = useMutationUpdateUserName(
-    getValues,
-    setError,
-    exitModal
-  );
+  const { mutate, isLoading } = useMutation(getValues, setError, exitModal);
 
   const onSubmit = () => {
     mutate();

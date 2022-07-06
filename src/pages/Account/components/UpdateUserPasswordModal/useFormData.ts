@@ -2,8 +2,8 @@ import { object } from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-import { FormDataType } from "./types";
 import { firstName, lastName, password } from "~/utils/validation";
+import { FormDataType } from "./types";
 
 const validatorSchema = object({
   firstName,
@@ -11,10 +11,10 @@ const validatorSchema = object({
   currentPassword: password,
 });
 
-const useFormData = () => {
+const useUpdateUserPasswordModalForm = () => {
   return useForm<FormDataType>({
     resolver: yupResolver(validatorSchema),
   });
 };
 
-export default useFormData;
+export default useUpdateUserPasswordModalForm;
