@@ -9,12 +9,12 @@ import {
   DeleteUserMutationVariables,
 } from "~/types/graphql";
 
-import { FormDataType } from "./types";
 import DeleteUserOperation from "./DeleteUser.gql";
+import { DeleteAccountModalFormDataType } from "./useDeleteAccountForm";
 
-const useMutation = (
-  getValues: UseFormGetValues<FormDataType>,
-  setError: UseFormSetError<FormDataType>
+const useDeleteUserMutation = (
+  getValues: UseFormGetValues<DeleteAccountModalFormDataType>,
+  setError: UseFormSetError<DeleteAccountModalFormDataType>
 ) => {
   const { setAuthFalse } = useAuthContext();
   const { addNotification } = useNotificationContext();
@@ -62,4 +62,4 @@ const useMutation = (
   );
 };
 
-export default useMutation;
+export default useDeleteUserMutation;
