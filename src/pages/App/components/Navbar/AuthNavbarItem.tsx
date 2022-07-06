@@ -7,9 +7,9 @@ import { FC, ReactNode, useState } from "react";
 import { CogIcon, LogoutIcon } from "@heroicons/react/outline";
 
 import Show from "~/components/Show";
-import LogoutModal from "~/pages/App/components/LogoutModal/LogoutModal";
 
-import useReadUserFirstNameAndPictureQuery from "~/pages/App/components/Navbar/useReadUserFirstNameAndPictureQuery";
+import LogoutModal from "~/pages/App/components/LogoutModal";
+import useReadUserFirstNameAndPictureQuery from "./useReadUserFirstNameAndPictureQuery";
 
 const AuthNavbarItem: FC = () => {
   const [isOpenLogoutModal, setIsOpenLogoutModal] = useState(false);

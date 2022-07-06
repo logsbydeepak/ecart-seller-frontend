@@ -1,10 +1,12 @@
 import { useAuthContext } from "~/context/AuthContext";
-import { useNotificationContext } from "~/context/NotificationContext";
 import useAuthMutationHook from "~/hooks/useAuthMutationHook";
+import { useNotificationContext } from "~/context/NotificationContext";
+
 import {
   DeleteSessionMutation,
   DeleteSessionMutationVariables,
 } from "~/types/graphql";
+
 import DeleteSessionOperation from "./DeleteSession.gql";
 
 const useDeleteSessionMutation = () => {
