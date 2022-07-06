@@ -2,12 +2,11 @@ import { useMutation } from "react-query";
 import { UseFormGetValues, UseFormSetError } from "react-hook-form";
 
 import { gqlRequest } from "~/utils/helper/gql";
-
-import { useNotificationContext } from "~/context/NotificationContext";
 import { useAuthContext } from "~/context/AuthContext";
+import { useNotificationContext } from "~/context/NotificationContext";
 
-import { CreateUserFormDataType } from "~/pages/SignUp/type";
-import CreateUserOperation from "~/pages/SignUp/hooks/useCreateUserMutation/CreateUser.gql";
+import CreateUserOperation from "./CreateUser.gql";
+import { SignUpFormDataType } from "./useSignUpForm";
 
 import {
   CreateUserMutation,
@@ -28,8 +27,8 @@ const createUserRequest = async (
 };
 
 const useCreateUserMutation = (
-  setError: UseFormSetError<CreateUserFormDataType>,
-  getValue: UseFormGetValues<CreateUserFormDataType>
+  setError: UseFormSetError<SignUpFormDataType>,
+  getValue: UseFormGetValues<SignUpFormDataType>
 ) => {
   const { addNotification } = useNotificationContext();
   const { setAuthTrue } = useAuthContext();

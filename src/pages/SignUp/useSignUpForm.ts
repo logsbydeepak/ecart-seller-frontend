@@ -1,8 +1,8 @@
-import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { object, ref } from "yup";
+import { object, ref, InferType } from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+
 import { email, firstName, lastName, password } from "~/utils/validation";
-import { CreateUserFormDataType } from "~/pages/SignUp/type";
 
 const formValidationSchema = object({
   firstName,
@@ -12,8 +12,10 @@ const formValidationSchema = object({
   confirmPassword: password.oneOf([ref("password")], "Password does not match"),
 });
 
+export type SignUpFormDataType = InferType<typeof formValidationSchema>;
+
 const useSignUpForm = () => {
-  return useForm<CreateUserFormDataType>({
+  return useForm<SignUpFormDataType>({
     resolver: yupResolver(formValidationSchema),
   });
 };

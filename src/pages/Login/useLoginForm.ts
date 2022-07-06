@@ -1,16 +1,18 @@
-import { yupResolver } from "@hookform/resolvers/yup";
+import { object, InferType } from "yup";
 import { useForm } from "react-hook-form";
-import { object } from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+
 import { email, password } from "~/utils/validation";
-import { CreateSessionFormDataType } from "~/pages/Login/types";
 
 const formValidationSchema = object({
   email,
   password,
 });
 
+export type LoginFormDataType = InferType<typeof formValidationSchema>;
+
 const useLoginForm = () => {
-  return useForm<CreateSessionFormDataType>({
+  return useForm<LoginFormDataType>({
     resolver: yupResolver(formValidationSchema),
   });
 };

@@ -1,13 +1,17 @@
-import { UseFormGetValues, UseFormSetError } from "react-hook-form";
 import { useMutation } from "react-query";
+import { UseFormGetValues, UseFormSetError } from "react-hook-form";
+
 import { useAuthContext } from "~/context/AuthContext";
 import { useNotificationContext } from "~/context/NotificationContext";
+
 import {
   CreateSessionMutation,
   CreateSessionMutationVariables,
 } from "~/types/graphql";
+
 import { gqlRequest } from "~/utils/helper/gql";
-import { CreateSessionFormDataType } from "../../types";
+
+import { LoginFormDataType } from "./useLoginForm";
 import CreateSessionOperation from "./CreateSession.gql";
 
 const createSessionRequest = async (
@@ -29,8 +33,8 @@ const errorMessage = {
 };
 
 const useCreateSessionMutation = (
-  setError: UseFormSetError<CreateSessionFormDataType>,
-  getValue: UseFormGetValues<CreateSessionFormDataType>
+  setError: UseFormSetError<LoginFormDataType>,
+  getValue: UseFormGetValues<LoginFormDataType>
 ) => {
   const { addNotification } = useNotificationContext();
   const { setAuthTrue } = useAuthContext();
