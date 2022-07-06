@@ -11,6 +11,8 @@ services:
       - ../../:/home/node/ecart-seller-frontend
     networks:
       - dev_frontend_network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     container_name: ecart_seller_dev_frontend_next
 
 networks:
