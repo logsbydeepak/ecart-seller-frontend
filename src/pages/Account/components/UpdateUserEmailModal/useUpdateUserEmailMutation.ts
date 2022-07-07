@@ -11,11 +11,11 @@ import {
 } from "~/types/graphql";
 
 import UpdateUserEmailOperation from "./UpdateUserEmail.gql";
-import { FormDataType } from "./types";
+import { UpdateUserEmailFormDataType } from "./useUpdateUserEmailForm";
 
-const useMutation = (
-  getValues: UseFormGetValues<FormDataType>,
-  setError: UseFormSetError<FormDataType>,
+const useUpdateUserEmailMutation = (
+  getValues: UseFormGetValues<UpdateUserEmailFormDataType>,
+  setError: UseFormSetError<UpdateUserEmailFormDataType>,
   exitModal: () => void
 ) => {
   const queryClient = useQueryClient();
@@ -73,4 +73,4 @@ const useMutation = (
   });
 };
 
-export default useMutation;
+export default useUpdateUserEmailMutation;
