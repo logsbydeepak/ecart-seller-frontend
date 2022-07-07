@@ -11,7 +11,7 @@ import {
 
 import RemoveUserPictureOperation from "./RemoveUserPicture.gql";
 
-const useMutation = (exitModal: () => void) => {
+const useRemoveUserPictureMutation = (exitModal: () => void) => {
   const queryClient = useQueryClient();
 
   const { setAuthFalse } = useAuthContext();
@@ -48,4 +48,4 @@ const useMutation = (exitModal: () => void) => {
   });
 };
 
-export default useMutation;
+export default useRemoveUserPictureMutation;

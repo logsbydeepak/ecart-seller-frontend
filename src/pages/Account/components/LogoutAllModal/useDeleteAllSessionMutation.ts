@@ -3,17 +3,18 @@ import { UseFormGetValues, UseFormSetError } from "react-hook-form";
 import { useAuthContext } from "~/context/AuthContext";
 import useAuthMutationHook from "~/hooks/useAuthMutationHook";
 import { useNotificationContext } from "~/context/NotificationContext";
+
 import {
   DeleteAllSessionMutation,
   DeleteAllSessionMutationVariables,
 } from "~/types/graphql";
 
-import { FormDataType } from "./types";
+import { LogoutAllFormDataType } from "./useLogoutAllForm";
 import DeleteAllSessionOperation from "./DeleteAllSession.gql";
 
-const useMutation = (
-  getValues: UseFormGetValues<FormDataType>,
-  setError: UseFormSetError<FormDataType>
+const useDeleteAllSessionMutation = (
+  getValues: UseFormGetValues<LogoutAllFormDataType>,
+  setError: UseFormSetError<LogoutAllFormDataType>
 ) => {
   const { setAuthFalse } = useAuthContext();
   const { addNotification } = useNotificationContext();
@@ -64,4 +65,4 @@ const useMutation = (
   );
 };
 
-export default useMutation;
+export default useDeleteAllSessionMutation;

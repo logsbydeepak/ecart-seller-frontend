@@ -4,8 +4,8 @@ import SmallButton from "~/components/Button/SmallButton";
 import ModalContainer from "~/components/Modal/Atom/ModalContainer";
 import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftIcon";
 
-import useFormData from "./useFormData";
-import useMutation from "./useMutation";
+import useLogoutAllForm from "./useLogoutAllForm";
+import useDeleteAllSessionMutation from "./useDeleteAllSessionMutation";
 
 const LogoutAllModal: FC<{
   isOpen: boolean;
@@ -17,9 +17,12 @@ const LogoutAllModal: FC<{
     setError,
     handleSubmit,
     formState: { errors },
-  } = useFormData();
+  } = useLogoutAllForm();
 
-  const { mutate, isLoading } = useMutation(getValues, setError);
+  const { mutate, isLoading } = useDeleteAllSessionMutation(
+    getValues,
+    setError
+  );
 
   const exitModal = () => {
     if (!isLoading) setIsOpen(false);
