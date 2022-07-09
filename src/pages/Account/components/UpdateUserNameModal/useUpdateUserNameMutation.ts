@@ -1,8 +1,6 @@
-import { useQueryClient } from "react-query";
-import { UseFormGetValues, UseFormSetError } from "react-hook-form";
-
 import { useAuthContext } from "~/context/AuthContext";
 import useAuthMutationHook from "~/hooks/useAuthMutationHook";
+import { UseFormGetValues, UseFormSetError } from "react-hook-form";
 import { useNotificationContext } from "~/context/NotificationContext";
 
 import {
@@ -10,12 +8,13 @@ import {
   UpdateUserNameMutationVariables,
 } from "~/types/graphql";
 
-import { FormDataType } from "./types";
+import { UpdateUserNameModalFormDataType } from "./useUpdateUserNameModalForm";
 import UpdateUserNameOperation from "./UpdateUserName.gql";
+import { useQueryClient } from "react-query";
 
 const useMutation = (
-  getValues: UseFormGetValues<FormDataType>,
-  setError: UseFormSetError<FormDataType>,
+  getValues: UseFormGetValues<UpdateUserNameModalFormDataType>,
+  setError: UseFormSetError<UpdateUserNameModalFormDataType>,
   exitModal: () => void
 ) => {
   const queryClient = useQueryClient();
