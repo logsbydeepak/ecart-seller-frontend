@@ -9,12 +9,12 @@ import {
   UpdateUserPasswordMutationVariables,
 } from "~/types/graphql";
 
-import { FormDataType } from "./types";
+import { UpdateUserPasswordFormDataType } from "./useUpdateUserPasswordModalForm";
 import UpdateUserPasswordOperation from "./UpdateUserPassword.gql";
 
 const useMutation = (
-  getValues: UseFormGetValues<FormDataType>,
-  setError: UseFormSetError<FormDataType>,
+  getValues: UseFormGetValues<UpdateUserPasswordFormDataType>,
+  setError: UseFormSetError<UpdateUserPasswordFormDataType>,
   exitModal: () => void
 ) => {
   const { setAuthFalse } = useAuthContext();
