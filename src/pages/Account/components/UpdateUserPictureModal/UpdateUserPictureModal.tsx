@@ -157,7 +157,14 @@ const CropImage: FC<{
   return (
     <div className="h-full w-full rounded-lg bg-neutral-50 p-2">
       <ReactCrop crop={crop} onChange={(c) => setCrop(c)} aspect={1}>
-        <img src={src} className="h-44 w-full" onLoad={handleOnLoad} />
+        <picture>
+          <img
+            src={src}
+            className="h-44 w-full"
+            onLoad={handleOnLoad}
+            alt="new picture"
+          />
+        </picture>
       </ReactCrop>
     </div>
   );
