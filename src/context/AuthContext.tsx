@@ -1,15 +1,13 @@
 import {
   createContext,
-  FC,
   useContext,
   useState,
   useEffect,
   useMemo,
+  PropsWithChildren,
 } from "react";
 
 import { useQueryClient } from "react-query";
-
-import { PropsWithChildrenOnlyType } from "~/types/nextMod";
 
 type AuthContextType = null | {
   authToken: string;
@@ -32,7 +30,7 @@ const getLocalTokenValue = () => localStorage.getItem("token") || "";
 const setLocalToken = (token: string) => localStorage.setItem("token", token);
 const removeLocalToken = () => localStorage.removeItem("token");
 
-export const AuthProvider: FC<PropsWithChildrenOnlyType> = ({ children }) => {
+export const AuthProvider = ({ children }: PropsWithChildren) => {
   const [isAuth, setIsAuth] = useState<boolean | null>(null);
   const [authToken, setAuthToken] = useState("");
 

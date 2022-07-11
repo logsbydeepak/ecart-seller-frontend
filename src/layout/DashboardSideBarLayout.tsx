@@ -13,8 +13,7 @@ import {
 } from "@heroicons/react/solid";
 
 import AuthLayout from "./AuthLayout";
-import { ReactElement, FC } from "react";
-import { PropsWithChildrenOnlyType } from "~/types/nextMod";
+import { PropsWithChildren, ReactElement } from "react";
 
 import { useRouter } from "next/router";
 import SideBarItem from "~/components/Sidebar/SideBarItem";
@@ -28,7 +27,7 @@ const DashboardSideBarLayout = (page: ReactElement) => (
   />
 );
 
-const DashboardSideBar: FC<PropsWithChildrenOnlyType> = ({ children }) => {
+const DashboardSideBar = ({ children }: PropsWithChildren) => {
   const router = useRouter();
   const currentPath = router.pathname.toLowerCase();
 

@@ -1,22 +1,20 @@
-import { FC } from "react";
+import { PropsWithChildren } from "react";
 import Link from "next/link";
 
-import { PropsWithChildrenOnlyType } from "~/types/nextMod";
-
-interface Props extends PropsWithChildrenOnlyType {
+interface Props extends PropsWithChildren {
   title: string;
   subTitle: string;
   subTitleLinkText: string;
   subTitleLink: string;
 }
 
-const LoginAndSignUpContainer: FC<Props> = ({
+const LoginAndSignUpContainer = ({
   children,
   title,
   subTitle,
   subTitleLink,
   subTitleLinkText,
-}) => {
+}: Props) => {
   return (
     <div className="flex flex-col items-center	justify-center py-20">
       <div className="rounded-lg border-2 px-10 py-16 ">

@@ -1,10 +1,14 @@
-import { createContext, FC, useContext, useState } from "react";
-
 import { v4 as uuidv4 } from "uuid";
+import {
+  createContext,
+  FC,
+  PropsWithChildren,
+  useContext,
+  useState,
+} from "react";
 
-import { PropsWithChildrenOnlyType } from "~/types/nextMod";
-import Notification from "~/components/Notification/Notification";
 import { AnimatePresence } from "framer-motion";
+import Notification from "~/components/Notification/Notification";
 
 type NotificationContextType = null | {
   addNotification: (type: "success" | "error", text: string) => void;
@@ -20,9 +24,9 @@ export const useNotificationContext = () => {
   return context;
 };
 
-export const NotificationContextProvider: FC<PropsWithChildrenOnlyType> = ({
+export const NotificationContextProvider = ({
   children,
-}) => {
+}: PropsWithChildren) => {
   const [notification, setNotification] = useState<
     { type: "success" | "error"; text: string; id: string }[]
   >([]);

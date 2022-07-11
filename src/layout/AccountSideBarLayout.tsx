@@ -3,13 +3,12 @@ import {
   IdentificationIcon as IdentificationIconSolid,
 } from "@heroicons/react/solid";
 
-import { FC, ReactElement } from "react";
+import { PropsWithChildren, ReactElement } from "react";
 import { useRouter } from "next/router";
 import { CreditCardIcon, IdentificationIcon } from "@heroicons/react/outline";
 
 import AuthLayout from "./AuthLayout";
 import SideBarItem from "~/components/Sidebar/SideBarItem";
-import { PropsWithChildrenOnlyType } from "~/types/nextMod";
 import SideBarContainer from "~/components/Sidebar/SideBarContainer";
 
 const AccountSideBarLayout = (page: ReactElement) => {
@@ -22,7 +21,7 @@ const AccountSideBarLayout = (page: ReactElement) => {
   );
 };
 
-const AccountSideBar: FC<PropsWithChildrenOnlyType> = ({ children }) => {
+const AccountSideBar = ({ children }: PropsWithChildren) => {
   const router = useRouter();
   const currentPath = router.pathname.toLowerCase();
 

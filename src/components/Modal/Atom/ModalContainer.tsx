@@ -1,13 +1,9 @@
-import { FC, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
 import { Dialog } from "@headlessui/react";
+import { PropsWithChildren } from "react";
 import { XIcon } from "@heroicons/react/solid";
 import { AnimationProps, motion } from "framer-motion";
 
-import Show from "~/components/Show";
-import { PropsWithChildrenOnlyType } from "~/types/nextMod";
-
-interface Props extends PropsWithChildrenOnlyType {
+interface Props extends PropsWithChildren {
   title: string;
   isOpen: boolean;
   exitModal: () => void;
@@ -20,7 +16,7 @@ const animation: AnimationProps = {
   exit: { y: 500, opacity: 0 },
 };
 
-const ModalContainer: FC<Props> = ({ children, title, isOpen, exitModal }) => {
+const ModalContainer = ({ children, title, isOpen, exitModal }: Props) => {
   return (
     <Dialog static open={isOpen} onClose={exitModal} className="relative z-10">
       <div className="fixed inset-0 bg-neutral-900 bg-opacity-75 transition-opacity" />

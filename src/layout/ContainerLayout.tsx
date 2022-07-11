@@ -1,7 +1,6 @@
-import { FC } from "react";
-import { PropsWithChildrenOnlyType } from "~/types/nextMod";
+import { PropsWithChildren } from "react";
 
-const ContainerLayout: FC<PropsWithChildrenOnlyType> = ({ children }) => (
+const ContainerLayout = ({ children }: PropsWithChildren) => (
   <div className="mx-auto max-w-screen-2xl px-6 pt-16">{children}</div>
 );
 

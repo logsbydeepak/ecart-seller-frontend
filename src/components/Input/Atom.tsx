@@ -1,7 +1,6 @@
-import { FC, ReactNode } from "react";
-import { UseFormRegisterReturn } from "react-hook-form";
 import clsx from "clsx";
-import { PropsWithChildrenOnlyType } from "~/types/nextMod";
+import { UseFormRegisterReturn } from "react-hook-form";
+import { FC, PropsWithChildren, ReactNode } from "react";
 
 export interface CommonInputType {
   label: string;
@@ -62,19 +61,17 @@ export const Label: FC<{ label: string; id: string }> = ({ label, id }) => (
   </label>
 );
 
-export const IconContainer: FC<PropsWithChildrenOnlyType> = ({ children }) => (
+export const IconContainer = ({ children }: PropsWithChildren) => (
   <div className="relative">{children}</div>
 );
 
-export const LeftIconContainer: FC<PropsWithChildrenOnlyType> = ({
-  children,
-}) => (
+export const LeftIconContainer = ({ children }: PropsWithChildren) => (
   <div className="pointer-events-none absolute left-0 h-full">{children}</div>
 );
 
-export const RightIconContainer: FC<PropsWithChildrenOnlyType> = ({
-  children,
-}) => <div className="absolute right-0 h-full">{children}</div>;
+export const RightIconContainer = ({ children }: PropsWithChildren) => (
+  <div className="absolute right-0 h-full">{children}</div>
+);
 
 export const IconBase: FC<{ Icon: ReactNode }> = ({ Icon }) => (
   <div className="flex h-full w-11 items-center justify-center text-neutral-500">
