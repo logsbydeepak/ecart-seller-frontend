@@ -11,7 +11,7 @@ import {
 
 import UpdateUserPictureOperation from "./UpdateUserPicture.gql";
 
-const useMutation = (
+const useUpdateUserPictureMutation = (
   handleImageCreation: () => string,
   exitModal: () => void
 ) => {
@@ -58,4 +58,4 @@ const useMutation = (
   );
 };
 
-export default useMutation;
+export default useUpdateUserPictureMutation;

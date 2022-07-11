@@ -8,7 +8,7 @@ import Show from "~/components/Show";
 import SmallButton from "~/components/Button/SmallButton";
 import ModalContainer from "~/components/Modal/Atom/ModalContainer";
 
-import useMutation from "./useMutation";
+import useUpdateUserPictureMutation from "./useUpdateUserPictureMutation";
 
 const UpdateUserPictureModal: FC<{
   isOpen: boolean;
@@ -54,7 +54,10 @@ const UpdateUserPictureModal: FC<{
     return canvas.toDataURL("image/jpeg", 1);
   };
 
-  const { isLoading, mutate } = useMutation(handleImageCreation, exitModal);
+  const { isLoading, mutate } = useUpdateUserPictureMutation(
+    handleImageCreation,
+    exitModal
+  );
 
   const handleUpload = () => {
     mutate();

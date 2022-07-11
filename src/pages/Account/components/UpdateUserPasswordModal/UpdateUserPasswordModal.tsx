@@ -4,8 +4,8 @@ import SmallButton from "~/components/Button/SmallButton";
 import ModalContainer from "~/components/Modal/Atom/ModalContainer";
 import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftIcon";
 
-import useMutation from "./useMutation";
-import useFormData from "./useFormData";
+import useUpdateUserPasswordMutation from "./useUpdateUserPasswordMutation";
+import useUpdateUserPasswordForm from "./useUpdateUserPasswordForm";
 
 const UpdateUserPasswordModal: FC<{
   isOpen: boolean;
@@ -17,13 +17,17 @@ const UpdateUserPasswordModal: FC<{
     setError,
     handleSubmit,
     formState: { errors },
-  } = useFormData();
+  } = useUpdateUserPasswordForm();
 
   const exitModal = () => {
     if (!isLoading) setIsOpen(false);
   };
 
-  const { mutate, isLoading } = useMutation(getValues, setError, exitModal);
+  const { mutate, isLoading } = useUpdateUserPasswordMutation(
+    getValues,
+    setError,
+    exitModal
+  );
 
   const onSubmit = () => {
     mutate(getValues());

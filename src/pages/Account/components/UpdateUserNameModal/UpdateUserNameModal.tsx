@@ -8,7 +8,7 @@ import InputWithLeftIcon from "~/components/Input/InputWithLeftIcon";
 import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftIcon";
 
 import useUpdateUserNameMutation from "./useUpdateUserNameMutation";
-import useUpdateUserNameModalForm from "./useUpdateUserNameModalForm";
+import useUpdateUserNameForm from "./useUpdateUserNameForm";
 
 const UpdateUserNameModal: FC<{
   isOpen: boolean;
@@ -22,7 +22,7 @@ const UpdateUserNameModal: FC<{
     setError,
     handleSubmit,
     formState: { errors },
-  } = useUpdateUserNameModalForm(firstName, lastName);
+  } = useUpdateUserNameForm(firstName, lastName);
 
   const exitModal = () => {
     if (!isLoading) setIsOpen(false);
