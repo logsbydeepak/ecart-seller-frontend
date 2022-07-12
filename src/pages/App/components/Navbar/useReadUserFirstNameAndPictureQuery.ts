@@ -21,10 +21,14 @@ const useReadUserFirstNameAndPictureQuery = (
   >
 ) => {
   const { setAuthFalse } = useAuthContext();
-  const { addNotification } = useNotificationContext();
+  const { dispatchNotification } = useNotificationContext();
 
   const errorNotification = () =>
-    addNotification("error", "Something went wrong");
+    dispatchNotification({
+      type: "add",
+      status: "error",
+      message: "Something went wrong",
+    });
 
   return useAuthQueryHook<
     ReadUserFirstNameAndPictureQuery,

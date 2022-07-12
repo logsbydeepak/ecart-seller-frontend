@@ -17,10 +17,14 @@ const useDeleteUserMutation = (
   setError: UseFormSetError<DeleteAccountModalFormDataType>
 ) => {
   const { setAuthFalse } = useAuthContext();
-  const { addNotification } = useNotificationContext();
+  const { dispatchNotification } = useNotificationContext();
 
   const errorNotification = () =>
-    addNotification("error", "Something went wrong");
+    dispatchNotification({
+      type: "add",
+      status: "error",
+      message: "Something went wrong",
+    });
 
   return useAuthMutationHook<DeleteUserMutation, DeleteUserMutationVariables>(
     "DeleteUserOperation",
@@ -35,10 +39,11 @@ const useDeleteUserMutation = (
         switch (responseData.__typename) {
           case "SuccessResponse":
             setAuthFalse();
-            addNotification(
-              "success",
-              "User Logout from all device successfully"
-            );
+            dispatchNotification({
+              type: "add",
+              status: "success",
+              message: "User Logout from all device successfully",
+            });
             break;
 
           case "DeleteUserCredentialError":

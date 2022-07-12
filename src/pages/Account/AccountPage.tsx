@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import Image from "next/image";
-import { useState } from "react";
+import { useReducer, useState } from "react";
 import { PencilIcon } from "@heroicons/react/outline";
 
 import Show from "~/components/Show";

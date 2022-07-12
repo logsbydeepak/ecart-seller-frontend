@@ -30,11 +30,15 @@ const useCreateUserMutation = (
   setError: UseFormSetError<SignUpFormDataType>,
   getValue: UseFormGetValues<SignUpFormDataType>
 ) => {
-  const { addNotification } = useNotificationContext();
+  const { dispatchNotification } = useNotificationContext();
   const { setAuthTrue } = useAuthContext();
 
   const errorNotification = () =>
-    addNotification("error", "Something went wrong");
+    dispatchNotification({
+      type: "add",
+      status: "error",
+      message: "Something went wrong",
+    });
 
   const variable = (): CreateUserMutationVariables => ({
     firstName: getValue("firstName"),
@@ -54,7 +58,11 @@ const useCreateUserMutation = (
       switch (responseData.__typename) {
         case "Token":
           setAuthTrue(responseData.token);
-          addNotification("success", "User created successful");
+          dispatchNotification({
+            type: "add",
+            status: "success",
+            message: "User created successful",
+          });
           break;
 
         case "UserAlreadyExistError":

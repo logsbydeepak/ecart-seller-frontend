@@ -1,7 +1,8 @@
 import { CheckIcon, XIcon } from "@heroicons/react/solid";
 import { ExclamationIcon } from "@heroicons/react/outline";
-import { useEffect, useState } from "react";
+import { Dispatch, useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { NotificationActionType } from "../notificationReducer";
 
 export const SuccessIconContainer = () => (
   <div className="rounded-md bg-green-200 p-1.5">
@@ -19,15 +20,14 @@ const Notification = ({
   text,
   type,
   id,
-  removeNotification,
+  dispatchNotification,
 }: {
   text: string;
   type: "success" | "error";
   id: string;
-  removeNotification: (id: string) => void;
+  dispatchNotification: Dispatch<NotificationActionType>;
 }) => {
   const [timeFrame, setTimeFrame] = useState(0);
-  const [show, setShow] = useState(true);
 
   useEffect(() => {
     const time = setTimeout(() => {
@@ -40,10 +40,9 @@ const Notification = ({
 
   useEffect(() => {
     if (timeFrame === 100) {
-      setShow(false);
-      removeNotification(id);
+      dispatchNotification({ type: "remove", payload: { id } });
     }
-  }, [id, removeNotification, timeFrame]);
+  }, [dispatchNotification, id, timeFrame]);
 
   return (
     <motion.div
@@ -63,8 +62,7 @@ const Notification = ({
           <button
             className="ml-auto rounded-md  p-1.5 hover:bg-neutral-100"
             onClick={() => {
-              setShow(false);
-              removeNotification(id);
+              dispatchNotification({ type: "remove", payload: { id } });
             }}
           >
             <XIcon className="h-5 w-5 text-neutral-500" />

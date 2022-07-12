@@ -10,11 +10,15 @@ import {
 import DeleteSessionOperation from "./DeleteSession.gql";
 
 const useDeleteSessionMutation = () => {
-  const { addNotification } = useNotificationContext();
+  const { dispatchNotification } = useNotificationContext();
   const { setAuthFalse } = useAuthContext();
 
   const errorNotification = () =>
-    addNotification("error", "Something went wrong");
+    dispatchNotification({
+      type: "add",
+      status: "error",
+      message: "Something went wrong",
+    });
 
   return useAuthMutationHook<
     DeleteSessionMutation,
@@ -28,7 +32,7 @@ const useDeleteSessionMutation = () => {
       switch (responseData.__typename) {
         case "SuccessResponse":
           setAuthFalse();
-          addNotification("success", "User Logout Successfully");
+          dispatchNotification("success", "User Logout Successfully");
           break;
 
         case "TokenError":

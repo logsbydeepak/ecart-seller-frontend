@@ -36,11 +36,15 @@ const useCreateSessionMutation = (
   setError: UseFormSetError<LoginFormDataType>,
   getValue: UseFormGetValues<LoginFormDataType>
 ) => {
-  const { addNotification } = useNotificationContext();
+  const { dispatchNotification } = useNotificationContext();
   const { setAuthTrue } = useAuthContext();
 
   const errorNotification = () =>
-    addNotification("error", "Something went wrong");
+    dispatchNotification({
+      type: "add",
+      status: "error",
+      message: "Something went wrong",
+    });
 
   const variable = (): CreateSessionMutationVariables => ({
     email: getValue("email"),
@@ -59,7 +63,11 @@ const useCreateSessionMutation = (
       switch (responseData.__typename) {
         case "Token":
           setAuthTrue(responseData.token);
-          addNotification("success", "User login successful");
+          dispatchNotification({
+            type: "add",
+            status: "success",
+            message: "User login successful",
+          });
           break;
 
         case "CreateSessionCredentialError":
