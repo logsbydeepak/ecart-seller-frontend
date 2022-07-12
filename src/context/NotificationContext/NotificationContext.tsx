@@ -1,13 +1,13 @@
-import { v4 as uuidv4 } from "uuid";
+import { useImmerReducer } from "use-immer";
+import { AnimatePresence } from "framer-motion";
 import { createContext, Dispatch, PropsWithChildren, useContext } from "react";
 
-import { AnimatePresence } from "framer-motion";
-import Notification from "./components/Notification";
-import { useImmerReducer } from "use-immer";
 import notificationReducer, {
   NotificationActionType,
   notificationInitialState,
 } from "./notificationReducer";
+
+import Notification from "./components/Notification";
 
 type NotificationContextType = null | {
   dispatchNotification: Dispatch<NotificationActionType>;
@@ -35,12 +35,10 @@ export const NotificationContextProvider = ({
     <NotificationContext.Provider value={{ dispatchNotification }}>
       <div className="fixed bottom-0 right-0 z-30 flex flex-col justify-end">
         <AnimatePresence>
-          {notificationState.map(({ type, message, id }) => (
+          {notificationState.map((notification) => (
             <Notification
-              key={id}
-              text={message}
-              type={type}
-              id={id}
+              notification={notification}
+              key={notification.id}
               dispatchNotification={dispatchNotification}
             />
           ))}

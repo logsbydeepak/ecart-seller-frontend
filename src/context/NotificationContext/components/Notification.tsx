@@ -1,33 +1,27 @@
-import { CheckIcon, XIcon } from "@heroicons/react/solid";
-import { ExclamationIcon } from "@heroicons/react/outline";
-import { Dispatch, useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { NotificationActionType } from "../notificationReducer";
+import { Dispatch, useCallback, useEffect, useState } from "react";
 
-export const SuccessIconContainer = () => (
-  <div className="rounded-md bg-green-200 p-1.5">
-    <CheckIcon className="h-5 w-5 text-green-800" />
-  </div>
-);
-
-export const ErrorIconContainer = () => (
-  <div className="rounded-md bg-red-200 p-1.5">
-    <ExclamationIcon className="h-5 w-5 text-red-800" />
-  </div>
-);
+import Show from "~/components/Show";
+import { CloseButtonIcon, ErrorIcon, SuccessIcon } from "./NotificationIcon";
+import { NotificationActionType } from "~/context/NotificationContext/notificationReducer";
 
 const Notification = ({
-  text,
-  type,
-  id,
+  notification,
   dispatchNotification,
 }: {
-  text: string;
-  type: "success" | "error";
-  id: string;
+  notification: {
+    message: string;
+    type: "success" | "error";
+    id: string;
+  };
   dispatchNotification: Dispatch<NotificationActionType>;
 }) => {
+  const { id, message, type } = notification;
   const [timeFrame, setTimeFrame] = useState(0);
+
+  const exitNotification = useCallback(() => {
+    dispatchNotification({ type: "remove", id });
+  }, [dispatchNotification, id]);
 
   useEffect(() => {
     const time = setTimeout(() => {
@@ -40,9 +34,9 @@ const Notification = ({
 
   useEffect(() => {
     if (timeFrame === 100) {
-      dispatchNotification({ type: "remove", payload: { id } });
+      exitNotification();
     }
-  }, [dispatchNotification, id, timeFrame]);
+  }, [exitNotification, timeFrame]);
 
   return (
     <motion.div
@@ -53,20 +47,16 @@ const Notification = ({
     >
       <div className="mx-4 mb-4 w-96 rounded-lg border border-neutral-200 bg-white px-5 py-5 shadow-sm">
         <div className="mb-3 flex items-center">
-          {type === "success" ? (
-            <SuccessIconContainer />
-          ) : (
-            <ErrorIconContainer />
-          )}
-          <p className="ml-2 text-sm">{text}</p>
-          <button
-            className="ml-auto rounded-md  p-1.5 hover:bg-neutral-100"
-            onClick={() => {
-              dispatchNotification({ type: "remove", payload: { id } });
-            }}
-          >
-            <XIcon className="h-5 w-5 text-neutral-500" />
-          </button>
+          <Show when={type === "success"}>
+            <SuccessIcon />
+          </Show>
+
+          <Show when={type === "success"}>
+            <ErrorIcon />
+          </Show>
+
+          <p className="ml-2 text-sm">{message}</p>
+          <CloseButtonIcon handleOnClick={exitNotification} />
         </div>
         <div
           className="h-1 rounded-full bg-neutral-500"
