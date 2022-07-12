@@ -1,4 +1,4 @@
-import { FC, ReactNode } from "react";
+import { ReactNode } from "react";
 import { v4 } from "uuid";
 import clsx from "clsx";
 
@@ -12,11 +12,11 @@ import {
   IconBase,
 } from "./Atom";
 
-interface PropType extends CommonInputType {
+interface Props extends CommonInputType {
   Icon: ReactNode;
 }
 
-const InputWithLeftIcon: FC<PropType> = ({
+const InputWithLeftIcon = ({
   className,
   label,
   placeholder,
@@ -25,7 +25,7 @@ const InputWithLeftIcon: FC<PropType> = ({
   type,
   errorMessage,
   Icon,
-}) => {
+}: Props) => {
   const id = v4();
   return (
     <div className={clsx(className, disabled && "pointer-events-none")}>

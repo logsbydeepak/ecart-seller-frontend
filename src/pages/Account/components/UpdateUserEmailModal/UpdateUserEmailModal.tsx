@@ -1,5 +1,5 @@
 import { MailIcon } from "@heroicons/react/solid";
-import { Dispatch, FC, SetStateAction } from "react";
+import { Dispatch, SetStateAction } from "react";
 
 import SmallButton from "~/components/Button/SmallButton";
 import ModalContainer from "~/components/Modal/Atom/ModalContainer";
@@ -9,11 +9,15 @@ import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftI
 import useUpdateUserEmailForm from "./useUpdateUserEmailForm";
 import useUpdateUserEmailMutation from "./useUpdateUserEmailMutation";
 
-const UpdateUserEmailModal: FC<{
+const UpdateUserEmailModal = ({
+  isOpen,
+  setIsOpen,
+  email,
+}: {
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   email: string;
-}> = ({ isOpen, setIsOpen, email }) => {
+}) => {
   const {
     register,
     getValues,

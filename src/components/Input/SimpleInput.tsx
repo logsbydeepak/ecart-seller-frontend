@@ -1,10 +1,9 @@
-import { FC } from "react";
 import { v4 } from "uuid";
 import clsx from "clsx";
 
 import { CommonInputType, ErrorMessage, TextInput, Label } from "./Atom";
 
-const SimpleInput: FC<CommonInputType> = ({
+const SimpleInput = ({
   className,
   label,
   placeholder,
@@ -12,7 +11,7 @@ const SimpleInput: FC<CommonInputType> = ({
   register,
   disabled,
   errorMessage,
-}) => {
+}: CommonInputType) => {
   const id = v4();
   return (
     <div className={clsx(className, disabled && "pointer-events-none")}>

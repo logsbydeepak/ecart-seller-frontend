@@ -1,4 +1,4 @@
-import { Dispatch, FC, SetStateAction, SyntheticEvent, useState } from "react";
+import { Dispatch, SetStateAction, SyntheticEvent, useState } from "react";
 
 import "react-image-crop/dist/ReactCrop.css";
 import { useDropzone } from "react-dropzone";
@@ -10,10 +10,13 @@ import ModalContainer from "~/components/Modal/Atom/ModalContainer";
 
 import useUpdateUserPictureMutation from "./useUpdateUserPictureMutation";
 
-const UpdateUserPictureModal: FC<{
+const UpdateUserPictureModal = ({
+  isOpen,
+  setIsOpen,
+}: {
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
-}> = ({ isOpen, setIsOpen }) => {
+}) => {
   const exitModal = () => {
     if (isLoading) return;
     setIsOpen(false);
@@ -118,10 +121,13 @@ const UpdateUserPictureModal: FC<{
   );
 };
 
-const DropImage: FC<{
+const DropImage = ({
+  setSrc,
+  setIsImageSelected,
+}: {
   setSrc: Dispatch<SetStateAction<string>>;
   setIsImageSelected: Dispatch<SetStateAction<boolean>>;
-}> = ({ setSrc, setIsImageSelected }) => {
+}) => {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop: (acceptedFile, rejectedFile) => {
       const reader = new FileReader();
@@ -144,12 +150,17 @@ const DropImage: FC<{
   );
 };
 
-const CropImage: FC<{
+const CropImage = ({
+  src,
+  setCrop,
+  crop,
+  setImage,
+}: {
   src: string;
   crop: Crop;
   setCrop: Dispatch<SetStateAction<Crop>>;
   setImage: Dispatch<SetStateAction<EventTarget & HTMLImageElement>>;
-}> = ({ src, setCrop, crop, setImage }) => {
+}) => {
   const handleOnLoad = (image: SyntheticEvent<HTMLImageElement, Event>) => {
     setImage(image.currentTarget);
   };

@@ -1,4 +1,4 @@
-import { FC, ReactNode } from "react";
+import { ReactNode } from "react";
 import Show from "../Show";
 import Spinner from "../Spinner";
 
@@ -10,13 +10,13 @@ interface Props {
   isSuccess?: boolean;
 }
 
-const SideBarContent: FC<Props> = ({
+const SideBarContent = ({
   title,
   children,
   isLoading = false,
   isError = false,
   isSuccess = true,
-}) => {
+}: Props) => {
   return (
     <>
       <h1 className="mb-10 text-2xl font-semibold">{title}</h1>

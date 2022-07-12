@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { UseFormRegisterReturn } from "react-hook-form";
-import { FC, PropsWithChildren, ReactNode } from "react";
+import { PropsWithChildren, ReactNode } from "react";
 
 export interface CommonInputType {
   label: string;
@@ -13,13 +13,19 @@ export interface CommonInputType {
   type?: string;
 }
 
-export const TextInput: FC<{
+export const TextInput = ({
+  placeholder,
+  id,
+  type,
+  register,
+  className,
+}: {
   placeholder: string;
   id: string;
   register: UseFormRegisterReturn;
   className: string;
   type?: string;
-}> = ({ placeholder, id, type, register, className }) => (
+}) => (
   <input
     placeholder={placeholder}
     id={id}
@@ -32,16 +38,19 @@ export const TextInput: FC<{
   />
 );
 
-export const LeftIcon: FC<{ Icon: ReactNode }> = ({ Icon }) => (
+export const LeftIcon = ({ Icon }: { Icon: ReactNode }) => (
   <div className="pointer-events-none absolute left-0 flex h-full w-11 items-center justify-center">
     <span className="w-4 text-neutral-500">{Icon}</span>
   </div>
 );
 
-export const RightButtonIcon: FC<{
+export const RightButtonIcon = ({
+  Icon,
+  handleOnClick,
+}: {
   Icon: ReactNode;
   handleOnClick: () => void;
-}> = ({ Icon, handleOnClick }) => (
+}) => (
   <button
     type="button"
     onClick={handleOnClick}
@@ -51,11 +60,11 @@ export const RightButtonIcon: FC<{
   </button>
 );
 
-export const ErrorMessage: FC<{ message?: string }> = ({ message }) => (
+export const ErrorMessage = ({ message }: { message?: string }) => (
   <p className="mt-0.5 text-sm font-normal text-red-600">{message}</p>
 );
 
-export const Label: FC<{ label: string; id: string }> = ({ label, id }) => (
+export const Label = ({ label, id }: { label: string; id: string }) => (
   <label htmlFor={id} className="mb-0.5 text-sm">
     {label}
   </label>
@@ -73,7 +82,7 @@ export const RightIconContainer = ({ children }: PropsWithChildren) => (
   <div className="absolute right-0 h-full">{children}</div>
 );
 
-export const IconBase: FC<{ Icon: ReactNode }> = ({ Icon }) => (
+export const IconBase = ({ Icon }: { Icon: ReactNode }) => (
   <div className="flex h-full w-11 items-center justify-center text-neutral-500">
     <span className="w-4">{Icon}</span>
   </div>

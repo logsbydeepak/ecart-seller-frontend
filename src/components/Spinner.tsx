@@ -1,7 +1,6 @@
-import { FC } from "react";
 import clsx from "clsx";
 
-const Spinner: FC<{ className?: string; size?: string }> = ({ className }) => {
+const Spinner = ({ className }: { className?: string }) => {
   return (
     <svg
       className={clsx("animate-spin", className)}

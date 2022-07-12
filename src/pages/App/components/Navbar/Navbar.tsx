@@ -1,4 +1,3 @@
-import { FC } from "react";
 import Link from "next/link";
 import { AnimatePresence } from "framer-motion";
 import { ShoppingCartIcon } from "@heroicons/react/solid";
@@ -8,7 +7,7 @@ import { useAuthContext } from "~/context/AuthContext";
 import AuthNavbarItem from "./AuthNavbarItem";
 import NoAuthNavbarItem from "./NoAuthNavbarItem";
 
-const Navbar: FC = () => {
+const Navbar = () => {
   const { authToken } = useAuthContext();
 
   return (

@@ -1,26 +1,31 @@
 import { CheckIcon, XIcon } from "@heroicons/react/solid";
 import { ExclamationIcon } from "@heroicons/react/outline";
-import { FC, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
-export const SuccessIconContainer: FC = () => (
+export const SuccessIconContainer = () => (
   <div className="rounded-md bg-green-200 p-1.5">
     <CheckIcon className="h-5 w-5 text-green-800" />
   </div>
 );
 
-export const ErrorIconContainer: FC = () => (
+export const ErrorIconContainer = () => (
   <div className="rounded-md bg-red-200 p-1.5">
     <ExclamationIcon className="h-5 w-5 text-red-800" />
   </div>
 );
 
-const Notification: FC<{
+const Notification = ({
+  text,
+  type,
+  id,
+  removeNotification,
+}: {
   text: string;
   type: "success" | "error";
   id: string;
   removeNotification: (id: string) => void;
-}> = ({ text, type, id, removeNotification }) => {
+}) => {
   const [timeFrame, setTimeFrame] = useState(0);
   const [show, setShow] = useState(true);
 

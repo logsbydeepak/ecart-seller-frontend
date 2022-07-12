@@ -1,12 +1,15 @@
-import { FC } from "react";
 import Spinner from "../Spinner";
 import clsx from "clsx";
 
-const ButtonWithTextAndSpinner: FC<{
+const ButtonWithTextAndSpinner = ({
+  text,
+  isLoading,
+  className,
+}: {
   text: string;
   isLoading: boolean;
   className?: string;
-}> = ({ text, isLoading, className }) => {
+}) => {
   return (
     <button
       type="submit"

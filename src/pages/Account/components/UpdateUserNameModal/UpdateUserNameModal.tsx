@@ -1,4 +1,4 @@
-import { Dispatch, FC, SetStateAction } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { EmojiHappyIcon } from "@heroicons/react/outline";
 
 import SimpleInput from "~/components/Input/SimpleInput";
@@ -10,12 +10,17 @@ import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftI
 import useUpdateUserNameMutation from "./useUpdateUserNameMutation";
 import useUpdateUserNameForm from "./useUpdateUserNameForm";
 
-const UpdateUserNameModal: FC<{
+const UpdateUserNameModal = ({
+  isOpen,
+  setIsOpen,
+  firstName,
+  lastName,
+}: {
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   firstName: string;
   lastName: string;
-}> = ({ isOpen, setIsOpen, firstName, lastName }) => {
+}) => {
   const {
     register,
     getValues,

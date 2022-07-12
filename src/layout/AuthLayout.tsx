@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { FC, ReactElement } from "react";
+import { ReactElement } from "react";
 import { useAuthContext } from "~/context/AuthContext";
 
 interface Props {
@@ -8,7 +8,7 @@ interface Props {
   page: ReactElement;
 }
 
-const AuthLayout: FC<Props> = ({ isAuth: pageIsAuth, redirect, page }) => {
+const AuthLayout = ({ isAuth: pageIsAuth, redirect, page }: Props) => {
   const { isAuth } = useAuthContext();
   const router = useRouter();
 

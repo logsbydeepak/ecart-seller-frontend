@@ -1,11 +1,11 @@
-import { FC, ReactNode } from "react";
+import { PropsWithChildren, ReactNode } from "react";
 
 interface Props {
   content: ReactNode;
   children: ReactNode;
 }
 
-const SideBarContainer: FC<Props> = ({ content, children }) => {
+const SideBarContainer = ({ content, children }: PropsWithChildren<Props>) => {
   return (
     <div className="flex">
       <div className="mr-7 inline-block h-screen w-72 pt-20">{children}</div>

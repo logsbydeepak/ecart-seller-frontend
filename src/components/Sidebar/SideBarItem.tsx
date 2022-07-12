@@ -1,15 +1,17 @@
 import Link from "next/link";
-import { FC, ReactNode } from "react";
+import { ReactNode } from "react";
 import clsx from "clsx";
 import Show from "../Show";
 
-const SideBarItem: FC<{
+interface Props {
   url: string;
   name: string;
   icon: ReactNode;
   solidIcon: ReactNode;
   active: boolean;
-}> = ({ url, name, icon, active, solidIcon }) => {
+}
+
+const SideBarItem = ({ url, name, icon, active, solidIcon }: Props) => {
   return (
     <Link href={url}>
       <a

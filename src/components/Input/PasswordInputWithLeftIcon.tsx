@@ -1,5 +1,5 @@
 import { EyeIcon, EyeOffIcon, LockClosedIcon } from "@heroicons/react/solid";
-import { FC, useState } from "react";
+import { useState } from "react";
 import { v4 } from "uuid";
 import clsx from "clsx";
 
@@ -14,16 +14,16 @@ import {
   RightIconContainer,
 } from "./Atom";
 
-interface PropType extends CommonInputType {}
+interface Props extends CommonInputType {}
 
-const PasswordInputWithLeftIcon: FC<PropType> = ({
+const PasswordInputWithLeftIcon = ({
   className,
   label,
   placeholder,
   register,
   disabled,
   errorMessage,
-}) => {
+}: Props) => {
   const [isPasswordHidden, setIsPasswordHidden] = useState(false);
 
   const toggleShowPassword = () => {

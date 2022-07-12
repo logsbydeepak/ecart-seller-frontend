@@ -3,7 +3,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { useRouter } from "next/router";
 import { Menu } from "@headlessui/react";
-import { FC, ReactNode, useState } from "react";
+import { ReactNode, useState } from "react";
 import { CogIcon, LogoutIcon } from "@heroicons/react/outline";
 
 import Show from "~/components/Show";
@@ -11,7 +11,7 @@ import Show from "~/components/Show";
 import LogoutModal from "~/pages/App/components/LogoutModal";
 import useReadUserFirstNameAndPictureQuery from "./useReadUserFirstNameAndPictureQuery";
 
-const AuthNavbarItem: FC = () => {
+const AuthNavbarItem = () => {
   const [isOpenLogoutModal, setIsOpenLogoutModal] = useState(false);
   const [userInfo, setUserInfo] = useState(
     null as unknown as { firstName: string; picture: string }
@@ -49,10 +49,7 @@ const AuthNavbarItem: FC = () => {
   );
 };
 
-const MenuButton: FC<{ name: string; picture: string }> = ({
-  name,
-  picture,
-}) => {
+const MenuButton = ({ name, picture }: { name: string; picture: string }) => {
   return (
     <Menu.Button className="flex items-center rounded-md px-3 py-2 hover:bg-neutral-100">
       <Image
@@ -69,7 +66,7 @@ const MenuButton: FC<{ name: string; picture: string }> = ({
   );
 };
 
-const MenuItems: FC<{ handleLogout: () => void }> = ({ handleLogout }) => {
+const MenuItems = ({ handleLogout }: { handleLogout: () => void }) => {
   const router = useRouter();
   return (
     <Menu.Items
@@ -91,10 +88,14 @@ const MenuItems: FC<{ handleLogout: () => void }> = ({ handleLogout }) => {
   );
 };
 
-const MenuItem: FC<{ text: string; Icon: ReactNode; onClick: () => void }> = ({
+const MenuItem = ({
   text,
   Icon,
   onClick,
+}: {
+  text: string;
+  Icon: ReactNode;
+  onClick: () => void;
 }) => {
   return (
     <Menu.Item>

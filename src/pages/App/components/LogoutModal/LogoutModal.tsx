@@ -1,14 +1,17 @@
-import { Dispatch, FC, SetStateAction } from "react";
+import { Dispatch, SetStateAction } from "react";
 
 import SmallButton from "~/components/Button/SmallButton";
 import ModalContainer from "~/components/Modal/Atom/ModalContainer";
 
 import useDeleteSessionMutation from "./useDeleteSessionMutation";
 
-const LogoutModal: FC<{
+const LogoutModal = ({
+  isOpen,
+  setIsOpen,
+}: {
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
-}> = ({ isOpen, setIsOpen }) => {
+}) => {
   const { isLoading, mutate } = useDeleteSessionMutation();
 
   const handleLogout = async () => {

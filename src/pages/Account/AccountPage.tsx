@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import Image from "next/image";
-import { FC, useState } from "react";
+import { useState } from "react";
 import { PencilIcon } from "@heroicons/react/outline";
 
 import Show from "~/components/Show";
@@ -147,12 +147,17 @@ const AccountPage: NextPageLayoutType = () => {
   );
 };
 
-const ItemContainer: FC<{
+const ItemContainer = ({
+  fieldValue,
+  value,
+  onClick,
+  className,
+}: {
   fieldValue: string;
   value: string;
   onClick: () => void;
   className?: string;
-}> = ({ fieldValue, value, onClick, className }) => {
+}) => {
   return (
     <div className={clsx(className)}>
       <p className="text-base font-semibold">{fieldValue}</p>
@@ -169,10 +174,13 @@ const ItemContainer: FC<{
   );
 };
 
-const ItemContainerButton: FC<{
+const ItemContainerButton = ({
+  fieldName,
+  handleOnClick,
+}: {
   fieldName: string;
   handleOnClick: () => void;
-}> = ({ fieldName, handleOnClick }) => {
+}) => {
   return (
     <button
       className="w-full text-center text-base font-semibold hover:text-indigo-700"
@@ -183,10 +191,13 @@ const ItemContainerButton: FC<{
   );
 };
 
-const ItemContainerImage: FC<{
+const ItemContainerImage = ({
+  picture,
+  onClick,
+}: {
   onClick: () => void;
   picture: string;
-}> = ({ picture, onClick }) => {
+}) => {
   return (
     <div>
       <p className="text-base font-semibold">Picture</p>
@@ -210,7 +221,7 @@ const ItemContainerImage: FC<{
   );
 };
 
-const Divider: FC = () => (
+const Divider = () => (
   <div className="my-5 h-0.5 rounded-full bg-neutral-200"></div>
 );
 

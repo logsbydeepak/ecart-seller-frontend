@@ -1,4 +1,4 @@
-import { Dispatch, FC, SetStateAction } from "react";
+import { Dispatch, SetStateAction } from "react";
 
 import SmallButton from "~/components/Button/SmallButton";
 import ModalContainer from "~/components/Modal/Atom/ModalContainer";
@@ -7,10 +7,12 @@ import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftI
 import useLogoutAllForm from "./useLogoutAllForm";
 import useDeleteAllSessionMutation from "./useDeleteAllSessionMutation";
 
-const LogoutAllModal: FC<{
+interface Props {
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
-}> = ({ isOpen, setIsOpen }) => {
+}
+
+const LogoutAllModal = ({ isOpen, setIsOpen }: Props) => {
   const {
     register,
     getValues,

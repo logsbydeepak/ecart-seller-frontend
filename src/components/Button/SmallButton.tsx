@@ -1,4 +1,3 @@
-import { FC } from "react";
 import clsx from "clsx";
 import Show from "../Show";
 import Spinner from "../Spinner";
@@ -11,13 +10,13 @@ interface Props {
   onClick?: () => void;
 }
 
-const SmallButton: FC<Props> = ({
+const SmallButton = ({
   isLoading = false,
   type = "button",
   text,
   className = "",
   onClick,
-}) => {
+}: Props) => {
   return (
     <button
       type={type}

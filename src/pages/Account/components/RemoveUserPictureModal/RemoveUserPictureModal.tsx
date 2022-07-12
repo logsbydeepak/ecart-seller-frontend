@@ -1,17 +1,24 @@
 import Image from "next/image";
-import { Dispatch, FC, SetStateAction } from "react";
+import { Dispatch, SetStateAction } from "react";
 
 import SmallButton from "~/components/Button/SmallButton";
 import ModalContainer from "~/components/Modal/Atom/ModalContainer";
 
 import useRemoveUserPictureMutation from "./useRemoveUserPictureMutation";
 
-const RemoveUserPictureModal: FC<{
+interface Props {
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   picture: string;
   setIsOpenUpdateUserPicture: Dispatch<SetStateAction<boolean>>;
-}> = ({ isOpen, setIsOpen, picture, setIsOpenUpdateUserPicture }) => {
+}
+
+const RemoveUserPictureModal = ({
+  isOpen,
+  setIsOpen,
+  picture,
+  setIsOpenUpdateUserPicture,
+}: Props) => {
   const exitModal = () => {
     if (isLoading) return;
     setIsOpen(false);

@@ -1,11 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-import {
-  createContext,
-  FC,
-  PropsWithChildren,
-  useContext,
-  useState,
-} from "react";
+import { createContext, PropsWithChildren, useContext, useState } from "react";
 
 import { AnimatePresence } from "framer-motion";
 import Notification from "~/components/Notification/Notification";

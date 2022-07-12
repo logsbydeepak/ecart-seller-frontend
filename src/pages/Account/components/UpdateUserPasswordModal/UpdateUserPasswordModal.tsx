@@ -1,4 +1,4 @@
-import { Dispatch, FC, SetStateAction } from "react";
+import { Dispatch, SetStateAction } from "react";
 
 import SmallButton from "~/components/Button/SmallButton";
 import ModalContainer from "~/components/Modal/Atom/ModalContainer";
@@ -7,10 +7,13 @@ import PasswordInputWithLeftIcon from "~/components/Input/PasswordInputWithLeftI
 import useUpdateUserPasswordMutation from "./useUpdateUserPasswordMutation";
 import useUpdateUserPasswordForm from "./useUpdateUserPasswordForm";
 
-const UpdateUserPasswordModal: FC<{
+const UpdateUserPasswordModal = ({
+  isOpen,
+  setIsOpen,
+}: {
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
-}> = ({ isOpen, setIsOpen }) => {
+}) => {
   const {
     register,
     getValues,
