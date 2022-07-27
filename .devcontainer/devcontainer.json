@@ -8,5 +8,8 @@
     "bradlc.vscode-tailwindcss",
     "streetsidesoftware.code-spell-checker",
     "GraphQL.vscode-graphql"
-  ]
+  ],
+  "features": {
+    "sshd": "latest"
+  }
 }
