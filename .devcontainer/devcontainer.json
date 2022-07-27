@@ -2,13 +2,11 @@
   "name": "Ecart Seller Frontend NextJS Dev",
   "dockerComposeFile": "../docker/dev/docker-compose.yml",
   "service": "ecart_seller_frontend",
-  "workspaceFolder": "/home/node/ecart-seller-frontend",
-  "remoteUser": "node",
+  "workspaceFolder": "/home/app/ecart-seller-frontend",
+  "remoteUser": "app",
   "extensions": [
     "bradlc.vscode-tailwindcss",
     "streetsidesoftware.code-spell-checker",
-    "GraphQL.vscode-graphql",
-    "dbaeumer.vscode-eslint",
-    "esbenp.prettier-vscode"
+    "GraphQL.vscode-graphql"
   ]
 }

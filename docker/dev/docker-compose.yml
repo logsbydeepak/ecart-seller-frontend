@@ -8,7 +8,7 @@ services:
       context: ../../
       dockerfile: ./docker/dev/Dockerfile.dev
     volumes:
-      - ../../:/home/node/ecart-seller-frontend
+      - ../../:/home/app/ecart-seller-frontend
     networks:
       - dev_frontend_network
     extra_hosts:
