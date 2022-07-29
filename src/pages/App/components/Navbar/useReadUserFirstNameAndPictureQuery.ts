@@ -10,7 +10,6 @@ import {
   ReadUserFirstNameAndPictureQuery,
   ReadUserFirstNameAndPictureQueryVariables,
 } from "~/types/graphql";
-import showPicture from "~/utils/helper/showPicture";
 
 const useReadUserFirstNameAndPictureQuery = (
   setUserInfo: Dispatch<
@@ -48,7 +47,7 @@ const useReadUserFirstNameAndPictureQuery = (
           case "User":
             setUserInfo({
               firstName: responseData.firstName,
-              picture: showPicture(responseData.picture),
+              picture: responseData.picture,
             });
             break;
 

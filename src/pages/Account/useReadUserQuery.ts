@@ -3,7 +3,6 @@ import { useAuthContext } from "~/context/AuthContext";
 import { useNotificationContext } from "~/context/NotificationContext";
 import useAuthQueryHook from "~/hooks/useAuthQueryHook";
 import { ReadUserQuery, ReadUserQueryVariables } from "~/types/graphql";
-import showPicture from "~/utils/helper/showPicture";
 import ReadUserOperation from "./ReadUser.gql";
 
 const useReadUserQuery = (
@@ -42,7 +41,7 @@ const useReadUserQuery = (
               firstName: responseData.firstName,
               lastName: responseData.lastName,
               email: responseData.email,
-              picture: showPicture(responseData.picture),
+              picture: responseData.picture,
             });
             break;
 
